@@ -1,2 +1,2 @@
 # Pioneer
-ECS with network sync framework in pure C#.
+ETCS with network sync framework in pure C#.
