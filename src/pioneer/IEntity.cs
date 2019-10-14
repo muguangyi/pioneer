@@ -11,7 +11,14 @@ using System;
 
 namespace Pioneer
 {
+    /// <summary>
+    /// Entity interface.
+    /// </summary>
     public interface IEntity : ITraitContainer, IControlContainer, IDisposable
     {
+        /// <summary>
+        /// Gets a value to indicate the entity creator.
+        /// </summary>
+        IEntityCreator Creator { get; }
     }
 }

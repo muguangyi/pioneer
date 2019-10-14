@@ -14,5 +14,14 @@ namespace Pioneer
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
     public sealed class PClassAttribute : Attribute
     {
+        public PClassAttribute(ApplyDomain domain = ApplyDomain.NetMultiple)
+        {
+            this.Domain = domain;
+        }
+
+        /// <summary>
+        /// Gets a value to indicate the apply domain.
+        /// </summary>
+        public ApplyDomain Domain { get; private set; }
     }
 }

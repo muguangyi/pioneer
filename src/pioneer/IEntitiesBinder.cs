@@ -9,7 +9,24 @@
 
 namespace Pioneer
 {
+    /// <summary>
+    /// Entities binder interface.
+    /// </summary>
     public interface IEntitiesBinder
     {
+        /// <summary>
+        /// Create a new matcher.
+        /// </summary>
+        /// <returns>Matcher instance.</returns>
+        IMatcher NewMatcher();
+
+        /// <summary>
+        /// Get target filter instance.
+        /// </summary>
+        /// <param name="system">System component.</param>
+        /// <param name="tupleType">Tuple type.</param>
+        /// <param name="matcher">Matcher instance.</param>
+        /// <returns>Filter instance.</returns>
+        IEntitiesFilter GetFilter(ISystem system, TupleType tupleType, IMatcher matcher);
     }
 }

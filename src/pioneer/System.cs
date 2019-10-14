@@ -9,9 +9,22 @@
 
 namespace Pioneer
 {
+    /// <summary>
+    /// Abstrace base system component.
+    /// </summary>
     public abstract class System : PureLogic, ISystem
     {
+        /// <inheritdoc />
         public virtual void Dispose()
         { }
+
+        /// <inheritdoc />
+        public virtual void OnInit(IEntityContainer container)
+        { }
+
+        /// <inheritdoc />
+        public virtual void OnUpdate(IEntityContainer container, float deltaTime)
+        { }
+
     }
 }

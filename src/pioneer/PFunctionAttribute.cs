@@ -14,5 +14,26 @@ namespace Pioneer
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
     public class PFunctionAttribute : Attribute
     {
+        public PFunctionAttribute(Type format, ApplyDomain domain = ApplyDomain.NetMultiple, ApplyCondition condition = ApplyCondition.All)
+        {
+            this.Format = format;
+            this.Domain = domain;
+            this.Condition = condition;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Type Format { get; private set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public ApplyDomain Domain { get; private set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public ApplyCondition Condition { get; private set; }
     }
 }

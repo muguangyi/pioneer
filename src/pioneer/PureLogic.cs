@@ -11,5 +11,20 @@ namespace Pioneer
 {
     public abstract class PureLogic
     {
+        public PureLogic()
+        {
+            var attrs = GetType().GetCustomAttributes(typeof(PClassAttribute), false);
+            this.Domain = (attrs.Length > 0 ? ((PClassAttribute)attrs[0]).Domain : ApplyDomain.NetMultiple);
+        }
+
+        internal bool IsApplied(GameMode mode)
+        {
+            return ((GameMode.Standalone == mode) ||
+                    (ApplyDomain.NetMultiple == this.Domain) ||
+                    (ApplyDomain.Client == this.Domain && GameMode.Client == mode) ||
+                    (ApplyDomain.Server == this.Domain && GameMode.Server == mode));
+        }
+
+        private ApplyDomain Domain { get; set; }
     }
 }

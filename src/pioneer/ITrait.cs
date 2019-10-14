@@ -11,7 +11,19 @@ using System;
 
 namespace Pioneer
 {
+    /// <summary>
+    /// Trait interface.
+    /// </summary>
     public interface ITrait : IDisposable
     {
+        /// <summary>
+        /// Event when a trait changed.
+        /// </summary>
+        event Action<ITrait> OnTraitChanged;
+
+        /// <summary>
+        /// Initialize entrance.
+        /// </summary>
+        void OnInit();
     }
 }

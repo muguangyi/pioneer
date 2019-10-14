@@ -9,7 +9,24 @@
 
 namespace Pioneer
 {
+    /// <summary>
+    /// Game mode types.
+    /// </summary>
     public enum GameMode
     {
+        /// <summary>
+        /// Standalone mode.
+        /// </summary>
+        Standalone,
+
+        /// <summary>
+        /// Client mode.
+        /// </summary>
+        Client,
+
+        /// <summary>
+        /// Dedicate server mode.
+        /// </summary>
+        Server,
     }
 }

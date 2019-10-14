@@ -11,7 +11,22 @@ using System;
 
 namespace Pioneer
 {
+    /// <summary>
+    /// Control component interface.
+    /// </summary>
     public interface IControl : IDisposable
     {
+        /// <summary>
+        /// Initialize entrance for the control component.
+        /// </summary>
+        /// <param name="container">The owner trait container.</param>
+        void OnInit(ITraitContainer container);
+
+        /// <summary>
+        /// Delta update entrance for the control component.
+        /// </summary>
+        /// <param name="container">The owner trait container.</param>
+        /// <param name="deltaTime">Delta time from the last frame.</param>
+        void OnUpdate(ITraitContainer container, float deltaTime);
     }
 }

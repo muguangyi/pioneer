@@ -7,11 +7,22 @@
  * file that was distributed with this source code.
  */
 
+using System;
+
 namespace Pioneer
 {
     public abstract class Trait : ITrait
     {
+        /// <inheritdoc />
+        public event Action<ITrait> OnTraitChanged;
+
+        /// <inheritdoc />
         public virtual void Dispose()
         { }
+
+        /// <inheritdoc />
+        public void OnInit()
+        {
+        }
     }
 }

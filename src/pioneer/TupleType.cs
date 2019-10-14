@@ -9,7 +9,19 @@
 
 namespace Pioneer
 {
+    /// <summary>
+    /// Tuple type.
+    /// </summary>
     public enum TupleType
     {
+        /// <summary>
+        /// Job type.
+        /// </summary>
+        Job = 0,
+
+        /// <summary>
+        /// Reactive type.
+        /// </summary>
+        Reactive = 1,
     }
 }

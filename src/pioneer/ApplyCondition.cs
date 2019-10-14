@@ -9,7 +9,24 @@
 
 namespace Pioneer
 {
+    /// <summary>
+    /// Sync apply condition.
+    /// </summary>
     public enum ApplyCondition
     {
+        /// <summary>
+        /// Apply to all clients.
+        /// </summary>
+        All,
+
+        /// <summary>
+        /// Apply only to owner client.
+        /// </summary>
+        OwnerOnly,
+
+        /// <summary>
+        /// Apply except owner clinet.
+        /// </summary>
+        SkipOwner,
     }
 }

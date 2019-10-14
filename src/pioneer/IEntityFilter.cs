@@ -9,7 +9,14 @@
 
 namespace Pioneer
 {
+    /// <summary>
+    /// Entity filter interface.
+    /// </summary>
     public interface IEntityFilter
     {
+        /// <summary>
+        /// Gets a value to indicate the owner container.
+        /// </summary>
+        ITraitContainer Target { get; }
     }
 }

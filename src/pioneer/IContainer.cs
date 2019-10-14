@@ -9,7 +9,14 @@
 
 namespace Pioneer
 {
+    /// <summary>
+    /// Base container interface.
+    /// </summary>
     public interface IContainer
     {
+        /// <summary>
+        /// Gets a value to indicate the container ID.
+        /// </summary>
+        ulong Id { get; }
     }
 }

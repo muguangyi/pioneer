@@ -9,7 +9,24 @@
 
 namespace Pioneer
 {
+    /// <summary>
+    /// Apply domain.
+    /// </summary>
     public enum ApplyDomain
     {
+        /// <summary>
+        /// Apply on client.
+        /// </summary>
+        Client,
+
+        /// <summary>
+        /// Apply on server.
+        /// </summary>
+        Server,
+
+        /// <summary>
+        /// Broadcast.
+        /// </summary>
+        NetMultiple,
     }
 }
