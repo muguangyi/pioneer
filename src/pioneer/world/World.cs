@@ -64,7 +64,7 @@ namespace Pioneer
             this.filters.Dispose();
             this.center.Dispose();
 
-            this.network = null;
+            this.socket = null;
             this.entities = null;
             this.entityMap = null;
             this.filters = null;

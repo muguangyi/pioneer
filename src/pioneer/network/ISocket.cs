@@ -14,5 +14,6 @@ namespace Pioneer
         bool Connected { get; }
         void Listen();
         void Dial();
+        void Close();
     }
 }

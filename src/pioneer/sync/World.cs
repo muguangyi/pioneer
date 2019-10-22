@@ -123,16 +123,16 @@ namespace Pioneer
 
         private void Reset()
         {
-            if (null != this.network)
+            if (null != this.socket)
             {
-                //this.network.Disconnect();
-                this.network = null;
+                this.socket.Close();
+                this.socket = null;
             }
         }
 
         private bool IsNetworkValid()
         {
-            return (null != this.network && this.network.Connected);
+            return (null != this.socket && this.socket.Connected);
         }
 
         private void Sync(IPeer targetChannel = null)
@@ -153,7 +153,7 @@ namespace Pioneer
 
         private void Flush(Action<IEnumerable<SyncAction>> callback)
         {
-            if (null != this.network && this.syncActions.Count > 0)
+            if (null != this.socket && this.syncActions.Count > 0)
             {
                 lock (this.syncActions)
                 {
@@ -533,7 +533,7 @@ namespace Pioneer
         private Dictionary<ulong, IEntity> players = new Dictionary<ulong, IEntity>();
         private Queue<SyncAction> syncActions = new Queue<SyncAction>();
         private Queue<Action> deferActions = new Queue<Action>();
-        private ISocket network = null;
+        private ISocket socket = null;
         private byte[] marshalBuffer = new byte[BufferSize];
         private object syncObject = new object();
         //private HeartBeatState beatState = null;
