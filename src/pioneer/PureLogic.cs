@@ -17,6 +17,8 @@ namespace Pioneer
             this.Domain = (attrs.Length > 0 ? ((PClassAttribute)attrs[0]).Domain : ApplyDomain.NetMultiple);
         }
 
+        private ApplyDomain Domain { get; set; }
+
         internal bool IsApplied(GameMode mode)
         {
             return ((GameMode.Standalone == mode) ||
@@ -24,7 +26,5 @@ namespace Pioneer
                     (ApplyDomain.Client == this.Domain && GameMode.Client == mode) ||
                     (ApplyDomain.Server == this.Domain && GameMode.Server == mode));
         }
-
-        private ApplyDomain Domain { get; set; }
     }
 }
