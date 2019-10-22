@@ -8,11 +8,18 @@
  */
 
 using System;
+using System.Collections.Generic;
 
 namespace Pioneer
 {
     public abstract class Trait : ITrait
     {
+        private readonly string typeName = null;
+        private Dictionary<string, AbstractMeta> props = new Dictionary<string, AbstractMeta>();
+        private Dictionary<string, AbstractArgs> funcs = new Dictionary<string, AbstractArgs>();
+
+        internal Entity Entity { private get; set; }
+
         /// <inheritdoc />
         public event Action<ITrait> OnTraitChanged;
 
