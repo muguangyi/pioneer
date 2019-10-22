@@ -41,7 +41,7 @@ namespace Pioneer
             get
             {
                 var first = this.entities.First;
-                return (null != first ? first.Value : null);
+                return first?.Value;
             }
         }
 
@@ -147,8 +147,7 @@ namespace Pioneer
 
         protected override void OnEntityChanged(Entity entity)
         {
-            LinkedListNode<IEntity> node = null;
-            if (!this.queryTable.TryGetValue(entity.Id, out node))
+            if (!this.queryTable.TryGetValue(entity.Id, out LinkedListNode<IEntity> node))
             {
                 node = this.entities.AddLast(entity);
                 this.queryTable.Add(entity.Id, node);
