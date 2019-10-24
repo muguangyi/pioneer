@@ -14,7 +14,7 @@ namespace Pioneer
     interface ISocket
     {
         event Action<IPeer> OnConnected;
-        event Action<IPeer> OnClosed;
+        event Action<IPeer, Exception> OnClosed;
         event Action<IPeer, object> OnPacket;
 
         bool Connected { get; }

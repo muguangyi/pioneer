@@ -7,10 +7,19 @@
  * file that was distributed with this source code.
  */
 
+using System.Net.Sockets;
+
 namespace Pioneer
 {
-    class Peer : IPeer
+    sealed class NetPeer : IPeer
     {
+        private readonly Socket socket = null;
+
+        public NetPeer(Socket socket)
+        {
+            this.socket = socket;
+        }
+
         public void Send(object obj)
         {
             throw new global::System.NotImplementedException();
