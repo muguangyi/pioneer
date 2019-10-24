@@ -14,9 +14,10 @@ namespace Pioneer
 {
     sealed class NetPeer : IPeer
     {
-        public NetPeer(Socket socket)
+        public NetPeer(Socket socket, ISerializer serializer)
         {
             this.Socket = socket ?? throw new ArgumentNullException("Socket can't be null!");
+            this.Serializer = serializer ?? throw new ArgumentNullException("Serializer can't be null!");
         }
 
         public void Send(object obj)
@@ -35,5 +36,6 @@ namespace Pioneer
         }
 
         internal Socket Socket { get; private set; } = null;
+        internal ISerializer Serializer { get; } = null;
     }
 }

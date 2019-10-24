@@ -17,13 +17,11 @@ namespace Pioneer
     {
         private NetPeer peer = null;
         private EndPoint endPoint = null;
-        private ISerializer serializer = null;
 
         public NetSocket(Socket socket, EndPoint endPoint, ISerializer serializer)
         {
-            this.peer = new NetPeer(socket);
+            this.peer = new NetPeer(socket, serializer);
             this.endPoint = endPoint ?? throw new ArgumentNullException("EndPoint can't be null!");
-            this.serializer = serializer ?? throw new ArgumentNullException("Serializer can't be null!");
         }
 
         public bool Connected => throw new NotImplementedException();
@@ -55,7 +53,7 @@ namespace Pioneer
             try
             {
                 var socket = peer.Socket.EndAccept(result);
-                this.OnConnected?.Invoke(new NetPeer(socket));
+                this.OnConnected?.Invoke(new NetPeer(socket, peer.Serializer));
             }
             catch
             { }
