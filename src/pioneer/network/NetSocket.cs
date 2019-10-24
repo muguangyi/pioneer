@@ -15,13 +15,13 @@ namespace Pioneer
 {
     abstract class NetSocket : ISocket
     {
-        private Socket socket = null;
+        private NetPeer peer = null;
         private EndPoint endPoint = null;
         private ISerializer serializer = null;
 
         public NetSocket(Socket socket, EndPoint endPoint, ISerializer serializer)
         {
-            this.socket = socket ?? throw new ArgumentNullException("Socket can't be null!");
+            this.peer = new NetPeer(socket);
             this.endPoint = endPoint ?? throw new ArgumentNullException("EndPoint can't be null!");
             this.serializer = serializer ?? throw new ArgumentNullException("Serializer can't be null!");
         }
@@ -34,59 +34,55 @@ namespace Pioneer
 
         public void Listen()
         {
-            this.socket.Bind(this.endPoint);
-            this.socket.Listen(5);
-            this.socket.BeginAccept(OnEndAccept, this.socket);
+            this.peer.Socket.Bind(this.endPoint);
+            this.peer.Socket.Listen(5);
+            this.peer.Socket.BeginAccept(OnEndAccept, this.peer);
         }
 
         public void Dial()
         {
-            this.socket.BeginConnect(this.endPoint, OnEndConnect, this.socket);
+            this.peer.Socket.BeginConnect(this.endPoint, OnEndConnect, this.peer);
         }
 
         public void Close()
         {
-            CloseInternal();
+            CloseInternal(this.peer);
         }
 
         private void OnEndAccept(IAsyncResult result)
         {
-            var socket = (Socket)result.AsyncState;
+            var peer = (NetPeer)result.AsyncState;
             try
             {
-                var s = socket.EndAccept(result);
-                this.OnConnected?.Invoke(new NetPeer(s));
+                var socket = peer.Socket.EndAccept(result);
+                this.OnConnected?.Invoke(new NetPeer(socket));
             }
-            catch (Exception ex)
-            {
-                CloseInternal(ex);
-            }
+            catch
+            { }
         }
 
         private void OnEndConnect(IAsyncResult result)
         {
-            var socket = (Socket)result.AsyncState;
+            var peer = (NetPeer)result.AsyncState;
             try
             {
-                socket.EndConnect(result);
-                this.OnConnected?.Invoke(new NetPeer(socket));
+                peer.Socket.EndConnect(result);
+                this.OnConnected?.Invoke(peer);
             }
             catch (Exception ex)
             {
-                CloseInternal(ex);
+                CloseInternal(peer, ex);
             }
         }
 
-        private void CloseInternal(Exception ex = null)
+        private void CloseInternal(NetPeer peer, Exception ex = null)
         {
-            if (this.socket != null)
+            if (peer != null)
             {
-                this.socket.Shutdown(SocketShutdown.Both);
-                this.socket.Close();
-                this.socket = null;
+                peer.Close();
             }
 
-            this.OnClosed?.Invoke(null, ex);
+            this.OnClosed?.Invoke(peer, ex);
         }
     }
 }

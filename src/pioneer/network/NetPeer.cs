@@ -7,22 +7,33 @@
  * file that was distributed with this source code.
  */
 
+using System;
 using System.Net.Sockets;
 
 namespace Pioneer
 {
     sealed class NetPeer : IPeer
     {
-        private readonly Socket socket = null;
-
         public NetPeer(Socket socket)
         {
-            this.socket = socket;
+            this.Socket = socket ?? throw new ArgumentNullException("Socket can't be null!");
         }
 
         public void Send(object obj)
         {
             throw new global::System.NotImplementedException();
         }
+
+        public void Close()
+        {
+            if (this.Socket != null)
+            {
+                this.Socket.Shutdown(SocketShutdown.Both);
+                this.Socket.Close();
+                this.Socket = null;
+            }
+        }
+
+        internal Socket Socket { get; private set; } = null;
     }
 }

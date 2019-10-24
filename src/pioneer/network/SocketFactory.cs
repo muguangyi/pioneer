@@ -46,7 +46,14 @@ namespace Pioneer.network
 
         private static (string, string) Parse(string nsp)
         {
-            return (string.Empty, string.Empty);
+            const string Separater = "://";
+            var index = nsp.IndexOf(Separater);
+            if (index < 0)
+            {
+                return (string.Empty, string.Empty);
+            }
+
+            return (nsp.Substring(0, index), nsp.Substring(index + Separater.Length));
         }
     }
 }

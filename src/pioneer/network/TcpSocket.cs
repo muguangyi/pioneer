@@ -15,15 +15,18 @@ namespace Pioneer
     class TcpSocket : NetSocket
     {
         public TcpSocket(string url, ISerializer serializer)
-            : base(
-                new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp),
-                MakeEndPoint(url),
-                serializer)
+            : base(MakeSocket(), MakeEndPoint(url), serializer)
         { }
+
+        private static Socket MakeSocket()
+        {
+            return new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        }
 
         private static EndPoint MakeEndPoint(string url)
         {
-            return null;
+            var address = url.Split(':');
+            return new IPEndPoint(IPAddress.Parse(address[0]), int.Parse(address[1]));
         }
     }
 }
