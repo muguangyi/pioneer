@@ -9,8 +9,11 @@
 
 namespace Pioneer
 {
-    interface IPeer
+    class Peer : IPeer
     {
-        void Send(object obj);
+        public void Send(object obj)
+        {
+            throw new global::System.NotImplementedException();
+        }
     }
 }

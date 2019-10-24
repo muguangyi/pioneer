@@ -10,7 +10,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Pioneer
+namespace Pioneer.Bit
 {
     struct BitCode
     {

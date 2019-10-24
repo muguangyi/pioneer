@@ -9,7 +9,7 @@
 
 using System;
 
-namespace Pioneer
+namespace Pioneer.Bit
 {
     /// <summary>
     /// BitCode center interface.

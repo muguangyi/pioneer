@@ -7,6 +7,8 @@
  * file that was distributed with this source code.
  */
 
+using Pioneer.Framework;
+using Pioneer.Sync;
 using System;
 using System.Collections.Generic;
 using System.Linq;

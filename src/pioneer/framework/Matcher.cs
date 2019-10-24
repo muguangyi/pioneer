@@ -7,10 +7,12 @@
  * file that was distributed with this source code.
  */
 
+using Pioneer.Bit;
+using Pioneer.Util;
 using System;
 using System.Collections.Generic;
 
-namespace Pioneer
+namespace Pioneer.Framework
 {
     class Matcher : IMatcher
     {

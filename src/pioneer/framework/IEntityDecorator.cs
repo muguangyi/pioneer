@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Pioneer
+namespace Pioneer.Framework
 {
     /// <summary>
     /// Entity decorator interface.

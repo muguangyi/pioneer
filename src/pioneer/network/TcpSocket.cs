@@ -9,8 +9,7 @@
 
 namespace Pioneer
 {
-    interface IPeer
+    class TcpSocket : NetSocket
     {
-        void Send(object obj);
     }
 }

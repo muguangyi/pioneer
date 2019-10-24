@@ -7,7 +7,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Pioneer
+using Pioneer.Framework;
+
+namespace Pioneer.Bit
 {
     /// <summary>
     /// BitCode trigger interface.

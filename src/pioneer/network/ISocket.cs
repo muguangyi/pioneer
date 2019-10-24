@@ -7,10 +7,16 @@
  * file that was distributed with this source code.
  */
 
+using System;
+
 namespace Pioneer
 {
     interface ISocket
     {
+        event Action<IPeer> OnConnected;
+        event Action<IPeer> OnClosed;
+        event Action<IPeer, object> OnPacket;
+
         bool Connected { get; }
         void Listen();
         void Dial();

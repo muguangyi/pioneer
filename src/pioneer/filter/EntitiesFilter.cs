@@ -7,9 +7,11 @@
  * file that was distributed with this source code.
  */
 
+using Pioneer.Bit;
+using Pioneer.Framework;
 using System.Collections.Generic;
 
-namespace Pioneer
+namespace Pioneer.Filter
 {
     abstract class EntitiesFilter : Filter, IEntitiesFilter
     {

@@ -7,7 +7,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Pioneer
+using Pioneer.Bit;
+using Pioneer.Framework;
+
+namespace Pioneer.Filter
 {
     abstract class EntityFilter : Filter, IEntityFilter
     {

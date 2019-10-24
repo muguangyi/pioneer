@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Pioneer
+namespace Pioneer.Sync
 {
     delegate void Method();
     delegate void Method<T1>(T1 t1);

@@ -11,7 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Pioneer
+namespace Pioneer.Util
 {
     static class TypeUtility
     {

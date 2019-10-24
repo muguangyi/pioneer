@@ -7,10 +7,14 @@
  * file that was distributed with this source code.
  */
 
+using System;
+
 namespace Pioneer
 {
-    interface IPeer
+    interface ISerializer
     {
-        void Send(object obj);
+        ArraySegment<byte> Marshal(object obj);
+        object Unmarshal(ArraySegment<byte> bytes);
+        int Slice(ArraySegment<byte> source);
     }
 }

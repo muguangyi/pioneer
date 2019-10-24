@@ -9,7 +9,7 @@
 
 using System;
 
-namespace Pioneer
+namespace Pioneer.Base
 {
     abstract class FrameObject : IDisposable
     {

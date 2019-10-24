@@ -7,9 +7,12 @@
  * file that was distributed with this source code.
  */
 
+using Pioneer.Base;
+using Pioneer.Bit;
+using Pioneer.Framework;
 using System.Collections.Generic;
 
-namespace Pioneer
+namespace Pioneer.Filter
 {
     class Filters<TFilter> : ReusableObject, IBitCodeTrigger where TFilter : Filter
     {

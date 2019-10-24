@@ -7,6 +7,7 @@
  * file that was distributed with this source code.
  */
 
+using Pioneer.Sync;
 using System;
 using System.Reflection;
 

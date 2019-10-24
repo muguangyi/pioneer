@@ -7,11 +7,16 @@
  * file that was distributed with this source code.
  */
 
+using Pioneer.Base;
+using Pioneer.Bit;
+using Pioneer.Filter;
+using Pioneer.Sync;
+using Pioneer.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Pioneer
+namespace Pioneer.Framework
 {
     sealed class Entity : ReusableObject, IEntity, IBitCodeTrigger
     {

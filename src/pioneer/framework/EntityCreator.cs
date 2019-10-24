@@ -7,9 +7,10 @@
  * file that was distributed with this source code.
  */
 
+using Pioneer.Base;
 using System.Collections.Generic;
 
-namespace Pioneer
+namespace Pioneer.Framework
 {
     class EntityCreator : InstantObject, IEntityCreator
     {
