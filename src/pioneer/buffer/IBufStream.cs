@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This file is part of the Pioneer package.
  *
  * (c) MuGuangYi <muguangyi@hotmail.com>
@@ -7,22 +7,16 @@
  * file that was distributed with this source code.
  */
 
-using System;
+using System.IO;
 
 namespace Pioneer.Buffer
 {
-    interface IBufArray : IBufReader, IBufWriter, IDisposable
+    interface IBufStream
     {
-        byte[] Buffer { get; }
+        int Size { get; }
 
-        int Offset { get; }
-        
-        void Retain();
+        int Position { get; }
 
-        void Release();
-
-        void Submit();
-
-        void SetSize(int size);
+        void Seek(int offset = 0, SeekOrigin seekOrigin = SeekOrigin.Begin);
     }
 }

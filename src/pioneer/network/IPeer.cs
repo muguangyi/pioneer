@@ -11,6 +11,7 @@ namespace Pioneer
 {
     interface IPeer
     {
+        ulong Id { get; }
         void Send(object obj);
     }
 }

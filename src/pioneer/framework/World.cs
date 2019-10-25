@@ -240,7 +240,6 @@ namespace Pioneer
             case GameMode.Client:
                 if (IsNetworkValid())
                 {
-                    //this.beatState.OnUpdate(deltaTime);
                     Sync();
                 }
                 break;

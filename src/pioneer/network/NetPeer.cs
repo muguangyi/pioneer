@@ -28,8 +28,9 @@ namespace Pioneer
         private IBufArray recvBuffer = null;
         private bool closed = false;
 
-        public NetPeer(Socket socket, ISerializer serializer)
+        public NetPeer(ulong id, Socket socket, ISerializer serializer)
         {
+            this.Id = id;
             this.Socket = socket ?? throw new ArgumentNullException("Socket can't be null!");
             this.Serializer = serializer ?? throw new ArgumentNullException("Serializer can't be null!");
             this.sendBuffer = this.storage.Alloc(BUFFER_SIZE);
@@ -37,6 +38,14 @@ namespace Pioneer
             this.sendThread = new Thread(new ThreadStart(DoSendAsync)); this.sendThread.Start();
             this.recvThread = new Thread(new ThreadStart(DoRecvAsync)); this.recvThread.Start();
         }
+
+        internal event Action<IPeer, Exception> OnClosed;
+        internal event Action<IPeer, object> OnMessage;
+
+        public ulong Id { get; }
+
+        internal Socket Socket { get; private set; } = null;
+        internal ISerializer Serializer { get; } = null;
 
         public void Send(object obj)
         {
@@ -47,8 +56,12 @@ namespace Pioneer
             this.sendWatcher.Set();
         }
 
-        public void Close()
+        public void Close(Exception ex = null)
         {
+            this.OnClosed?.Invoke(this, ex);
+            this.OnClosed = null;
+            this.OnMessage = null;
+
             this.closed = true;
 
             if (this.Socket != null)
@@ -92,10 +105,12 @@ namespace Pioneer
                     }
                     catch (Exception ex)
                     {
-
+                        Close(ex);
+                        goto terminate;
                     }
                 }
             }
+            terminate:;
         }
 
         private void DoRecvAsync()
@@ -109,7 +124,10 @@ namespace Pioneer
                     {
                         this.recvBuffer.SetSize(this.recvBuffer.Position + size);
                         this.recvBuffer.Seek();
-                        this.Serializer.Unmarshal(this.recvBuffer, out object obj);
+                        if (this.Serializer.Unmarshal(this.recvBuffer, out object obj))
+                        {
+                            this.OnMessage?.Invoke(this, obj);
+                        }
 
                         var unreadSize = this.recvBuffer.Size - this.recvBuffer.Position;
                         if (unreadSize > 0)
@@ -120,17 +138,17 @@ namespace Pioneer
                     }
                     else
                     {
-
+                        Close();
+                        goto terminate;
                     }
                 }
                 catch (Exception ex)
                 {
-
+                    Close(ex);
+                    goto terminate;
                 }
             }
+            terminate:;
         }
-
-        internal Socket Socket { get; private set; } = null;
-        internal ISerializer Serializer { get; } = null;
     }
 }

@@ -15,7 +15,7 @@ namespace Pioneer
     {
         event Action<IPeer> OnConnected;
         event Action<IPeer, Exception> OnClosed;
-        event Action<IPeer, object> OnPacket;
+        event Action<IPeer, object> OnMessage;
 
         bool Connected { get; }
         void Listen();

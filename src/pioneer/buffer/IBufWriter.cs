@@ -11,7 +11,7 @@ using System;
 
 namespace Pioneer.Buffer
 {
-    interface IBufWriter
+    interface IBufWriter : IBufStream
     {
         void WriteByte(byte data);
 
@@ -32,6 +32,8 @@ namespace Pioneer.Buffer
         void WriteInt(int data);
 
         void WriteFloat(float data);
+
+        void WriteDouble(double data);
 
         void WriteString(string data);
 

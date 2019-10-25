@@ -329,6 +329,34 @@ namespace Pioneer.Buffer
             return value;
         }
 
+        public double ReadDouble()
+        {
+            VertifyInRange(8);
+            double value;
+            if (BigEndian)
+            {
+                value = BitConverter.ToDouble(this.block.Buffer, this.Offset + this.Position);
+            }
+            else
+            {
+                var tmp = new byte[8]
+                {
+                    this.block.Buffer[this.Offset + this.Position + 7],
+                    this.block.Buffer[this.Offset + this.Position + 6],
+                    this.block.Buffer[this.Offset + this.Position + 5],
+                    this.block.Buffer[this.Offset + this.Position + 4],
+                    this.block.Buffer[this.Offset + this.Position + 3],
+                    this.block.Buffer[this.Offset + this.Position + 2],
+                    this.block.Buffer[this.Offset + this.Position + 1],
+                    this.block.Buffer[this.Offset + this.Position],
+                };
+                value = BitConverter.ToDouble(tmp, 0);
+            }
+            this.Position += 8;
+
+            return value;
+        }
+
         public string ReadString()
         {
             int length = ReadUInt16();
@@ -607,6 +635,33 @@ namespace Pioneer.Buffer
             this.block.Buffer[this.Offset + this.Position + 2] = bytes[2];
             this.block.Buffer[this.Offset + this.Position + 3] = bytes[3];
             this.Position += 4;
+
+            UpdateSize(this.Position);
+        }
+
+        public void WriteDouble(double data)
+        {
+            if (this.readOnly)
+            {
+                return;
+            }
+
+            VerifyCapacity(8);
+
+            byte[] bytes = BitConverter.GetBytes(data);
+            if (!BigEndian)
+            {
+                Array.Reverse(bytes);
+            }
+            this.block.Buffer[this.Offset + this.Position] = bytes[0];
+            this.block.Buffer[this.Offset + this.Position + 1] = bytes[1];
+            this.block.Buffer[this.Offset + this.Position + 2] = bytes[2];
+            this.block.Buffer[this.Offset + this.Position + 3] = bytes[3];
+            this.block.Buffer[this.Offset + this.Position + 4] = bytes[4];
+            this.block.Buffer[this.Offset + this.Position + 5] = bytes[5];
+            this.block.Buffer[this.Offset + this.Position + 6] = bytes[6];
+            this.block.Buffer[this.Offset + this.Position + 7] = bytes[7];
+            this.Position += 8;
 
             UpdateSize(this.Position);
         }

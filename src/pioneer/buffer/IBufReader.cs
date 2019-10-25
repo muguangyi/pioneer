@@ -11,7 +11,7 @@ using System;
 
 namespace Pioneer.Buffer
 {
-    interface IBufReader
+    interface IBufReader : IBufStream
     {
         byte ReadByte();
 
@@ -32,6 +32,8 @@ namespace Pioneer.Buffer
         int ReadInt();
 
         float ReadFloat();
+
+        double ReadDouble();
 
         string ReadString();
 

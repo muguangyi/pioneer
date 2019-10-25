@@ -7,19 +7,41 @@
  * file that was distributed with this source code.
  */
 
+using Pioneer.Buffer;
 using Pioneer.Framework;
+using Pioneer.network;
 using Pioneer.Sync;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 
 namespace Pioneer
 {
-    sealed partial class World
+    sealed partial class World : ISerializer
     {
+        private EntityCreator defaultCreator = null;
+        private readonly Dictionary<ulong, IEntity> players = new Dictionary<ulong, IEntity>();
+        private readonly Queue<SyncAction> syncActions = new Queue<SyncAction>();
+        private readonly Queue<Action> deferActions = new Queue<Action>();
+        private readonly Dictionary<ulong, IPeer> peers = new Dictionary<ulong, IPeer>();
+        private ISocket socket = null;
+        private object syncObject = new object();
+
         public event Action OnLoading;
         public event Action<Exception> OnClosed;
+
+        public GameMode GameMode { get; private set; }
+
+        public bool Marshal(object packet, IBufWriter writer)
+        {
+            var p = (Packet)packet;
+            return p.Marshal(writer);
+        }
+
+        public bool Unmarshal(IBufReader reader, out object obj)
+        {
+            return ((Packet)(obj = new Packet(0))).Unmarshal(reader);
+        }
 
         public void Start(string nsp = null)
         {
@@ -34,26 +56,20 @@ namespace Pioneer
                     throw new ArgumentNullException(string.Format("nsp should not be NULL under {0} mode!", this.GameMode));
                 }
 
-                //this.beatState = this.beatState ?? new HeartBeatState(this);
-
                 Reset();
 
-                //this.network = GBox.Make<INetworkManager>().Create("pioneer.net", nsp);
-                //this.network.OnAccepted += OnChannelAccepted;
-                //this.network.OnConnected += OnChannelConnected;
-                //this.network.OnClosed += OnChannelClosed;
-                //this.network.OnError += OnChannelError;
-                //this.network.OnPacket += OnChannelPacket;
-                //this.network.SetPlugins(this);
+                this.socket = SocketFactory.Create(nsp, this);
+                this.socket.OnConnected += OnPeerConnected;
+                this.socket.OnClosed += OnPeerClosed;
+                this.socket.OnMessage += OnPeerMessage;
 
                 switch (this.GameMode)
                 {
                 case GameMode.Client:
-                    //this.network.Connect();
+                    this.socket.Dial();
                     break;
                 case GameMode.Server:
-                    //this.network.SetPlugins(this.beatState);
-                    //this.network.Accept();
+                    this.socket.Listen();
                     EnqueueDeferAction(() => { this.OnLoading?.Invoke(); });
                     break;
                 }
@@ -92,17 +108,6 @@ namespace Pioneer
             }
         }
 
-        public ArraySegment<byte> Pack(object packet)
-        {
-            var p = (Packet)packet;
-            return p.Marshal(this.marshalBuffer);
-        }
-
-        public object Unpack(ArraySegment<byte> packet)
-        {
-            return new Packet(0).Unmarshal(packet);
-        }
-
         public void Do(ulong ownerId, SyncType type, SyncTarget target, ulong entityId, string clsName = null, string subTarget = null, params object[] payload)
         {
             if (GameMode.Standalone != this.GameMode)
@@ -137,19 +142,26 @@ namespace Pioneer
             return (null != this.socket && this.socket.Connected);
         }
 
-        private void Sync(IPeer targetChannel = null)
+        private void Sync(IPeer peer = null)
         {
             Flush(actions =>
             {
-                //this.network.SendTo(new Packet(0, actions), targetChannel);
+                peer?.Send(new Packet(0, actions));
             });
         }
 
-        private void SyncAll(params IPeer[] exceptChannels)
+        private void SyncAll()
         {
             Flush(actions =>
             {
-                //this.network.SendToAll(new Packet(0, actions), exceptChannels);
+                var p = new Packet(0, actions);
+                lock (this.peers)
+                {
+                    foreach (var i in this.peers)
+                    {
+                        i.Value.Send(p);
+                    }
+                }
             });
         }
 
@@ -165,21 +177,23 @@ namespace Pioneer
             }
         }
 
-        private void OnChannelAccepted(ISocket network, IPeer peer)
-        {
-
-        }
-
-        private void OnChannelConnected(ISocket network, IPeer peer)
+        private void OnPeerConnected(IPeer peer)
         {
             if (GameMode.Client == this.GameMode)
             {
                 Do(this.defaultCreator.Id, SyncType.Authorize, SyncTarget.Player, 0);
                 Sync(peer);
             }
+            else
+            {
+                lock (this.peers)
+                {
+                    this.peers.Add(peer.Id, peer);
+                }
+            }
         }
 
-        private void OnChannelClosed(ISocket network, IPeer peer, Exception ex)
+        private void OnPeerClosed(IPeer peer, Exception ex)
         {
             switch (this.GameMode)
             {
@@ -189,6 +203,11 @@ namespace Pioneer
             case GameMode.Server:
                 lock (this.syncObject)
                 {
+                    lock (this.peers)
+                    {
+                        this.peers.Remove(peer.Id);
+                    }
+
                     EnqueueDeferAction(() =>
                     {
                         this.OnPlayerExited?.Invoke(GetPlayer(peer));
@@ -204,7 +223,7 @@ namespace Pioneer
             Console.WriteLine("Network error: " + ex.Message);
         }
 
-        private void OnChannelPacket(ISocket network, IPeer peer, object packet)
+        private void OnPeerMessage(IPeer peer, object packet)
         {
             var p = (Packet)packet;
             while (p.Actions.Count > 0)
@@ -425,176 +444,148 @@ namespace Pioneer
                 this.RemoteTimestamp = 0;
             }
 
-            public ArraySegment<byte> Marshal(byte[] buffer)
+            public bool Marshal(IBufWriter writer)
             {
                 //Console.WriteLine("--------------------Marshal------------------------");
-                int length = 0;
-                using (var stream = new MemoryStream(buffer))
+                var orgin = writer.Position;
                 {
-                    using (var writer = new BinaryWriter(stream))
+                    writer.WriteInt32(0);
+                    writer.WriteUInt32(this.FrameIndex);
+                    writer.WriteInt(this.Actions.Count);
+                    lock (this.Actions)
                     {
-                        writer.Write(0);
-                        writer.Write(this.FrameIndex);
-                        writer.Write(this.Actions.Count);
-                        lock (this.Actions)
+                        while (this.Actions.Count > 0)
                         {
-                            while (this.Actions.Count > 0)
-                            {
-                                var a = this.Actions.Dequeue();
+                            var a = this.Actions.Dequeue();
 
-                                //Console.WriteLine("> " + a.OwnerId + ", " + a.Type + ", " + a.Target + ", " + a.EntityId + ", " + (a.ClsName ?? string.Empty) + ", " + (a.SubTarget ?? string.Empty));
-                                writer.Write(a.OwnerId);
-                                writer.Write((byte)a.Type);
-                                writer.Write((byte)a.Target);
-                                writer.Write(a.EntityId);
-                                writer.Write(a.ClsName ?? string.Empty);
-                                writer.Write(a.SubTarget ?? string.Empty);
-                                writer.Write((byte)a.Payload.Length);
-                                for (var i = 0; i < a.Payload.Length; ++i)
-                                {
-                                    WriteObject(writer, a.Payload[i]);
-                                }
+                            //Console.WriteLine("> " + a.OwnerId + ", " + a.Type + ", " + a.Target + ", " + a.EntityId + ", " + (a.ClsName ?? string.Empty) + ", " + (a.SubTarget ?? string.Empty));
+                            writer.WriteUInt64(a.OwnerId);
+                            writer.WriteByte((byte)a.Type);
+                            writer.WriteByte((byte)a.Target);
+                            writer.WriteUInt64(a.EntityId);
+                            writer.WriteString(a.ClsName ?? string.Empty);
+                            writer.WriteString(a.SubTarget ?? string.Empty);
+                            writer.WriteByte((byte)a.Payload.Length);
+                            for (var i = 0; i < a.Payload.Length; ++i)
+                            {
+                                WriteObject(writer, a.Payload[i]);
                             }
                         }
-
-                        writer.Write(this.LocalTimestamp);
-
-                        length = (int)stream.Position;
                     }
-                }
 
-                using (var stream = new MemoryStream(buffer))
-                {
-                    using (var writer = new BinaryWriter(stream))
-                    {
-                        writer.Write(length);
-                    }
+                    writer.WriteInt64(this.LocalTimestamp);
                 }
+                var length = writer.Position - orgin;
+                writer.Seek(orgin);
+                writer.WriteInt32(length);
 
-                return new ArraySegment<byte>(buffer, 0, length + 4);
+                return true;
             }
 
-            public Packet Unmarshal(ArraySegment<byte> data)
+            public bool Unmarshal(IBufReader reader)
             {
                 //Console.WriteLine("--------------------Unmarshal------------------------");
-                using (var stream = new MemoryStream(data.Array, data.Offset, data.Count))
+                var length = reader.ReadInt32();
+
+                this.FrameIndex = reader.ReadUInt32();
+
+                var count = reader.ReadInt32();
+                for (var i = 0; i < count; ++i)
                 {
-                    using (var reader = new BinaryReader(stream))
+                    var ownerId = reader.ReadUInt64();
+                    var type = (SyncType)reader.ReadByte();
+                    var target = (SyncTarget)reader.ReadByte();
+                    var entityId = reader.ReadUInt64();
+                    var clsName = reader.ReadString();
+                    var subTarget = reader.ReadString();
+                    object[] payload = null;
+                    var payloadCount = (int)reader.ReadByte();
+                    if (payloadCount > 0)
                     {
-                        var length = reader.ReadInt32();
-
-                        this.FrameIndex = reader.ReadUInt32();
-
-                        var count = reader.ReadInt32();
-                        for (var i = 0; i < count; ++i)
+                        payload = new object[payloadCount];
+                        for (var j = 0; j < payloadCount; ++j)
                         {
-                            var ownerId = reader.ReadUInt64();
-                            var type = (SyncType)reader.ReadByte();
-                            var target = (SyncTarget)reader.ReadByte();
-                            var entityId = reader.ReadUInt64();
-                            var clsName = reader.ReadString();
-                            var subTarget = reader.ReadString();
-                            object[] payload = null;
-                            var payloadCount = (int)reader.ReadByte();
-                            if (payloadCount > 0)
-                            {
-                                payload = new object[payloadCount];
-                                for (var j = 0; j < payloadCount; ++j)
-                                {
-                                    payload[j] = ReadObject(reader);
-                                }
-                            }
-
-                            //Console.WriteLine("< " + ownerId + ", " + type + ", " + target + ", " + entityId + ", " + (clsName ?? string.Empty) + ", " + (subTarget ?? string.Empty));
-                            lock (this.Actions)
-                            {
-                                this.Actions.Enqueue(new SyncAction
-                                {
-                                    OwnerId = ownerId,
-                                    Type = type,
-                                    Target = target,
-                                    EntityId = entityId,
-                                    ClsName = string.IsNullOrEmpty(clsName) ? null : clsName,
-                                    SubTarget = string.IsNullOrEmpty(subTarget) ? null : subTarget,
-                                    Payload = payload,
-                                });
-                            }
+                            payload[j] = ReadObject(reader);
                         }
+                    }
 
-                        this.RemoteTimestamp = reader.ReadInt64();
-
-                        return this;
+                    //Console.WriteLine("< " + ownerId + ", " + type + ", " + target + ", " + entityId + ", " + (clsName ?? string.Empty) + ", " + (subTarget ?? string.Empty));
+                    lock (this.Actions)
+                    {
+                        this.Actions.Enqueue(new SyncAction
+                        {
+                            OwnerId = ownerId,
+                            Type = type,
+                            Target = target,
+                            EntityId = entityId,
+                            ClsName = string.IsNullOrEmpty(clsName) ? null : clsName,
+                            SubTarget = string.IsNullOrEmpty(subTarget) ? null : subTarget,
+                            Payload = payload,
+                        });
                     }
                 }
+
+                this.RemoteTimestamp = reader.ReadInt64();
+
+                return true;
             }
         }
 
-        public GameMode GameMode { get; private set; }
-
-        private EntityCreator defaultCreator = null;
-        private Dictionary<ulong, IEntity> players = new Dictionary<ulong, IEntity>();
-        private Queue<SyncAction> syncActions = new Queue<SyncAction>();
-        private Queue<Action> deferActions = new Queue<Action>();
-        private ISocket socket = null;
-        private byte[] marshalBuffer = new byte[BufferSize];
-        private object syncObject = new object();
-        //private HeartBeatState beatState = null;
-
-        public static void WriteObject(BinaryWriter writer, object value)
+        public static void WriteObject(IBufWriter writer, object value)
         {
             var t = value.GetType();
             if (t.IsValueType)
             {
                 if (t == typeof(bool))
                 {
-                    writer.Write((bool)value ? TRUE : FALSE);
+                    writer.WriteByte((bool)value ? TRUE : FALSE);
                 }
                 else if (t.IsPrimitive)
                 {
                     if (t == typeof(byte))
                     {
-                        writer.Write(INT8);
-                        writer.Write((byte)value);
+                        writer.WriteByte(INT8);
+                        writer.WriteByte((byte)value);
                     }
                     else if (t == typeof(short))
                     {
-                        writer.Write(INT16);
-                        writer.Write((short)value);
+                        writer.WriteByte(INT16);
+                        writer.WriteInt16((short)value);
                     }
                     else if (t == typeof(int))
                     {
-                        writer.Write(INT32);
-                        writer.Write((int)value);
+                        writer.WriteByte(INT32);
+                        writer.WriteInt32((int)value);
                     }
                     else if (t == typeof(long))
                     {
-                        writer.Write(INT64);
-                        writer.Write((long)value);
+                        writer.WriteByte(INT64);
+                        writer.WriteInt64((long)value);
                     }
                     else if (t == typeof(ushort))
                     {
-                        writer.Write(UINT16);
-                        writer.Write((ushort)value);
+                        writer.WriteByte(UINT16);
+                        writer.WriteUInt16((ushort)value);
                     }
                     else if (t == typeof(uint))
                     {
-                        writer.Write(UINT32);
-                        writer.Write((uint)value);
+                        writer.WriteByte(UINT32);
+                        writer.WriteUInt32((uint)value);
                     }
                     else if (t == typeof(ulong))
                     {
-                        writer.Write(UINT64);
-                        writer.Write((ulong)value);
+                        writer.WriteByte(UINT64);
+                        writer.WriteUInt64((ulong)value);
                     }
                     else if (t == typeof(float))
                     {
-                        writer.Write(FLOAT32);
-                        writer.Write((float)value);
+                        writer.WriteByte(FLOAT32);
+                        writer.WriteFloat((float)value);
                     }
                     else if (t == typeof(double))
                     {
-                        writer.Write(FLOAT64);
-                        writer.Write((double)value);
+                        writer.WriteByte(FLOAT64);
+                        writer.WriteDouble((double)value);
                     }
                 }
                 else if (t.IsEnum)
@@ -608,12 +599,12 @@ namespace Pioneer
             }
             else if (t == typeof(string))
             {
-                writer.Write(STR32);
-                writer.Write((string)value);
+                writer.WriteByte(STR32);
+                writer.WriteString((string)value);
             }
             else if (t.IsArray)
             {
-                writer.Write(ARR32);
+                writer.WriteByte(ARR32);
                 var arr = value as Array;
                 WriteObject(writer, arr.Length);
                 for (var i = 0; i < arr.Length; ++i)
@@ -623,7 +614,7 @@ namespace Pioneer
             }
             else if (value is IDictionary)
             {
-                writer.Write(MAP32);
+                writer.WriteByte(MAP32);
                 var map = value as IDictionary;
                 WriteObject(writer, map.Count);
                 var it = map.GetEnumerator();
@@ -639,7 +630,7 @@ namespace Pioneer
             }
         }
 
-        public static object ReadObject(BinaryReader reader)
+        public static object ReadObject(IBufReader reader)
         {
             var flag = reader.ReadByte();
             switch (flag)
@@ -649,7 +640,7 @@ namespace Pioneer
             case TRUE:
                 return true;
             case FLOAT32:
-                return reader.ReadSingle();
+                return reader.ReadFloat();
             case FLOAT64:
                 return reader.ReadDouble();
             case UINT16:
