@@ -11,6 +11,9 @@ using System;
 
 namespace Pioneer
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
     public sealed class PClassAttribute : Attribute
     {

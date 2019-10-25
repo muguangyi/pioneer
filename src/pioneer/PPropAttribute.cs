@@ -11,10 +11,13 @@ using System;
 
 namespace Pioneer
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
-    public sealed class PPropertyAttribute : Attribute
+    public sealed class PPropAttribute : Attribute
     {
-        public PPropertyAttribute(Type format, object defaultValue = null, ApplyDomain domain = ApplyDomain.NetMultiple, ApplyCondition condition = ApplyCondition.All)
+        public PPropAttribute(Type format, object defaultValue = null, ApplyDomain domain = ApplyDomain.NetMultiple, ApplyCondition condition = ApplyCondition.All)
         {
             this.Format = format;
             this.DefaultValue = defaultValue;

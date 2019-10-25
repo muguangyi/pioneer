@@ -28,10 +28,10 @@ namespace Pioneer
             this.typeName = type.FullName;
 
             var properties = type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static)
-                                 .Where(p => p.GetCustomAttributes(typeof(PPropertyAttribute), false).Length > 0);
+                                 .Where(p => p.GetCustomAttributes(typeof(PPropAttribute), false).Length > 0);
             foreach (var property in properties)
             {
-                var attr = property.GetCustomAttributes(typeof(PPropertyAttribute), false)[0] as PPropertyAttribute;
+                var attr = property.GetCustomAttributes(typeof(PPropAttribute), false)[0] as PPropAttribute;
                 var proxy = (AbstractMeta)Activator.CreateInstance
                 (
                     attr.Format,
@@ -45,10 +45,10 @@ namespace Pioneer
             }
 
             var functions = type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static)
-                                .Where(m => m.GetCustomAttributes(typeof(PFunctionAttribute), true).Length > 0);
+                                .Where(m => m.GetCustomAttributes(typeof(PFuncAttribute), true).Length > 0);
             foreach (var function in functions)
             {
-                var attr = function.GetCustomAttributes(typeof(PFunctionAttribute), false)[0] as PFunctionAttribute;
+                var attr = function.GetCustomAttributes(typeof(PFuncAttribute), false)[0] as PFuncAttribute;
                 var proxy = (AbstractArgs)Activator.CreateInstance
                 (
                     attr.Format,
@@ -63,7 +63,7 @@ namespace Pioneer
         internal Entity Entity { private get; set; }
 
         /// <inheritdoc />
-        public event Action<ITrait> OnTraitChanged;
+        public event Action<ITrait> OnChanged;
 
         /// <inheritdoc />
         public virtual void Dispose()
@@ -106,7 +106,7 @@ namespace Pioneer
         /// </summary>
         protected void NotifyChanged()
         {
-            this.OnTraitChanged?.Invoke(this);
+            this.OnChanged?.Invoke(this);
         }
 
         internal enum CallType

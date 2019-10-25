@@ -11,10 +11,13 @@ using System;
 
 namespace Pioneer
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
-    public class PFunctionAttribute : Attribute
+    public class PFuncAttribute : Attribute
     {
-        public PFunctionAttribute(Type format, ApplyDomain domain = ApplyDomain.NetMultiple, ApplyCondition condition = ApplyCondition.All)
+        public PFuncAttribute(Type format, ApplyDomain domain = ApplyDomain.NetMultiple, ApplyCondition condition = ApplyCondition.All)
         {
             this.Format = format;
             this.Domain = domain;

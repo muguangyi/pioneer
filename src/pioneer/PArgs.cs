@@ -12,6 +12,9 @@ using System;
 
 namespace Pioneer
 {
+    /// <summary>
+    /// Base abstract arg class.
+    /// </summary>
     public abstract class AbstractArgs : AbstractMeta
     {
         public AbstractArgs(ApplyDomain domain, ApplyCondition condition) : base(domain, condition)
@@ -21,6 +24,9 @@ namespace Pioneer
         { }
     }
 
+    /// <summary>
+    /// Pioneer arg without parameters.
+    /// </summary>
     public sealed class PArgs : AbstractArgs
     {
         /// <summary>
@@ -49,7 +55,7 @@ namespace Pioneer
     }
 
     /// <summary>
-    /// 
+    /// Pioneer arg with 1 parameter.
     /// </summary>
     /// <typeparam name="T1"></typeparam>
     public sealed class PArgs<T1> : AbstractArgs
@@ -80,7 +86,7 @@ namespace Pioneer
     }
 
     /// <summary>
-    /// 
+    /// Pioneer arg with 2 parameters.
     /// </summary>
     /// <typeparam name="T1"></typeparam>
     /// <typeparam name="T2"></typeparam>
@@ -112,7 +118,7 @@ namespace Pioneer
     }
 
     /// <summary>
-    /// 
+    /// Pioneer arg with 3 parameters.
     /// </summary>
     /// <typeparam name="T1"></typeparam>
     /// <typeparam name="T2"></typeparam>
@@ -145,7 +151,7 @@ namespace Pioneer
     }
 
     /// <summary>
-    /// 
+    /// Pioneer arg with 4 parameters.
     /// </summary>
     /// <typeparam name="T1"></typeparam>
     /// <typeparam name="T2"></typeparam>
@@ -179,7 +185,7 @@ namespace Pioneer
     }
 
     /// <summary>
-    /// 
+    /// Pioneer arg with 5 parameters.
     /// </summary>
     /// <typeparam name="T1"></typeparam>
     /// <typeparam name="T2"></typeparam>
@@ -214,7 +220,7 @@ namespace Pioneer
     }
 
     /// <summary>
-    /// 
+    /// Pioneer arg with 6 parameters.
     /// </summary>
     /// <typeparam name="T1"></typeparam>
     /// <typeparam name="T2"></typeparam>
@@ -250,7 +256,7 @@ namespace Pioneer
     }
 
     /// <summary>
-    /// 
+    /// Pioneer arg with 7 parameters.
     /// </summary>
     /// <typeparam name="T1"></typeparam>
     /// <typeparam name="T2"></typeparam>
@@ -287,7 +293,7 @@ namespace Pioneer
     }
 
     /// <summary>
-    /// 
+    /// Pioneer arg with 8 parameters.
     /// </summary>
     /// <typeparam name="T1"></typeparam>
     /// <typeparam name="T2"></typeparam>
@@ -325,7 +331,7 @@ namespace Pioneer
     }
 
     /// <summary>
-    /// 
+    /// Pioneer arg with 9 parameters.
     /// </summary>
     /// <typeparam name="T1"></typeparam>
     /// <typeparam name="T2"></typeparam>

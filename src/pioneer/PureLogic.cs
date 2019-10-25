@@ -9,6 +9,9 @@
 
 namespace Pioneer
 {
+    /// <summary>
+    /// Logic base class.
+    /// </summary>
     public abstract class PureLogic
     {
         public PureLogic()

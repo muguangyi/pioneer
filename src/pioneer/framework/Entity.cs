@@ -75,7 +75,7 @@ namespace Pioneer.Framework
                 if (null != trait)
                 {
                     code = this.center.GetBitCodeByType(trait.GetType());
-                    trait.OnTraitChanged -= OnTraitChanged;
+                    trait.OnChanged -= OnTraitChanged;
 
                     this.traits[index] = null;
                     this.world.DropTrait(trait);
@@ -366,7 +366,7 @@ namespace Pioneer.Framework
                 trait = this.world.PickTrait(traitType);
                 trait.Entity = this;
                 trait.OnInit();
-                trait.OnTraitChanged += OnTraitChanged;
+                trait.OnChanged += OnTraitChanged;
 
                 this.traits[code.Index] = trait;
                 this.CompositeCode.Add(code);
@@ -394,7 +394,7 @@ namespace Pioneer.Framework
             {
                 var code = this.center.GetBitCodeByType(traitType);
                 var trait = this.traits[code.Index];
-                trait.OnTraitChanged -= OnTraitChanged;
+                trait.OnChanged -= OnTraitChanged;
 
                 this.traits[code.Index] = null;
                 this.world.DropTrait(trait);

@@ -19,7 +19,7 @@ namespace Pioneer
         /// <summary>
         /// Event when a trait changed.
         /// </summary>
-        event Action<ITrait> OnTraitChanged;
+        event Action<ITrait> OnChanged;
 
         /// <summary>
         /// Initialize entrance.

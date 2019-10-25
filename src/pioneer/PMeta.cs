@@ -13,6 +13,9 @@ using System.Reflection;
 
 namespace Pioneer
 {
+    /// <summary>
+    /// Base abstract meta class.
+    /// </summary>
     public abstract class AbstractMeta : IDisposable
     {
         public AbstractMeta(ApplyDomain domain, ApplyCondition condition)
@@ -42,6 +45,10 @@ namespace Pioneer
         }
     }
 
+    /// <summary>
+    /// Meta class with target Type.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public sealed class PMeta<T> : AbstractMeta
     {
         public PMeta(object defaultValue, PropertyInfo property, object target, ApplyDomain domain, ApplyCondition condition) : base(domain, condition)
