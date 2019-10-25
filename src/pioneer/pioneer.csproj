@@ -13,4 +13,8 @@
     <OutputPath>../../bin</OutputPath>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="buffer\" />
+  </ItemGroup>
+
 </Project>
