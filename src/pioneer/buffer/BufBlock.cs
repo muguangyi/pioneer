@@ -11,15 +11,15 @@ using System;
 
 namespace Pioneer.Buffer
 {
-    sealed class ByteBlock : IDisposable
+    sealed class BufBlock : IDisposable
     {
-        private readonly ByteArray header = null;
+        private readonly BufArray header = null;
 
-        public ByteBlock(ByteStorage storage, int size)
+        public BufBlock(BufStorage storage, int size)
         {
             this.Storage = storage;
             this.Buffer = new byte[size];
-            this.header = new ByteArray(this, 0, size);
+            this.header = new BufArray(this, 0, size);
         }
 
         public void Dispose()
@@ -27,13 +27,13 @@ namespace Pioneer.Buffer
             this.Buffer = null;
         }
 
-        public ByteStorage Storage { get; } = null;
+        public BufStorage Storage { get; } = null;
 
         public byte[] Buffer { get; private set; } = null;
 
-        public ByteArray Capture(int size)
+        public BufArray Capture(int size)
         {
-            size = ByteStorage.GetProperSize(size);
+            size = BufStorage.GetProperSize(size);
 
             lock (this)
             {

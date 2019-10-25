@@ -12,7 +12,7 @@ using System.IO;
 
 namespace Pioneer.Buffer
 {
-    interface IByteArray : IDisposable
+    interface IBufArray : IBufReader, IBufWriter, IDisposable
     {
         byte[] Buffer { get; }
 

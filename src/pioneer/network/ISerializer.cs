@@ -7,14 +7,13 @@
  * file that was distributed with this source code.
  */
 
-using System;
+using Pioneer.Buffer;
 
 namespace Pioneer
 {
     interface ISerializer
     {
-        ArraySegment<byte> Marshal(object obj);
-        object Unmarshal(ArraySegment<byte> bytes);
-        int Slice(ArraySegment<byte> source);
+        bool Marshal(object obj, IBufWriter writer);
+        bool Unmarshal(IBufReader reader, out object obj);
     }
 }

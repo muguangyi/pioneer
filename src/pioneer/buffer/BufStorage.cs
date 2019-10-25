@@ -12,12 +12,12 @@ using System.Collections.Generic;
 
 namespace Pioneer.Buffer
 {
-    sealed class ByteStorage : IDisposable
+    sealed class BufStorage : IDisposable
     {
         private const int MIN_BUFFER_SIZE = 64 * 1024;  // 64k
         private const int MIN_BYTEARRAY_SIZE = 32;      // 32b
 
-        private readonly List<ByteBlock> blocks = new List<ByteBlock>();
+        private readonly List<BufBlock> blocks = new List<BufBlock>();
 
         public static int GetProperSize(int size)
         {
@@ -35,9 +35,9 @@ namespace Pioneer.Buffer
             return total;
         }
 
-        public ByteStorage()
+        public BufStorage()
         {
-            this.blocks.Add(new ByteBlock(this, MIN_BUFFER_SIZE));
+            this.blocks.Add(new BufBlock(this, MIN_BUFFER_SIZE));
         }
 
         public void Dispose()
@@ -48,9 +48,9 @@ namespace Pioneer.Buffer
             }
         }
 
-        public IByteArray Alloc(int size)
+        public IBufArray Alloc(int size)
         {
-            ByteArray bytes = null;
+            BufArray bytes = null;
             for (int i = 0; i < this.blocks.Count; ++i)
             {
                 bytes = this.blocks[i].Capture(size);
@@ -60,7 +60,7 @@ namespace Pioneer.Buffer
                 }
             }
 
-            var block = new ByteBlock(this, Math.Max(GetProperSize(size), MIN_BUFFER_SIZE));
+            var block = new BufBlock(this, Math.Max(GetProperSize(size), MIN_BUFFER_SIZE));
             this.blocks.Add(block);
 
             return block.Capture(size);
