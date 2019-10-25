@@ -11,7 +11,7 @@ using System;
 
 namespace Pioneer.Buffer
 {
-    interface IBufArray : IBufReader, IBufWriter, IDisposable
+    interface IBufSlice : IBufReader, IBufWriter, IDisposable
     {
         byte[] Buffer { get; }
 

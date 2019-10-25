@@ -48,9 +48,9 @@ namespace Pioneer.Buffer
             }
         }
 
-        public IBufArray Alloc(int size)
+        public IBufSlice Alloc(int size)
         {
-            BufArray bytes = null;
+            BufSlice bytes = null;
             for (int i = 0; i < this.blocks.Count; ++i)
             {
                 bytes = this.blocks[i].Capture(size);

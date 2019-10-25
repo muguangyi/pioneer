@@ -146,12 +146,12 @@ namespace Pioneer
         private void Invoke(AbstractMeta proxy, CallType callType, SyncType syncType, ulong authorityOwnerId, string subTarget, params object[] payload)
         {
             var world = ((EntityCreator)this.Entity.Creator).World;
-            switch (world.GameMode)
+            switch (world.Mode)
             {
-            case GameMode.Standalone:
+            case WorldMode.Standalone:
                 proxy.Call(payload);
                 break;
-            case GameMode.Server:
+            case WorldMode.Server:
                 switch (proxy.Domain)
                 {
                 case ApplyDomain.Client:
@@ -169,7 +169,7 @@ namespace Pioneer
                     break;
                 }
                 break;
-            case GameMode.Client:
+            case WorldMode.Client:
                 switch (proxy.Domain)
                 {
                 case ApplyDomain.Client:

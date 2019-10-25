@@ -111,7 +111,7 @@ namespace Pioneer.Framework
         public Trait AddTrait(Type traitType)
         {
             Trait trait = AddTraitInternal(traitType);
-            if (this.Replicated && null != trait && GameMode.Client != this.world.GameMode)
+            if (this.Replicated && null != trait && WorldMode.Client != this.world.Mode)
             {
                 this.world.Do(((EntityCreator)this.Creator).Id, SyncType.Create, SyncTarget.Trait, this.Id, traitType.FullName);
             }
@@ -132,7 +132,7 @@ namespace Pioneer.Framework
 
         public bool RemoveTrait(Type traitType)
         {
-            if (RemoveTraitInternal(traitType) && this.Replicated && GameMode.Client != this.world.GameMode)
+            if (RemoveTraitInternal(traitType) && this.Replicated && WorldMode.Client != this.world.Mode)
             {
                 this.world.Do(((EntityCreator)this.Creator).Id, SyncType.Destroy, SyncTarget.Trait, this.Id, traitType.FullName);
 
@@ -225,7 +225,7 @@ namespace Pioneer.Framework
 
         public bool AddTag(string tag)
         {
-            if (AddTagInternal(tag) && this.Replicated && GameMode.Client != this.world.GameMode)
+            if (AddTagInternal(tag) && this.Replicated && WorldMode.Client != this.world.Mode)
             {
                 this.world.Do(((EntityCreator)this.Creator).Id, SyncType.Create, SyncTarget.Tag, this.Id, tag);
 
@@ -237,7 +237,7 @@ namespace Pioneer.Framework
 
         public bool RemoveTag(string tag)
         {
-            if (RemoveTagInternal(tag) && this.Replicated && GameMode.Client != this.world.GameMode)
+            if (RemoveTagInternal(tag) && this.Replicated && WorldMode.Client != this.world.Mode)
             {
                 this.world.Do(((EntityCreator)this.Creator).Id, SyncType.Destroy, SyncTarget.Tag, this.Id, tag);
 
@@ -456,7 +456,7 @@ namespace Pioneer.Framework
             if (typeof(Control).IsAssignableFrom(controlType) && null == control)
             {
                 control = Activator.CreateInstance(controlType) as Control;
-                if (control.IsApplied(this.world.GameMode))
+                if (control.IsApplied(this.world.Mode))
                 {
                     AddControl(control);
                 }

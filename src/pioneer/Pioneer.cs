@@ -10,23 +10,18 @@
 namespace Pioneer
 {
     /// <summary>
-    /// Game mode types.
+    /// Pioneer module entry.
     /// </summary>
-    public enum GameMode
+    public static class Pioneer
     {
         /// <summary>
-        /// Standalone mode.
+        /// New a world instance.
         /// </summary>
-        Standalone,
-
-        /// <summary>
-        /// Client mode.
-        /// </summary>
-        Client,
-
-        /// <summary>
-        /// Dedicate server mode.
-        /// </summary>
-        Server,
+        /// <param name="worldMode">World running mode.</param>
+        /// <returns>IWorld instance.</returns>
+        public static IWorld New(WorldMode worldMode = WorldMode.Standalone)
+        {
+            return new World(worldMode);
+        }
     }
 }

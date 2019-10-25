@@ -19,12 +19,12 @@ namespace Pioneer
 
         private ApplyDomain Domain { get; set; }
 
-        internal bool IsApplied(GameMode mode)
+        internal bool IsApplied(WorldMode worldMode)
         {
-            return ((GameMode.Standalone == mode) ||
-                    (ApplyDomain.NetMultiple == this.Domain) ||
-                    (ApplyDomain.Client == this.Domain && GameMode.Client == mode) ||
-                    (ApplyDomain.Server == this.Domain && GameMode.Server == mode));
+            return (WorldMode.Standalone == worldMode)                                  ||
+                   (ApplyDomain.NetMultiple == this.Domain)                             ||
+                   (ApplyDomain.Client == this.Domain && WorldMode.Client == worldMode) ||
+                   (ApplyDomain.Server == this.Domain && WorldMode.Server == worldMode);
         }
     }
 }

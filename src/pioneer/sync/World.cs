@@ -30,7 +30,7 @@ namespace Pioneer
         public event Action OnLoading;
         public event Action<Exception> OnClosed;
 
-        public GameMode GameMode { get; private set; }
+        public WorldMode Mode { get; }
 
         public bool Marshal(object packet, IBufWriter writer)
         {
@@ -45,7 +45,7 @@ namespace Pioneer
 
         public void Start(string nsp = null)
         {
-            if (GameMode.Standalone == this.GameMode)
+            if (WorldMode.Standalone == this.Mode)
             {
                 EnqueueDeferAction(() => { this.OnLoading?.Invoke(); });
             }
@@ -53,7 +53,7 @@ namespace Pioneer
             {
                 if (null == nsp)
                 {
-                    throw new ArgumentNullException(string.Format("nsp should not be NULL under {0} mode!", this.GameMode));
+                    throw new ArgumentNullException(string.Format("nsp should not be NULL under {0} mode!", this.Mode));
                 }
 
                 Reset();
@@ -63,12 +63,12 @@ namespace Pioneer
                 this.socket.OnClosed += OnPeerClosed;
                 this.socket.OnMessage += OnPeerMessage;
 
-                switch (this.GameMode)
+                switch (this.Mode)
                 {
-                case GameMode.Client:
+                case WorldMode.Client:
                     this.socket.Dial();
                     break;
-                case GameMode.Server:
+                case WorldMode.Server:
                     this.socket.Listen();
                     EnqueueDeferAction(() => { this.OnLoading?.Invoke(); });
                     break;
@@ -83,9 +83,9 @@ namespace Pioneer
 
         public void NotifyLoaded()
         {
-            switch (this.GameMode)
+            switch (this.Mode)
             {
-            case GameMode.Standalone:
+            case WorldMode.Standalone:
                 {
                     EnqueueDeferAction(() =>
                     {
@@ -94,7 +94,7 @@ namespace Pioneer
                     });
                 }
                 break;
-            case GameMode.Client:
+            case WorldMode.Client:
                 {
                     var creator = GetFirstEntityCreator();
                     if (null == creator)
@@ -110,7 +110,7 @@ namespace Pioneer
 
         public void Do(ulong ownerId, SyncType type, SyncTarget target, ulong entityId, string clsName = null, string subTarget = null, params object[] payload)
         {
-            if (GameMode.Standalone != this.GameMode)
+            if (WorldMode.Standalone != this.Mode)
             {
                 lock (this.syncActions)
                 {
@@ -179,7 +179,7 @@ namespace Pioneer
 
         private void OnPeerConnected(IPeer peer)
         {
-            if (GameMode.Client == this.GameMode)
+            if (WorldMode.Client == this.Mode)
             {
                 Do(this.defaultCreator.Id, SyncType.Authorize, SyncTarget.Player, 0);
                 Sync(peer);
@@ -195,12 +195,12 @@ namespace Pioneer
 
         private void OnPeerClosed(IPeer peer, Exception ex)
         {
-            switch (this.GameMode)
+            switch (this.Mode)
             {
-            case GameMode.Client:
+            case WorldMode.Client:
                 EnqueueDeferAction(() => { this.OnClosed?.Invoke(ex); });
                 break;
-            case GameMode.Server:
+            case WorldMode.Server:
                 lock (this.syncObject)
                 {
                     lock (this.peers)

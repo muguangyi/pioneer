@@ -34,9 +34,9 @@ namespace Pioneer
         public event Action<IEntity> OnPlayerEntered;
         public event Action<IEntity> OnPlayerExited;
 
-        public World(GameMode worldMode = GameMode.Standalone)
+        public World(WorldMode mode = WorldMode.Standalone)
         {
-            this.GameMode = worldMode;
+            this.Mode = mode;
             this.filters.Active();
             this.defaultCreator = new EntityCreator(AllocUniqueId(), this);
         }
@@ -171,7 +171,7 @@ namespace Pioneer
         {
             var e = CreateEntityInternal(this.defaultCreator, 0, replicated, template);
 
-            if (replicated && GameMode.Client != this.GameMode)
+            if (replicated && WorldMode.Client != this.Mode)
             {
                 this.Do(((EntityCreator)e.Creator).Id, SyncType.Create, SyncTarget.Entity, e.Id, null, template);
             }
@@ -235,15 +235,15 @@ namespace Pioneer
 
             ExecuteDeferActions();
 
-            switch (this.GameMode)
+            switch (this.Mode)
             {
-            case GameMode.Client:
+            case WorldMode.Client:
                 if (IsNetworkValid())
                 {
                     Sync();
                 }
                 break;
-            case GameMode.Server:
+            case WorldMode.Server:
                 if (IsNetworkValid())
                 {
                     SyncAll();
@@ -256,7 +256,7 @@ namespace Pioneer
         {
             var e = CreateEntityInternal(owner, 0, replicated, template);
 
-            if (replicated && GameMode.Client != this.GameMode)
+            if (replicated && WorldMode.Client != this.Mode)
             {
                 this.Do(((EntityCreator)e.Creator).Id, SyncType.Create, SyncTarget.Entity, e.Id, null, template);
             }
@@ -287,7 +287,7 @@ namespace Pioneer
 
         internal void DestroyEntity(Entity entity)
         {
-            if (GameMode.Client != this.GameMode)
+            if (WorldMode.Client != this.Mode)
             {
                 this.Do(((EntityCreator)entity.Creator).Id, SyncType.Destroy, SyncTarget.Entity, entity.Id);
             }
@@ -305,7 +305,7 @@ namespace Pioneer
             if (null == GetSystem(systemType) && typeof(System).IsAssignableFrom(systemType))
             {
                 var system = Activator.CreateInstance(systemType) as System;
-                if (system.IsApplied(this.GameMode))
+                if (system.IsApplied(this.Mode))
                 {
                     system.OnInit(this);
                     this.systems.Add(system);
@@ -366,7 +366,7 @@ namespace Pioneer
 
         private ulong AllocUniqueId()
         {
-            ulong flag = (GameMode.Client == this.GameMode ? (ulong)0 : (uint)1 << 63);
+            ulong flag = (WorldMode.Client == this.Mode ? (ulong)0 : (uint)1 << 63);
             return (flag + (++this.instanceIndex));
         }
 

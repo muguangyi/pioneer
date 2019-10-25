@@ -30,7 +30,7 @@ namespace Pioneer.Framework
         {
             get
             {
-                return (GameMode.Client != this.World.GameMode);
+                return (WorldMode.Client != this.World.Mode);
             }
         }
 

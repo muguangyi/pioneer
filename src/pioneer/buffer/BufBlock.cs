@@ -13,13 +13,13 @@ namespace Pioneer.Buffer
 {
     sealed class BufBlock : IDisposable
     {
-        private readonly BufArray header = null;
+        private readonly BufSlice header = null;
 
         public BufBlock(BufStorage storage, int size)
         {
             this.Storage = storage;
             this.Buffer = new byte[size];
-            this.header = new BufArray(this, 0, size);
+            this.header = new BufSlice(this, 0, size);
         }
 
         public void Dispose()
@@ -31,7 +31,7 @@ namespace Pioneer.Buffer
 
         public byte[] Buffer { get; private set; } = null;
 
-        public BufArray Capture(int size)
+        public BufSlice Capture(int size)
         {
             size = BufStorage.GetProperSize(size);
 

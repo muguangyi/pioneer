@@ -24,8 +24,8 @@ namespace Pioneer
         private readonly Thread recvThread = null;
         private readonly Queue<object> sendQueue = new Queue<object>();
         private readonly AutoResetEvent sendWatcher = new AutoResetEvent(false);
-        private IBufArray sendBuffer = null;
-        private IBufArray recvBuffer = null;
+        private IBufSlice sendBuffer = null;
+        private IBufSlice recvBuffer = null;
         private bool closed = false;
 
         public NetPeer(ulong id, Socket socket, ISerializer serializer)

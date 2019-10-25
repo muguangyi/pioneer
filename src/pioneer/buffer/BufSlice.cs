@@ -13,15 +13,15 @@ using System.Text;
 
 namespace Pioneer.Buffer
 {
-    sealed class BufArray : IBufArray
+    sealed class BufSlice : IBufSlice
     {
         public static bool BigEndian { get; set; } = true;
 
         private readonly BufBlock block = null;
-        private BufArray prev = null;
+        private BufSlice prev = null;
         private bool readOnly = false;
 
-        public BufArray(BufBlock block, int offset, int total)
+        public BufSlice(BufBlock block, int offset, int total)
         {
             this.block = block;
             this.Offset = offset;
@@ -72,7 +72,7 @@ namespace Pioneer.Buffer
 
         public int Position { get; private set; } = 0;
 
-        public BufArray Next { get; private set; } = null;
+        public BufSlice Next { get; private set; } = null;
 
         public void Retain()
         {
@@ -703,7 +703,7 @@ namespace Pioneer.Buffer
 
         internal void SplitByteArray(int size)
         {
-            var splitNode = new BufArray(this.block, this.Offset + size, this.Total - size);
+            var splitNode = new BufSlice(this.block, this.Offset + size, this.Total - size);
             this.Total = size;
 
             if (null != this.Next)
