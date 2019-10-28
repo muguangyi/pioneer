@@ -25,6 +25,5 @@ namespace Pioneer
         /// <inheritdoc />
         public virtual void OnUpdate(IEntityContainer container, float deltaTime)
         { }
-
     }
 }
