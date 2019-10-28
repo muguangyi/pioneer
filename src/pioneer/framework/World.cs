@@ -80,7 +80,6 @@ namespace Pioneer
             this.traitPool = null;
             this.entities = null;
             this.systems = null;
-            //this.beatState = null;
 
             base.Dispose();
         }
