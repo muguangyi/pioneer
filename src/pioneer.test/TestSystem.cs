@@ -8,6 +8,7 @@
  */
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Pioneer.Test.Support;
 using System.Linq;
 
 namespace Pioneer.Test

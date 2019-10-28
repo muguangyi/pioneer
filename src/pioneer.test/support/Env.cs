@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Pioneer.Test
+namespace Pioneer.Test.Support
 {
     static class Env
     {
