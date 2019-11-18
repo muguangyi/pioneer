@@ -9,7 +9,7 @@
 
 using Pioneer.Buffer;
 
-namespace Pioneer
+namespace Pioneer.Network
 {
     /// <summary>
     /// Network packet serializer.

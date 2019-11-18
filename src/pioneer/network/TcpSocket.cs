@@ -10,17 +10,17 @@
 using System.Net;
 using System.Net.Sockets;
 
-namespace Pioneer
+namespace Pioneer.Network
 {
     class TcpSocket : NetSocket
     {
         public TcpSocket(string url, ISerializer serializer)
-            : base(MakeSocket(), MakeEndPoint(url), serializer)
+            : base(MakeProxy(), MakeEndPoint(url), serializer)
         { }
 
-        private static Socket MakeSocket()
+        private static INetProxy MakeProxy()
         {
-            return new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            return new SocketProxy(new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp));
         }
 
         private static EndPoint MakeEndPoint(string url)

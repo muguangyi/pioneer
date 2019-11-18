@@ -11,7 +11,7 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 
-namespace Pioneer
+namespace Pioneer.Network
 {
     abstract class NetSocket : ISocket
     {
@@ -20,9 +20,9 @@ namespace Pioneer
         private NetPeer peer = null;
         private EndPoint endPoint = null;
 
-        public NetSocket(Socket socket, EndPoint endPoint, ISerializer serializer)
+        public NetSocket(INetProxy proxy, EndPoint endPoint, ISerializer serializer)
         {
-            this.peer = new NetPeer(PeerIndex++, socket, serializer);
+            this.peer = new NetPeer(PeerIndex++, proxy, serializer);
             this.peer.OnClosed += OnPeerClosed;
             this.peer.OnMessage += OnPeerMessage;
             this.endPoint = endPoint ?? throw new ArgumentNullException("EndPoint can't be null!");
@@ -36,14 +36,12 @@ namespace Pioneer
 
         public void Listen()
         {
-            this.peer.Socket.Bind(this.endPoint);
-            this.peer.Socket.Listen(5);
-            this.peer.Socket.BeginAccept(OnEndAccept, this.peer);
+            this.peer.Proxy.ListenAsync(this.endPoint, this.peer, OnEndAccept);
         }
 
         public void Dial()
         {
-            this.peer.Socket.BeginConnect(this.endPoint, OnEndConnect, this.peer);
+            this.peer.Proxy.DialAsync(this.endPoint, this.peer, OnEndConnect);
         }
 
         public void Close()
@@ -51,13 +49,12 @@ namespace Pioneer
             CloseInternal(this.peer);
         }
 
-        private void OnEndAccept(IAsyncResult result)
+        private void OnEndAccept(INetProxy proxy, object payload)
         {
-            var peer = (NetPeer)result.AsyncState;
+            var peer = (NetPeer)payload;
             try
             {
-                var socket = peer.Socket.EndAccept(result);
-                var p = new NetPeer(PeerIndex++, socket, peer.Serializer);
+                var p = new NetPeer(PeerIndex++, proxy, peer.Serializer);
                 p.OnClosed += OnPeerClosed;
                 p.OnMessage += OnPeerMessage;
                 this.OnConnected?.Invoke(p);
@@ -66,12 +63,11 @@ namespace Pioneer
             { }
         }
 
-        private void OnEndConnect(IAsyncResult result)
+        private void OnEndConnect(object payload)
         {
-            var peer = (NetPeer)result.AsyncState;
+            var peer = (NetPeer)payload;
             try
             {
-                peer.Socket.EndConnect(result);
                 this.OnConnected?.Invoke(peer);
             }
             catch (Exception ex)

@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Threading;
 
-namespace Pioneer
+namespace Pioneer.Network
 {
     sealed class NetPeer : IPeer
     {
@@ -28,10 +28,10 @@ namespace Pioneer
         private IBufSlice recvBuffer = null;
         private bool closed = false;
 
-        public NetPeer(ulong id, Socket socket, ISerializer serializer)
+        public NetPeer(ulong id, INetProxy proxy, ISerializer serializer)
         {
             this.Id = id;
-            this.Socket = socket ?? throw new ArgumentNullException("Socket can't be null!");
+            this.Proxy = proxy ?? throw new ArgumentNullException("Socket proxy can't be null!");
             this.Serializer = serializer ?? throw new ArgumentNullException("Serializer can't be null!");
             this.sendBuffer = this.storage.Alloc(BUFFER_SIZE);
             this.recvBuffer = this.storage.Alloc(BUFFER_SIZE);
@@ -44,7 +44,7 @@ namespace Pioneer
 
         public ulong Id { get; }
 
-        internal Socket Socket { get; private set; } = null;
+        internal INetProxy Proxy { get; private set; } = null;
         internal ISerializer Serializer { get; } = null;
 
         public void Send(object obj)
@@ -64,11 +64,10 @@ namespace Pioneer
 
             this.closed = true;
 
-            if (this.Socket != null)
+            if (this.Proxy != null)
             {
-                this.Socket.Shutdown(SocketShutdown.Both);
-                this.Socket.Close();
-                this.Socket = null;
+                this.Proxy.Close();
+                this.Proxy = null;
             }
 
             this.storage.Dispose();
@@ -98,7 +97,7 @@ namespace Pioneer
                         this.sendBuffer.Seek();
 
                         int size = -1;
-                        while ((size = this.Socket.Send(this.sendBuffer.Buffer, this.sendBuffer.Offset + this.sendBuffer.Position, this.sendBuffer.Size - this.sendBuffer.Position, SocketFlags.None)) < this.sendBuffer.Size)
+                        while ((size = this.Proxy.Send(this.sendBuffer.Buffer, this.sendBuffer.Offset + this.sendBuffer.Position, this.sendBuffer.Size - this.sendBuffer.Position)) < this.sendBuffer.Size)
                         {
                             this.sendBuffer.Seek(size);
                         }
@@ -119,7 +118,7 @@ namespace Pioneer
             {
                 try
                 {
-                    var size = this.Socket.Receive(this.recvBuffer.Buffer, this.recvBuffer.Offset + this.recvBuffer.Position, BUFFER_SIZE - this.recvBuffer.Position, SocketFlags.None);
+                    var size = this.Proxy.Receive(this.recvBuffer.Buffer, this.recvBuffer.Offset + this.recvBuffer.Position, BUFFER_SIZE - this.recvBuffer.Position);
                     if (size > 0)
                     {
                         this.recvBuffer.SetSize(this.recvBuffer.Position + size);

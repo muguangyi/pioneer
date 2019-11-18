@@ -10,7 +10,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Pioneer.network
+namespace Pioneer.Network
 {
     /// <summary>
     /// Internal socket factory to create target socket object based on network service provider.

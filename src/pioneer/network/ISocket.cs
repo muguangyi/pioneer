@@ -9,7 +9,7 @@
 
 using System;
 
-namespace Pioneer
+namespace Pioneer.Network
 {
     /// <summary>
     /// Network socket.

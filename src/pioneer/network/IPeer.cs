@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Pioneer
+namespace Pioneer.Network
 {
     /// <summary>
     /// Network peer.
