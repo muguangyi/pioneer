@@ -11,9 +11,25 @@ using Pioneer.Buffer;
 
 namespace Pioneer
 {
+    /// <summary>
+    /// Network packet serializer.
+    /// </summary>
     interface ISerializer
     {
+        /// <summary>
+        /// Marshal object into buf stream.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="writer"></param>
+        /// <returns></returns>
         bool Marshal(object obj, IBufWriter writer);
+
+        /// <summary>
+        /// Unmarshal buf stream to target object.
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         bool Unmarshal(IBufReader reader, out object obj);
     }
 }

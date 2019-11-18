@@ -9,9 +9,20 @@
 
 namespace Pioneer
 {
+    /// <summary>
+    /// Network peer.
+    /// </summary>
     interface IPeer
     {
+        /// <summary>
+        /// Gets a value to indicate the peer id.
+        /// </summary>
         ulong Id { get; }
+
+        /// <summary>
+        /// Send an object.
+        /// </summary>
+        /// <param name="obj">Object.</param>
         void Send(object obj);
     }
 }

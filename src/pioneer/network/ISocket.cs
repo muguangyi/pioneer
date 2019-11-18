@@ -11,15 +11,44 @@ using System;
 
 namespace Pioneer
 {
+    /// <summary>
+    /// Network socket.
+    /// </summary>
     interface ISocket
     {
+        /// <summary>
+        /// Event when a peer connected.
+        /// </summary>
         event Action<IPeer> OnConnected;
+
+        /// <summary>
+        /// Event when a peer closed.
+        /// </summary>
         event Action<IPeer, Exception> OnClosed;
+
+        /// <summary>
+        /// Event when a message received.
+        /// </summary>
         event Action<IPeer, object> OnMessage;
 
+        /// <summary>
+        /// Get a value to indicate whether the socket is connected.
+        /// </summary>
         bool Connected { get; }
+
+        /// <summary>
+        /// Listen an incomming connection.
+        /// </summary>
         void Listen();
+
+        /// <summary>
+        /// Dial to target server.
+        /// </summary>
         void Dial();
+
+        /// <summary>
+        /// Close the network socket.
+        /// </summary>
         void Close();
     }
 }
