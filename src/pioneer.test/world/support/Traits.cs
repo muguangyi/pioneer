@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Pioneer.Test.Support.World
+namespace Pioneer.Test.World.Support
 {
     public class BaseTrait : Trait
     {

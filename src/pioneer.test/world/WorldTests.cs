@@ -8,7 +8,7 @@
  */
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Pioneer.Test.Support.World;
+using Pioneer.Test.World.Support;
 using System.Linq;
 
 namespace Pioneer.Test.World
@@ -95,7 +95,7 @@ namespace Pioneer.Test.World
         public void TestAddSystem3()
         {
             var world = Env.GetWorld();
-            Assert.IsNotNull(world.AddSystem("Pioneer.Test.Support.World.NoneSystem"));
+            Assert.IsNotNull(world.AddSystem("Pioneer.Test.World.Support.NoneSystem"));
         }
 
         [TestMethod]
@@ -104,7 +104,7 @@ namespace Pioneer.Test.World
             var world = Env.GetWorld();
             Assert.IsNotNull(world.AddSystem<NoneSystem>());
             Assert.IsNull(world.AddSystem(typeof(NoneSystem)));
-            Assert.IsNull(world.AddSystem("Pioneer.Test.Support.World.NoneSystem"));
+            Assert.IsNull(world.AddSystem("Pioneer.Test.World.Support.NoneSystem"));
         }
     }
 }

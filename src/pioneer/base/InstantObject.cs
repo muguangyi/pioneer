@@ -20,9 +20,14 @@ namespace Pioneer.Base
             this.InstanceId = (++instanceIndex);
         }
 
+        public uint InstanceId { get; }
+
         public virtual void Dispose()
         { }
 
-        public uint InstanceId { get; }
+        public static void Reset()
+        {
+            instanceIndex = 0;
+        }
     }
 }
