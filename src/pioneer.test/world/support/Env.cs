@@ -7,12 +7,15 @@
  * file that was distributed with this source code.
  */
 
+using Pioneer.Base;
+
 namespace Pioneer.Test.World.Support
 {
     static class Env
     {
         public static void Start()
         {
+            InstantObject.Reset();
             world = Pioneer.New();
         }
 
