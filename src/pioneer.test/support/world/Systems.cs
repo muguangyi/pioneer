@@ -9,7 +9,7 @@
 
 using System;
 
-namespace Pioneer.Test.Support
+namespace Pioneer.Test.Support.World
 {
     public abstract class BaseSystem : System
     {

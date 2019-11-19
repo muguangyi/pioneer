@@ -8,13 +8,13 @@
  */
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Pioneer.Test.Support;
+using Pioneer.Test.Support.World;
 using System.Linq;
 
-namespace Pioneer.Test
+namespace Pioneer.Test.World
 {
     [TestClass]
-    public class TestSystem
+    public class SystemTests
     {
         [TestInitialize]
         public void Setup()

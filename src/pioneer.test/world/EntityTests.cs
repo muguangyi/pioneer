@@ -8,12 +8,12 @@
  */
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Pioneer.Test.Support;
+using Pioneer.Test.Support.World;
 
-namespace Pioneer.Test
+namespace Pioneer.Test.World
 {
     [TestClass]
-    public class TestEntity
+    public class EntityTests
     {
         [TestInitialize]
         public void Setup()
@@ -85,8 +85,8 @@ namespace Pioneer.Test
         {
             var world = Env.GetWorld();
             var e = world.CreateEntity();
-            var a = e.AddTrait("Pioneer.Test.Support.ATrait");
-            var b = e.AddTrait("Pioneer.Test.Support.BTrait");
+            var a = e.AddTrait("Pioneer.Test.Support.World.ATrait");
+            var b = e.AddTrait("Pioneer.Test.Support.World.BTrait");
             Assert.IsNotNull(a);
             Assert.IsNotNull(b);
         }
