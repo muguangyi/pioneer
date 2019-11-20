@@ -9,7 +9,7 @@
 ETCS (`Entity` + `Trait` + `Control` + `System`)可以组合出不同的开发方案：
 
 * `Entity` + `Trait` + `System`相当于**ECS**模式。
-* `Entity` + `Trait` + `Control`相当于Unity中的**GameObject**和**Component**模式。
+* `Entity` + `Trait` + `Control`相当于Unity中的**GameObject** + **Component**模式。
 
 当然你也可以在一个项目中同时混合使用这两种模式。
 
