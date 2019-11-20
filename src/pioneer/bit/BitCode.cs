@@ -14,7 +14,7 @@ namespace Pioneer.Bit
 {
     struct BitCode
     {
-        public const int MAXSIZE = MAXOFFSET * BITCOUNT;
+        public const uint MAXSIZE = MAXOFFSET * BITCOUNT;
 
         private const byte MAXOFFSET = 16;
         private const byte BITCOUNT = 64;
@@ -24,6 +24,11 @@ namespace Pioneer.Bit
 
         public BitCode(uint index)
         {
+            if (index >= MAXSIZE)
+            {
+                throw new IndexOutOfRangeException($"Index range can't excceed {MAXSIZE - 1}!");
+            }
+
             this.Index = index;
             this.bits = new ulong[MAXOFFSET];
 

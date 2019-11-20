@@ -8,15 +8,16 @@
  */
 
 using Pioneer.Base;
+using PP = Pioneer.Pioneer;
 
-namespace Pioneer.Test.World.Support
+namespace Pioneer.Test.Pioneer.Support
 {
     static class Env
     {
         public static void Start()
         {
             InstantObject.Reset();
-            world = Pioneer.New();
+            world = PP.New();
         }
 
         public static void Stop()

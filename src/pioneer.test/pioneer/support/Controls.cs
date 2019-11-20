@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Pioneer.Test.World.Support
+namespace Pioneer.Test.Pioneer.Support
 {
     public class BaseControl : Control
     {

@@ -8,10 +8,10 @@
  */
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Pioneer.Test.World.Support;
+using Pioneer.Test.Pioneer.Support;
 using System.Linq;
 
-namespace Pioneer.Test.World
+namespace Pioneer.Test.Pioneer
 {
     [TestClass]
     public class SystemTests
