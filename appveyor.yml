@@ -2,6 +2,7 @@ version: 1.0.{build}
 image: Visual Studio 2017
 before_build:
 - cmd: dotnet restore
+- cmd: choco install codecov # Can be changed to dotnet tool install --global Codecov.Tool
 build:
   verbosity: minimal
 test_script:
