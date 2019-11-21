@@ -8,11 +8,13 @@
  */
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Pioneer.Base
 {
     abstract class ReusableObject : IReusableObject, IDisposable
     {
+        [ExcludeFromCodeCoverage]
         public virtual void Dispose()
         { }
 

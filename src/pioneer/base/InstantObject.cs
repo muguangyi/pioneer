@@ -8,6 +8,7 @@
  */
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Pioneer.Base
 {
@@ -22,6 +23,7 @@ namespace Pioneer.Base
 
         public uint InstanceId { get; }
 
+        [ExcludeFromCodeCoverage]
         public virtual void Dispose()
         { }
 
