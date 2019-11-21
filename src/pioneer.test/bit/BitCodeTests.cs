@@ -93,14 +93,58 @@ namespace Pioneer.Test.Bit
                 c2.Add(new BitCode(b[i]));
             }
 
-            if (contains)
+            var result = c1.Contains(c2);
+            Assert.AreEqual(contains, result);
+        }
+
+        [DataRow(true, new uint[] { 1 }, new uint[] { 1 })]
+        [DataRow(true, new uint[] { 1, 2 }, new uint[] { 2, 3 })]
+        [DataRow(true, new uint[] { 1, 2, 3, 4, 5 }, new uint[] { 1, 3, 4 })]
+        [DataRow(false, new uint[] { 1 }, new uint[] { 2 })]
+        [DataRow(false, new uint[] { 1, 2 }, new uint[] { 3 })]
+        [DataRow(true, new uint[] { 1, 2, 3, 4, 5 }, new uint[] { 4, 5, 6 })]
+        [DataTestMethod]
+        public void TestCompositeIntersect(bool intersect, uint[] a, uint[] b)
+        {
+            var c1 = BitCode.CompositeCode.Create();
+            for (var i = 0; i < a.Length; ++i)
             {
-                Assert.IsTrue(c1.Contains(c2));
+                c1.Add(new BitCode(a[i]));
             }
-            else
+
+            var c2 = BitCode.CompositeCode.Create();
+            for (var i = 0; i < b.Length; ++i)
             {
-                Assert.IsFalse(c1.Contains(c2));
+                c2.Add(new BitCode(b[i]));
             }
+
+            var result = c1.Intersect(c2);
+            Assert.AreEqual(intersect, result);
+        }
+
+        [DataRow(true, new uint[] { 1 }, new uint[] { 1 })]
+        [DataRow(false, new uint[] { 1, 2 }, new uint[] { 1 })]
+        [DataRow(true, new uint[] { 3, 4, 5 }, new uint[] { 5, 3, 4 })]
+        [DataRow(false, new uint[] { 1 }, new uint[] { 2 })]
+        [DataRow(true, new uint[] { 1, 2 }, new uint[] { 2, 1 })]
+        [DataRow(false, new uint[] { 1, 2, 3, 4, 5 }, new uint[] { 4, 5, 3 })]
+        [DataRow(false, new uint[] { 1, 2, 3, 4, 5 }, new uint[] { 4, 5, 6 })]
+        [DataTestMethod]
+        public void TestCompositeEquals(bool equal, uint[] a, uint[] b)
+        {
+            var c1 = BitCode.CompositeCode.Create();
+            for (var i = 0; i < a.Length; ++i)
+            {
+                c1.Add(new BitCode(a[i]));
+            }
+
+            var c2 = BitCode.CompositeCode.Create();
+            for (var i = 0; i < b.Length; ++i)
+            {
+                c2.Add(new BitCode(b[i]));
+            }
+
+            Assert.IsTrue(equal ? c1 == c2 : c1 != c2);
         }
     }
 }
