@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Pioneer.Bit
 {
@@ -40,6 +41,7 @@ namespace Pioneer.Bit
 
         public struct CompositeCode
         {
+            [ExcludeFromCodeCoverage]
             public override bool Equals(object obj)
             {
                 if (obj is CompositeCode)
@@ -64,6 +66,7 @@ namespace Pioneer.Bit
                 return false;
             }
 
+            [ExcludeFromCodeCoverage]
             public override int GetHashCode()
             {
                 return base.GetHashCode();
