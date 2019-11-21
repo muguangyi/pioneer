@@ -5,6 +5,6 @@ before_build:
 build:
   verbosity: minimal
 test_script:
-- cmd: dotnet test /p:CollectCoverage=true /p:Threshold=10 /p:ThresholdType=line
+- cmd: dotnet test /p:CollectCoverage=true /p:Threshold=10 /p:ThresholdType=line > coverage.json
 after_test:
 - cmd: bash <(curl -s https://codecov.io/bash)
