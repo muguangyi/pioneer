@@ -6,3 +6,5 @@ build:
   verbosity: minimal
 test_script:
 - cmd: dotnet test /p:CollectCoverage=true /p:Threshold=60 /p:ThresholdType=line
+after_test:
+- cmd: bash <(curl -s https://codecov.io/bash)
