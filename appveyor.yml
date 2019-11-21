@@ -7,4 +7,4 @@ build:
 test_script:
 - cmd: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:Threshold=10 /p:ThresholdType=line
 after_test:
-- cmd: bash <(curl -s https://codecov.io/bash)
+- cmd: curl -s https://codecov.io/bash | bash -s -- -c -F aFlag
