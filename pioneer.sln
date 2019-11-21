@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28307.572
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pioneer", "src\pioneer\pioneer.csproj", "{88DE47F9-FA4A-4F0F-AD14-61B2AD228F39}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pioneer.test", "src\pioneer.test\pioneer.test.csproj", "{E99946E9-797F-4FDA-B313-0880DD5ADD25}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pioneer.test", "src\pioneer.test\pioneer.test.csproj", "{E99946E9-797F-4FDA-B313-0880DD5ADD25}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
