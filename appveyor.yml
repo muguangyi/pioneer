@@ -5,6 +5,6 @@ before_build:
 build:
   verbosity: minimal
 test_script:
-- cmd: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:Threshold=10 /p:ThresholdType=line /p:CoverletOutput=.\coverage.opencover.xml
+- cmd: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:Threshold=10 /p:ThresholdType=line
 after_test:
-- cmd: curl -s https://codecov.io/bash | bash -s -- -c -F aFlag -f .\coverage.opencover.xml
+- cmd: curl -s https://codecov.io/bash | bash -s -- -c -F aFlag -f c:\projects\pioneer\src\pioneer.test\coverage.opencover.xml
