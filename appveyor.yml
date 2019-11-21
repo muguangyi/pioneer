@@ -1,0 +1,8 @@
+version: 1.0.{build}
+image: Visual Studio 2017
+before_build:
+- cmd: dotnet restore
+build:
+  verbosity: minimal
+test_script:
+- cmd: dotnet test /p:CollectCoverage=true /p:Threshold=60 /p:ThresholdType=line
