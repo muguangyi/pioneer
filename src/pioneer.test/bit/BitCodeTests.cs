@@ -71,5 +71,36 @@ namespace Pioneer.Test.Bit
             Assert.IsFalse(c.Contains(a));
             Assert.IsFalse(c.Contains(b));
         }
+
+        [DataRow(true, new uint[] { 1 }, new uint[] { 1 })]
+        [DataRow(true, new uint[] { 1, 2 }, new uint[] { 1 })]
+        [DataRow(true, new uint[] { 1, 2, 3, 4, 5 }, new uint[] { 1, 3, 4 })]
+        [DataRow(false, new uint[] { 1 }, new uint[] { 2 })]
+        [DataRow(false, new uint[] { 1, 2 }, new uint[] { 3 })]
+        [DataRow(false, new uint[] { 1, 2, 3, 4, 5 }, new uint[] { 4, 5, 6 })]
+        [DataTestMethod]
+        public void TestCompositeContains(bool contains, uint[] a, uint[] b)
+        {
+            var c1 = BitCode.CompositeCode.Create();
+            for (var i = 0; i < a.Length; ++i)
+            {
+                c1.Add(new BitCode(a[i]));
+            }
+
+            var c2 = BitCode.CompositeCode.Create();
+            for (var i = 0; i < b.Length; ++i)
+            {
+                c2.Add(new BitCode(b[i]));
+            }
+
+            if (contains)
+            {
+                Assert.IsTrue(c1.Contains(c2));
+            }
+            else
+            {
+                Assert.IsFalse(c1.Contains(c2));
+            }
+        }
     }
 }
