@@ -6,6 +6,6 @@ before_build:
 build:
   verbosity: minimal
 test_script:
-- cmd: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:Threshold=10 /p:ThresholdType=line
+- cmd: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:Exclude=[*.Test]*  /p:Threshold=10 /p:ThresholdType=line
 after_test:
 - cmd: codecov -f C:\projects\pioneer\src\pioneer.test\coverage.opencover.xml
