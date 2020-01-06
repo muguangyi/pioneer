@@ -33,11 +33,13 @@ namespace Pioneer.Framework
             this.center = center;
         }
 
-        public IEntityCreator Creator { get; private set; }
+        public IEntityCreator Creator { get; private set; } = null;
 
-        public ulong Id { get; private set; }
+        public IWorld World { get => this.world; }
 
-        public string Template { get; private set; }
+        public ulong Id { get; private set; } = 0;
+
+        public string Template { get; private set; } = string.Empty;
 
         public override void Dispose()
         {

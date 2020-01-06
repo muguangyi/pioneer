@@ -20,5 +20,10 @@ namespace Pioneer
         /// Gets a value to indicate the entity creator.
         /// </summary>
         IEntityCreator Creator { get; }
+
+        /// <summary>
+        /// Gets a value to indicate the world instance.
+        /// </summary>
+        IWorld World { get; }
     }
 }
