@@ -14,7 +14,7 @@ namespace Pioneer
     /// <summary>
     /// Trait container interface.
     /// </summary>
-    public interface ITraitContainer : IContainer, IEntityBinder
+    public interface ITraitContainer : IContainer, IActorBinder
     {
         /// <summary>
         /// Add trait.

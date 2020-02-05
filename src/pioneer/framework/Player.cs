@@ -11,20 +11,14 @@ using Pioneer.Network;
 
 namespace Pioneer.Framework
 {
-    sealed class Player : EntityCreator
+    sealed class Player : Creator
     {
         public Player(ulong id, World world, IPeer peer) : base(id, world)
         {
             this.Peer = peer;
         }
 
-        public override bool HasAuthority
-        {
-            get
-            {
-                return (base.HasAuthority || null != this.Peer);
-            }
-        }
+        public override bool HasAuthority => base.HasAuthority || null != this.Peer;
 
         public IPeer Peer { get; private set; }
     }

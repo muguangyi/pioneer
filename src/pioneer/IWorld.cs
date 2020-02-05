@@ -14,7 +14,7 @@ namespace Pioneer
     /// <summary>
     /// World interface.
     /// </summary>
-    public interface IWorld : IEntityContainer, IDisposable
+    public interface IWorld : IActorContainer, IDisposable
     {
         /// <summary>
         /// Event when the world is loading.
@@ -48,12 +48,12 @@ namespace Pioneer
         System AddSystem(string systemName);
 
         /// <summary>
-        /// Add entity template with an unique name.
+        /// Add actor template with an unique name.
         /// </summary>
         /// <param name="template">Template name.</param>
         /// <param name="decorator">Decorator func for entity.</param>
         /// <returns>Indicate if the operation is succeeded or not.</returns>
-        bool AddEntityTemplate(string template, Action<IEntity> decorator);
+        bool AddActorTemplate(string template, Action<IActor> decorator);
 
         /// <summary>
         /// Start the world with network service provider.

@@ -19,11 +19,11 @@ namespace Pioneer
         { }
 
         /// <inheritdoc />
-        public virtual void OnInit(IEntityContainer container)
+        public virtual void OnInit(IActorContainer container)
         { }
 
         /// <inheritdoc />
-        public virtual void OnUpdate(IEntityContainer container, float deltaTime)
+        public virtual void OnUpdate(IActorContainer container, float deltaTime)
         { }
     }
 }

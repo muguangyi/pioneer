@@ -21,24 +21,24 @@ namespace Pioneer
     sealed partial class World : FrameObject, IWorld
     {
         private ulong instanceIndex = 0;
-        private LinkedList<IEntity> entities = new LinkedList<IEntity>();
-        private Dictionary<ulong, LinkedListNode<IEntity>> entityMap = new Dictionary<ulong, LinkedListNode<IEntity>>();
-        private Filters<EntitiesFilter> filters = new Filters<EntitiesFilter>();
-        private List<IEntity> cycleEntities = new List<IEntity>();
-        private Stack<IEntity> entityPool = new Stack<IEntity>();
+        private LinkedList<IActor> actors = new LinkedList<IActor>();
+        private Dictionary<ulong, LinkedListNode<IActor>> actorMap = new Dictionary<ulong, LinkedListNode<IActor>>();
+        private Filters<ActorsFilter> filters = new Filters<ActorsFilter>();
+        private List<IActor> cycleActors = new List<IActor>();
+        private Stack<IActor> actorPool = new Stack<IActor>();
         private List<System> systems = new List<System>();
         private BitCodeCenter center = new BitCodeCenter();
-        private EntityDecorator decorator = new EntityDecorator();
+        private ActorDecorator decorator = new ActorDecorator();
         private Dictionary<uint, Queue<Trait>> traitPool = new Dictionary<uint, Queue<Trait>>();
 
-        public event Action<IEntity> OnPlayerEntered;
-        public event Action<IEntity> OnPlayerExited;
+        public event Action<IActor> OnPlayerEntered;
+        public event Action<IActor> OnPlayerExited;
 
         public World(WorldMode mode = WorldMode.Standalone)
         {
             this.Mode = mode;
             this.filters.Active();
-            this.defaultCreator = new EntityCreator(AllocUniqueId(), this);
+            this.defaultCreator = new Creator(AllocUniqueId(), this);
         }
 
         public override void Dispose()
@@ -54,16 +54,16 @@ namespace Pioneer
 
             // NOTE: DONOT dispose trait in traitPool since they have been
             // disposed already when being dropped
-            var node = this.entities.First;
+            var node = this.actors.First;
             while (null != node)
             {
-                (node.Value as Entity).DisposeImmediate();
+                (node.Value as Actor).DisposeImmediate();
                 node = node.Next;
             }
 
-            while (this.entityPool.Count > 0)
+            while (this.actorPool.Count > 0)
             {
-                var e = this.entityPool.Pop() as Entity;
+                var e = this.actorPool.Pop() as Actor;
                 e.DisposeImmediate();
             }
 
@@ -71,36 +71,30 @@ namespace Pioneer
             this.center.Dispose();
 
             this.socket = null;
-            this.entities = null;
-            this.entityMap = null;
+            this.actors = null;
+            this.actorMap = null;
             this.filters = null;
-            this.cycleEntities = null;
-            this.entityPool = null;
+            this.cycleActors = null;
+            this.actorPool = null;
             this.center = null;
             this.traitPool = null;
-            this.entities = null;
+            this.actors = null;
             this.systems = null;
 
             base.Dispose();
         }
 
-        public IEnumerable<IEntity> Entities
-        {
-            get
-            {
-                return this.entities;
-            }
-        }
+        public IEnumerable<IActor> Actors => this.actors;
 
         public void Update(float deltaTime)
         {
             BeginFrame(deltaTime);
             lock (this.syncObject)
             {
-                var node = this.entities.First;
+                var node = this.actors.First;
                 while (null != node)
                 {
-                    (node.Value as Entity).OnUpdate(deltaTime);
+                    (node.Value as Actor).OnUpdate(deltaTime);
                     node = node.Next;
                 }
 
@@ -123,24 +117,24 @@ namespace Pioneer
             return new Matcher(this.center);
         }
 
-        public IEntitiesFilter GetFilter(ISystem system, TupleType tupleType, IMatcher matcher)
+        public IActorsFilter GetFilter(ISystem system, TupleType tupleType, IMatcher matcher)
         {
             var m = matcher as Matcher;
 
-            EntitiesFilter filter = this.filters.GetFilter(system, tupleType, m);
+            ActorsFilter filter = this.filters.GetFilter(system, tupleType, m);
             if (null == filter)
             {
                 filter = this.filters.AddFilter
                 (
                     system,
                     tupleType,
-                    TupleType.Job == tupleType ? new JobEntitiesFilter(m) as EntitiesFilter : new ReactEntitiesFilter(m)
+                    TupleType.Job == tupleType ? new JobActorsFilter(m) as ActorsFilter : new ReactActorsFilter(m)
                 );
 
-                var node = this.entities.First;
+                var node = this.actors.First;
                 while (null != node)
                 {
-                    filter.OnBitCodeTargetInit(node.Value as Entity);
+                    filter.OnBitCodeTargetInit(node.Value as Actor);
                     node = node.Next;
                 }
             }
@@ -148,40 +142,40 @@ namespace Pioneer
             return filter;
         }
 
-        public void OnBitCodeTargetInit(Entity target)
+        public void OnBitCodeTargetInit(Actor target)
         { }
 
-        public void OnBitCodeTargetAdded(Entity target, BitCode code)
+        public void OnBitCodeTargetAdded(Actor target, BitCode code)
         {
             this.filters.OnBitCodeTargetAdded(target, code);
         }
 
-        public void OnBitCodeTargetRemoved(Entity target, BitCode code)
+        public void OnBitCodeTargetRemoved(Actor target, BitCode code)
         {
             this.filters.OnBitCodeTargetRemoved(target, code);
         }
 
-        public void OnBitCodeTargetChanged(Entity target, BitCode code)
+        public void OnBitCodeTargetChanged(Actor target, BitCode code)
         {
             this.filters.OnBitCodeTargetChanged(target, code);
         }
 
-        public IEntity CreateEntity(bool replicated = true, string template = null)
+        public IActor CreateActor(bool replicated = true, string template = null)
         {
-            var e = CreateEntityInternal(this.defaultCreator, 0, replicated, template);
+            var e = CreateActorInternal(this.defaultCreator, 0, replicated, template);
 
             if (replicated && WorldMode.Client != this.Mode)
             {
-                this.Do(((EntityCreator)e.Creator).Id, SyncType.Create, SyncTarget.Entity, e.Id, null, template);
+                this.Do(((Creator)e.Creator).Id, SyncType.Create, SyncTarget.Actor, e.Id, null, template);
             }
 
             return e;
         }
 
-        public IEntity GetEntityById(ulong entityId)
+        public IActor GetActorById(ulong entityId)
         {
-            LinkedListNode<IEntity> node = null;
-            if (this.entityMap.TryGetValue(entityId, out node))
+            LinkedListNode<IActor> node = null;
+            if (this.actorMap.TryGetValue(entityId, out node))
             {
                 return node.Value;
             }
@@ -205,32 +199,32 @@ namespace Pioneer
             return AddSystem(TypeUtility.GetType(systemName));
         }
 
-        public bool AddEntityTemplate(string template, Action<IEntity> decorator)
+        public bool AddActorTemplate(string template, Action<IActor> decorator)
         {
-            return this.decorator.AddTemplate(template, decorator);
+            return this.decorator.TrySetTemplate(template, decorator);
         }
 
         public override void EndFrame(float deltaTime)
         {
-            Entity e = null;
-            for (var i = 0; i < this.cycleEntities.Count; ++i)
+            Actor e = null;
+            for (var i = 0; i < this.cycleActors.Count; ++i)
             {
-                e = this.cycleEntities[i] as Entity;
+                e = this.cycleActors[i] as Actor;
                 e.Deactive();
 
                 lock (this.syncObject)
                 {
-                    LinkedListNode<IEntity> node = null;
-                    if (this.entityMap.TryGetValue(e.Id, out node))
+                    LinkedListNode<IActor> node = null;
+                    if (this.actorMap.TryGetValue(e.Id, out node))
                     {
-                        this.entityMap.Remove(e.Id);
-                        this.entities.Remove(node);
+                        this.actorMap.Remove(e.Id);
+                        this.actors.Remove(node);
                     }
                 }
 
-                this.entityPool.Push(e);
+                this.actorPool.Push(e);
             }
-            this.cycleEntities.Clear();
+            this.cycleActors.Clear();
 
             ExecuteDeferActions();
 
@@ -251,52 +245,52 @@ namespace Pioneer
             }
         }
 
-        internal Entity CreateEntityByOwner(EntityCreator owner, bool replicated, string template)
+        internal Actor CreateActorByOwner(Creator owner, bool replicated, string template)
         {
-            var e = CreateEntityInternal(owner, 0, replicated, template);
+            var e = CreateActorInternal(owner, 0, replicated, template);
 
             if (replicated && WorldMode.Client != this.Mode)
             {
-                this.Do(((EntityCreator)e.Creator).Id, SyncType.Create, SyncTarget.Entity, e.Id, null, template);
+                this.Do(((Creator)e.Creator).Id, SyncType.Create, SyncTarget.Actor, e.Id, null, template);
             }
 
             return e;
         }
 
-        internal Entity CreateEntityInternal(IEntityCreator owner, ulong id, bool replicated, string template)
+        internal Actor CreateActorInternal(ICreator owner, ulong id, bool replicated, string template)
         {
-            Entity e = null;
-            if (this.entityPool.Count > 0)
+            Actor a = null;
+            if (this.actorPool.Count > 0)
             {
-                e = this.entityPool.Pop() as Entity;
+                a = this.actorPool.Pop() as Actor;
             }
             else
             {
-                e = new Entity(this, this.center);
+                a = new Actor(this, this.center);
             }
-            e.Replicated = replicated;
+            a.Replicated = replicated;
 
-            ulong entityId = (0 != id ? id : AllocUniqueId());
-            e.Active(owner, entityId, template);
-            this.decorator.Apply(template, e);
-            this.entityMap.Add(e.Id, this.entities.AddLast(e));
+            ulong actorId = (0 != id ? id : AllocUniqueId());
+            a.Active(owner, actorId, template);
+            this.decorator.Apply(template, a);
+            this.actorMap.Add(a.Id, this.actors.AddLast(a));
 
-            return e;
+            return a;
         }
 
-        internal void DestroyEntity(Entity entity)
+        internal void DestroyActor(Actor actor)
         {
             if (WorldMode.Client != this.Mode)
             {
-                this.Do(((EntityCreator)entity.Creator).Id, SyncType.Destroy, SyncTarget.Entity, entity.Id);
+                this.Do(((Creator)actor.Creator).Id, SyncType.Destroy, SyncTarget.Actor, actor.Id);
             }
 
-            DestroyEntityInternal(entity);
+            DestroyActorInternal(actor);
         }
 
-        internal void DestroyEntityInternal(Entity entity)
+        internal void DestroyActorInternal(Actor actor)
         {
-            this.cycleEntities.Add(entity);
+            this.cycleActors.Add(actor);
         }
 
         internal System AddSystemInternal(Type systemType)
@@ -366,7 +360,7 @@ namespace Pioneer
         private ulong AllocUniqueId()
         {
             ulong flag = (WorldMode.Client == this.Mode ? (ulong)0 : (uint)1 << 63);
-            return (flag + (++this.instanceIndex));
+            return flag + (++this.instanceIndex);
         }
 
         private System GetSystem(Type systemType)
@@ -382,20 +376,15 @@ namespace Pioneer
             return null;
         }
 
-        private System GetSystem(string systemName)
-        {
-            return GetSystem(TypeUtility.GetType(systemName));
-        }
-
         private void TakeSnapshot()
         {
-            var node = this.entities.First;
+            var node = this.actors.First;
             while (null != node)
             {
-                var e = node.Value as Entity;
+                var e = node.Value as Actor;
                 if (e.Replicated)
                 {
-                    Do(((EntityCreator)e.Creator).Id, SyncType.Create, SyncTarget.Entity, e.Id, null, e.Template);
+                    Do(((Creator)e.Creator).Id, SyncType.Create, SyncTarget.Actor, e.Id, null, e.Template);
                     e.TakeSnapshot();
                 }
 

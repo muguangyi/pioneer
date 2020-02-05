@@ -20,13 +20,13 @@ namespace Pioneer
         /// Initialize entrance for the system component.
         /// </summary>
         /// <param name="container">The owner entity container.</param>
-        void OnInit(IEntityContainer container);
+        void OnInit(IActorContainer container);
 
         /// <summary>
         /// Delta update entrance for the system component.
         /// </summary>
         /// <param name="container">The owner entity container.</param>
         /// <param name="deltaTime">Delta time from the last frame.</param>
-        void OnUpdate(IEntityContainer container, float deltaTime);
+        void OnUpdate(IActorContainer container, float deltaTime);
     }
 }

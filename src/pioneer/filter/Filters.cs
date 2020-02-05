@@ -110,10 +110,10 @@ namespace Pioneer.Filter
             return filter;
         }
 
-        public void OnBitCodeTargetInit(Entity entity)
+        public void OnBitCodeTargetInit(Actor actor)
         { }
 
-        public void OnBitCodeTargetAdded(Entity target, BitCode code)
+        public void OnBitCodeTargetAdded(Actor target, BitCode code)
         {
             var filters = this.quickFilters[code.Index];
             if (null != filters && filters.Count > 0)
@@ -128,7 +128,7 @@ namespace Pioneer.Filter
             }
         }
 
-        public void OnBitCodeTargetRemoved(Entity target, BitCode code)
+        public void OnBitCodeTargetRemoved(Actor target, BitCode code)
         {
             var filters = this.quickFilters[code.Index];
             if (null != filters && filters.Count > 0)
@@ -143,7 +143,7 @@ namespace Pioneer.Filter
             }
         }
 
-        public void OnBitCodeTargetChanged(Entity target, BitCode code)
+        public void OnBitCodeTargetChanged(Actor target, BitCode code)
         {
             var filters = this.quickFilters[code.Index];
             if (null != filters && filters.Count > 0)

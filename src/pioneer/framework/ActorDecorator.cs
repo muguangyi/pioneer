@@ -12,14 +12,14 @@ using System.Collections.Generic;
 
 namespace Pioneer.Framework
 {
-    sealed class EntityDecorator : IEntityDecorator, IDisposable
+    sealed class ActorDecorator : IActorDecorator, IDisposable
     {
-        private Dictionary<string, Action<IEntity>> templates = new Dictionary<string, Action<IEntity>>();
+        private Dictionary<string, Action<IActor>> templates = new Dictionary<string, Action<IActor>>();
 
         public void Dispose()
         { }
 
-        public bool AddTemplate(string template, Action<IEntity> decorator)
+        public bool TrySetTemplate(string template, Action<IActor> decorator)
         {
             if (this.templates.ContainsKey(template))
             {
@@ -30,16 +30,16 @@ namespace Pioneer.Framework
             return true;
         }
 
-        public void Apply(string template, IEntity entity)
+        public void Apply(string template, IActor actor)
         {
             if (string.IsNullOrEmpty(template))
             {
                 return;
             }
 
-            if (this.templates.TryGetValue(template, out Action<IEntity> decorator))
+            if (this.templates.TryGetValue(template, out Action<IActor> decorator))
             {
-                decorator(entity);
+                decorator(actor);
             }
         }
     }
