@@ -4,25 +4,25 @@
 
 ***
 
-> ETCS with network sync framework in pure C#.
+> ATCS with network sync framework in pure C#.
 
-**Pioneer** includes two concepts: `ETCS development framework` and `Network synchronize framework`.
+**Pioneer** includes two concepts: `ATCS development framework` and `Network synchronize framework`.
 
-## ETCS Development Framework
+## ATCS Development Framework
 
-`ETCS` composes the public **ECS** and the classic **MVC** develop pattern, and abstract the kernal thought:
+`ATCS` composes the public **ECS** and the classic **MVC** develop pattern, and abstract the kernal thought:
 
-> `Entity` is a container; Data (`Trait`) and Logic (`Control`, `System`) are separated.
+> `Actor` is a container; Data (`Trait`) and Logic (`Control`, `System`) are separated.
 
-* Entity is only a container.
-* Data (`Trait`) is attached to Entity.
+* Actor is only a container.
+* Data (`Trait`) is attached to Actor.
 * Logic component can't contains Data.
-* `Control` is single Entity's logic component, and `System` is a group of Entities' logic component.
+* `Control` is single Actor's logic component, and `System` is a group of Actors' logic component.
 
-ETCS (`Entity` + `Trait` + `Control` + `System`) could compose different development solutions:
+ATCS (`Actor` + `Trait` + `Control` + `System`) could compose different development solutions:
 
-* `Entity` + `Trait` + `System` equals **ECS** pattern.
-* `Entity` + `Trait` + `Control` equals **GameObject** + **Component** pattern in Unity.
+* `Actor` + `Trait` + `System` equals **ECS** pattern.
+* `Actor` + `Trait` + `Control` equals **GameObject** + **Component** pattern in Unity.
 
 Of cause you could compose two type patterns in one project as well.
 
