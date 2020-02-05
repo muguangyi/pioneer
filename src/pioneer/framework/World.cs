@@ -199,7 +199,7 @@ namespace Pioneer
             return AddSystem(TypeUtility.GetType(systemName));
         }
 
-        public bool AddActorTemplate(string template, Action<IActor> decorator)
+        public bool TrySetActorTemplate(string template, Action<IActor> decorator)
         {
             return this.decorator.TrySetTemplate(template, decorator);
         }

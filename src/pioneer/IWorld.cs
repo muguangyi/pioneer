@@ -53,7 +53,7 @@ namespace Pioneer
         /// <param name="template">Template name.</param>
         /// <param name="decorator">Decorator func for entity.</param>
         /// <returns>Indicate if the operation is succeeded or not.</returns>
-        bool AddActorTemplate(string template, Action<IActor> decorator);
+        bool TrySetActorTemplate(string template, Action<IActor> decorator);
 
         /// <summary>
         /// Start the world with network service provider.
