@@ -13,7 +13,7 @@ using Pioneer.Test.Pioneer.Support;
 namespace Pioneer.Test.Pioneer
 {
     [TestClass]
-    public class EntityTests
+    public class ActorTests
     {
         [TestInitialize]
         public void Setup()
@@ -28,41 +28,41 @@ namespace Pioneer.Test.Pioneer
         }
 
         [TestMethod]
-        public void TestEntityIdNotZero()
+        public void TestActorIdNotZero()
         {
             var world = Env.GetWorld();
-            var entity = world.CreateEntity();
-            Assert.AreNotEqual(entity.Id, 0);
+            var actor = world.CreateActor();
+            Assert.AreNotEqual(0, actor.Id);
         }
 
         [TestMethod]
         public void TestMultipleEnityIdNotEqual()
         {
             var world = Env.GetWorld();
-            var e1 = world.CreateEntity();
-            var e2 = world.CreateEntity();
-            Assert.AreNotEqual(e1, e2);
-            Assert.AreNotEqual(e1.Id, e2.Id);
+            var a1 = world.CreateActor();
+            var a2 = world.CreateActor();
+            Assert.AreNotEqual(a1, a2);
+            Assert.AreNotEqual(a1.Id, a2.Id);
         }
 
         [TestMethod]
         public void TestDestroyEntity()
         {
             var world = Env.GetWorld();
-            var e = world.CreateEntity();
-            var id = e.Id;
-            Assert.IsNotNull(e);
+            var a = world.CreateActor();
+            var id = a.Id;
+            Assert.IsNotNull(a);
 
-            e.Dispose();
+            a.Dispose();
             Env.UpdateWorld(1);
-            Assert.IsNull(world.GetEntityById(id));
+            Assert.IsNull(world.GetActorById(id));
         }
 
         [TestMethod]
         public void TestAddTrait()
         {
             var world = Env.GetWorld();
-            var e = world.CreateEntity();
+            var e = world.CreateActor();
             var a = e.AddTrait<ATrait>();
             var b = e.AddTrait<BTrait>();
             Assert.IsNotNull(a);
@@ -73,7 +73,7 @@ namespace Pioneer.Test.Pioneer
         public void TestAddTrait2()
         {
             var world = Env.GetWorld();
-            var e = world.CreateEntity();
+            var e = world.CreateActor();
             var a = e.AddTrait(typeof(ATrait));
             var b = e.AddTrait(typeof(BTrait));
             Assert.IsNotNull(a);
@@ -84,7 +84,7 @@ namespace Pioneer.Test.Pioneer
         public void TestAddTrait3()
         {
             var world = Env.GetWorld();
-            var e = world.CreateEntity();
+            var e = world.CreateActor();
             var a = e.AddTrait("Pioneer.Test.Pioneer.Support.ATrait");
             var b = e.AddTrait("Pioneer.Test.Pioneer.Support.BTrait");
             Assert.IsNotNull(a);
@@ -95,7 +95,7 @@ namespace Pioneer.Test.Pioneer
         public void TestCantAddSameTraits()
         {
             var world = Env.GetWorld();
-            var e = world.CreateEntity();
+            var e = world.CreateActor();
             var ac = e.AddTrait<ATrait>();
             Assert.AreEqual(ac, e.AddTrait(typeof(ATrait)));
         }
@@ -104,7 +104,7 @@ namespace Pioneer.Test.Pioneer
         public void TestCheckTraitExist()
         {
             var world = Env.GetWorld();
-            var e = world.CreateEntity();
+            var e = world.CreateActor();
 
             Assert.IsFalse(e.HasTrait<ATrait>());
 
@@ -119,7 +119,7 @@ namespace Pioneer.Test.Pioneer
         public void TestVerifyGetDataTuple()
         {
             var world = Env.GetWorld();
-            var e = world.CreateEntity();
+            var e = world.CreateActor();
             e.AddTrait<ATrait>();
             e.AddTrait<BTrait>();
             var logic = e.AddControl<ABJobControl>();
@@ -138,7 +138,7 @@ namespace Pioneer.Test.Pioneer
         public void TestVerifyTraitChanged()
         {
             var world = Env.GetWorld();
-            var e = world.CreateEntity();
+            var e = world.CreateActor();
             var a = e.AddTrait<ATrait>();
             var b = e.AddTrait<BTrait>();
             var logic = e.AddControl<ABReactControl>();
@@ -166,7 +166,7 @@ namespace Pioneer.Test.Pioneer
         public void TestVerifyMatcher()
         {
             var world = Env.GetWorld();
-            var e = world.CreateEntity();
+            var e = world.CreateActor();
             var a = e.AddTrait<ATrait>();
             var b = e.AddTrait<BTrait>();
             e.AddTag("tag");
@@ -202,7 +202,7 @@ namespace Pioneer.Test.Pioneer
         public void TestVerifyTraitDispose()
         {
             var world = Env.GetWorld();
-            var e = world.CreateEntity();
+            var e = world.CreateActor();
             e.AddTrait<ATrait>();
             e.AddTrait<BTrait>();
             e.AddTrait<CTrait>();
@@ -221,7 +221,7 @@ namespace Pioneer.Test.Pioneer
         {
             var world = Env.GetWorld();
 
-            var e = world.CreateEntity();
+            var e = world.CreateActor();
             e.AddTrait<ATrait>();
             e.AddTrait<BTrait>();
 
@@ -237,7 +237,7 @@ namespace Pioneer.Test.Pioneer
         {
             var world = Env.GetWorld();
 
-            var e0 = world.CreateEntity();
+            var e0 = world.CreateActor();
             e0.AddTrait<ATrait>();
 
             Env.UpdateWorld(1);
@@ -245,12 +245,12 @@ namespace Pioneer.Test.Pioneer
             var id0 = e0.Id;
             e0.Dispose();
 
-            var e1 = world.CreateEntity();
+            var e1 = world.CreateActor();
             Assert.AreNotEqual(id0, e1.Id);
 
             Env.UpdateWorld(1);
 
-            var e2 = world.CreateEntity();
+            var e2 = world.CreateActor();
             Assert.AreEqual(e0, e2);    // reuse the same entity, but all content is clean
             Assert.AreNotEqual(id0, e2.Id);
             Assert.AreNotEqual(e1.Id, e2.Id);

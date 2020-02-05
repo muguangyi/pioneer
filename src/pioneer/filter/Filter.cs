@@ -27,7 +27,7 @@ namespace Pioneer.Filter
         private struct TargetAction
         {
             public TargetActionType ActionType;
-            public Entity Entity;
+            public Actor Actor;
             public BitCode Code;
         }
 
@@ -46,70 +46,70 @@ namespace Pioneer.Filter
             this.Matcher = null;
         }
 
-        public void OnBitCodeTargetInit(Entity entity)
+        public void OnBitCodeTargetInit(Actor actor)
         {
             if (this.locked)
             {
                 this.actions.Enqueue(new TargetAction
                 {
                     ActionType = TargetActionType.Init,
-                    Entity = entity,
+                    Actor = actor,
                 });
             }
             else
             {
-                OnTargetInit(entity);
+                OnTargetInit(actor);
             }
         }
 
-        public void OnBitCodeTargetAdded(Entity entity, BitCode code)
+        public void OnBitCodeTargetAdded(Actor actor, BitCode code)
         {
             if (this.locked)
             {
                 this.actions.Enqueue(new TargetAction
                 {
                     ActionType = TargetActionType.Added,
-                    Entity = entity,
+                    Actor = actor,
                     Code = code,
                 });
             }
             else
             {
-                OnTargetAdded(entity, code);
+                OnTargetAdded(actor, code);
             }
         }
 
-        public void OnBitCodeTargetRemoved(Entity entity, BitCode code)
+        public void OnBitCodeTargetRemoved(Actor actor, BitCode code)
         {
             if (this.locked)
             {
                 this.actions.Enqueue(new TargetAction
                 {
                     ActionType = TargetActionType.Removed,
-                    Entity = entity,
+                    Actor = actor,
                     Code = code,
                 });
             }
             else
             {
-                OnTargetRemoved(entity, code);
+                OnTargetRemoved(actor, code);
             }
         }
 
-        public void OnBitCodeTargetChanged(Entity entity, BitCode code)
+        public void OnBitCodeTargetChanged(Actor actor, BitCode code)
         {
             if (this.locked)
             {
                 this.actions.Enqueue(new TargetAction
                 {
                     ActionType = TargetActionType.Changed,
-                    Entity = entity,
+                    Actor = actor,
                     Code = code,
                 });
             }
             else
             {
-                OnTargetChanged(entity, code);
+                OnTargetChanged(actor, code);
             }
         }
 
@@ -124,16 +124,16 @@ namespace Pioneer.Filter
             DeferTargetActions();
         }
 
-        protected virtual void OnTargetInit(Entity entity)
+        protected virtual void OnTargetInit(Actor actor)
         { }
 
-        protected virtual void OnTargetAdded(Entity entity, BitCode code)
+        protected virtual void OnTargetAdded(Actor actor, BitCode code)
         { }
 
-        protected virtual void OnTargetRemoved(Entity entity, BitCode code)
+        protected virtual void OnTargetRemoved(Actor actor, BitCode code)
         { }
 
-        protected virtual void OnTargetChanged(Entity entity, BitCode code)
+        protected virtual void OnTargetChanged(Actor actor, BitCode code)
         { }
 
         protected virtual void OnTargetDeferActions()
@@ -148,18 +148,18 @@ namespace Pioneer.Filter
                 var action = this.actions.Dequeue();
                 switch (action.ActionType)
                 {
-                case TargetActionType.Init:
-                    OnTargetInit(action.Entity);
-                    break;
-                case TargetActionType.Added:
-                    OnTargetAdded(action.Entity, action.Code);
-                    break;
-                case TargetActionType.Removed:
-                    OnTargetRemoved(action.Entity, action.Code);
-                    break;
-                case TargetActionType.Changed:
-                    OnTargetChanged(action.Entity, action.Code);
-                    break;
+                    case TargetActionType.Init:
+                        OnTargetInit(action.Actor);
+                        break;
+                    case TargetActionType.Added:
+                        OnTargetAdded(action.Actor, action.Code);
+                        break;
+                    case TargetActionType.Removed:
+                        OnTargetRemoved(action.Actor, action.Code);
+                        break;
+                    case TargetActionType.Changed:
+                        OnTargetChanged(action.Actor, action.Code);
+                        break;
                 }
             }
         }

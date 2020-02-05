@@ -39,7 +39,7 @@ namespace Pioneer.Test.Pioneer
         public void TestCreateEntity()
         {
             var world = Env.GetWorld();
-            var entity = world.CreateEntity();
+            var entity = world.CreateActor();
             Assert.IsNotNull(entity);
         }
 
@@ -47,19 +47,19 @@ namespace Pioneer.Test.Pioneer
         public void TestDestroyEntity()
         {
             var world = Env.GetWorld();
-            var entity = world.CreateEntity();
+            var entity = world.CreateActor();
             entity.Dispose();
             Env.UpdateWorld(1);
-            Assert.IsNull(world.GetEntityById(entity.Id));
+            Assert.IsNull(world.GetActorById(entity.Id));
         }
 
         [TestMethod]
         public void TestGetEntity()
         {
             var world = Env.GetWorld();
-            var e1 = world.CreateEntity();
+            var e1 = world.CreateActor();
             var id = e1.Id;
-            var e2 = world.GetEntityById(id);
+            var e2 = world.GetActorById(id);
             Assert.IsNotNull(e2);
             Assert.AreEqual(e1, e2);
             Assert.AreEqual(e1.Id, e2.Id);
@@ -69,11 +69,11 @@ namespace Pioneer.Test.Pioneer
         public void TestIterateEntities()
         {
             var world = Env.GetWorld();
-            world.CreateEntity();
-            world.CreateEntity();
-            world.CreateEntity();
+            world.CreateActor();
+            world.CreateActor();
+            world.CreateActor();
 
-            var entities = world.Entities;
+            var entities = world.Actors;
             Assert.AreEqual(entities.Count(), 3);
         }
 

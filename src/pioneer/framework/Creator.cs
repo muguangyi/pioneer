@@ -12,11 +12,11 @@ using System.Collections.Generic;
 
 namespace Pioneer.Framework
 {
-    class EntityCreator : InstantObject, IEntityCreator
+    class Creator : InstantObject, ICreator
     {
-        private Stack<IEntity> entities = new Stack<IEntity>();
+        private Stack<IActor> entities = new Stack<IActor>();
 
-        public EntityCreator(ulong id, World world)
+        public Creator(ulong id, World world)
         {
             this.Id = id;
             this.World = world;
@@ -45,9 +45,9 @@ namespace Pioneer.Framework
             base.Dispose();
         }
 
-        public IEntity CreateEntity(bool replicated = true, string template = null)
+        public IActor CreateActor(bool replicated = true, string template = null)
         {
-            var e = this.World.CreateEntityByOwner(this, replicated, template);
+            var e = this.World.CreateActorByOwner(this, replicated, template);
             this.entities.Push(e);
 
             return e;

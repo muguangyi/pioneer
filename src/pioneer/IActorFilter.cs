@@ -10,9 +10,9 @@
 namespace Pioneer
 {
     /// <summary>
-    /// Entity filter interface.
+    /// Actor filter interface.
     /// </summary>
-    public interface IEntityFilter
+    public interface IActorFilter
     {
         /// <summary>
         /// Gets a value to indicate the owner container.

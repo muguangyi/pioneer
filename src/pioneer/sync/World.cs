@@ -19,8 +19,8 @@ namespace Pioneer
 {
     sealed partial class World : ISerializer
     {
-        private EntityCreator defaultCreator = null;
-        private readonly Dictionary<ulong, IEntity> players = new Dictionary<ulong, IEntity>();
+        private Creator defaultCreator = null;
+        private readonly Dictionary<ulong, IActor> players = new Dictionary<ulong, IActor>();
         private readonly Queue<SyncAction> syncActions = new Queue<SyncAction>();
         private readonly Queue<Action> deferActions = new Queue<Action>();
         private readonly Dictionary<ulong, IPeer> peers = new Dictionary<ulong, IPeer>();
@@ -89,7 +89,7 @@ namespace Pioneer
                 {
                     EnqueueDeferAction(() =>
                     {
-                        var e = CreateEntity();
+                        var e = CreateActor();
                         this.OnPlayerEntered?.Invoke(e);
                     });
                 }
@@ -108,7 +108,7 @@ namespace Pioneer
             }
         }
 
-        public void Do(ulong ownerId, SyncType type, SyncTarget target, ulong entityId, string clsName = null, string subTarget = null, params object[] payload)
+        public void Do(ulong ownerId, SyncType type, SyncTarget target, ulong actorId, string clsName = null, string subTarget = null, params object[] payload)
         {
             if (WorldMode.Standalone != this.Mode)
             {
@@ -119,7 +119,7 @@ namespace Pioneer
                         OwnerId = ownerId,
                         Type = type,
                         Target = target,
-                        EntityId = entityId,
+                        ActorId = actorId,
                         ClsName = clsName,
                         SubTarget = subTarget,
                         Payload = payload,
@@ -218,11 +218,6 @@ namespace Pioneer
             }
         }
 
-        private void OnChannelError(ISocket network, IPeer peer, Exception ex)
-        {
-            Console.WriteLine("Network error: " + ex.Message);
-        }
-
         private void OnPeerMessage(IPeer peer, object packet)
         {
             var p = (Packet)packet;
@@ -259,16 +254,16 @@ namespace Pioneer
                 case SyncType.Create:
                     switch (a.Target)
                     {
-                    case SyncTarget.Entity:
+                    case SyncTarget.Actor:
                         lock (this.syncObject)
                         {
-                            CreateEntityInternal(GetEntityCreatorById(a.OwnerId), a.EntityId, true, a.SubTarget);
+                            CreateActorInternal(GetEntityCreatorById(a.OwnerId), a.ActorId, true, a.SubTarget);
                         }
                         break;
                     case SyncTarget.Trait:
                         lock (this.syncObject)
                         {
-                            var e = GetEntityById(a.EntityId) as Entity;
+                            var e = GetActorById(a.ActorId) as Actor;
                             if (null != e)
                             {
                                 e.AddTraitInternal(a.ClsName);
@@ -278,7 +273,7 @@ namespace Pioneer
                     case SyncTarget.Tag:
                         lock (this.syncObject)
                         {
-                            var e = GetEntityById(a.EntityId) as Entity;
+                            var e = GetActorById(a.ActorId) as Actor;
                             if (null != e)
                             {
                                 e.AddTagInternal(a.ClsName);
@@ -290,20 +285,20 @@ namespace Pioneer
                 case SyncType.Destroy:
                     switch (a.Target)
                     {
-                    case SyncTarget.Entity:
+                    case SyncTarget.Actor:
                         lock (this.syncObject)
                         {
-                            var e = GetEntityById(a.EntityId) as Entity;
+                            var e = GetActorById(a.ActorId) as Actor;
                             if (null != e)
                             {
-                                DestroyEntityInternal(e);
+                                DestroyActorInternal(e);
                             }
                         }
                         break;
                     case SyncTarget.Trait:
                         lock (this.syncObject)
                         {
-                            var e = GetEntityById(a.EntityId) as Entity;
+                            var e = GetActorById(a.ActorId) as Actor;
                             if (null != e)
                             {
                                 e.RemoveTraitInternal(a.ClsName);
@@ -313,7 +308,7 @@ namespace Pioneer
                     case SyncTarget.Tag:
                         lock (this.syncObject)
                         {
-                            var e = GetEntityById(a.EntityId) as Entity;
+                            var e = GetActorById(a.ActorId) as Actor;
                             if (null != e)
                             {
                                 e.RemoveTagInternal(a.ClsName);
@@ -325,7 +320,7 @@ namespace Pioneer
                 case SyncType.SetProp: // Only apply on Trait
                     lock (this.syncObject)
                     {
-                        var e = GetEntityById(a.EntityId) as Entity;
+                        var e = GetActorById(a.ActorId) as Actor;
                         if (null != e)
                         {
                             var t = e.GetTrait(a.ClsName);
@@ -336,7 +331,7 @@ namespace Pioneer
                 case SyncType.CallFunc: // Only apply on Trait
                     lock (this.syncObject)
                     {
-                        var e = GetEntityById(a.EntityId) as Entity;
+                        var e = GetActorById(a.ActorId) as Actor;
                         if (null != e)
                         {
                             var t = e.GetTrait(a.ClsName);
@@ -348,9 +343,9 @@ namespace Pioneer
             }
         }
 
-        private IEntity NewPlayer(ulong id, IPeer peer)
+        private IActor NewPlayer(ulong id, IPeer peer)
         {
-            var p = new Player(id, this, peer).CreateEntity();
+            var p = new Player(id, this, peer).CreateActor();
             this.players.Add(id, p);
 
             return p;
@@ -372,7 +367,7 @@ namespace Pioneer
             return false;
         }
 
-        private IEntity GetPlayer(IPeer peer)
+        private IActor GetPlayer(IPeer peer)
         {
             foreach (var p in this.players)
             {
@@ -385,17 +380,17 @@ namespace Pioneer
             return null;
         }
 
-        private IEntityCreator GetEntityCreatorById(ulong id)
+        private ICreator GetEntityCreatorById(ulong id)
         {
-            IEntity p = null;
+            IActor p = null;
             return (this.players.TryGetValue(id, out p) ? p.Creator : this.defaultCreator);
         }
 
-        private EntityCreator GetFirstEntityCreator()
+        private Creator GetFirstEntityCreator()
         {
             foreach (var p in this.players)
             {
-                return (EntityCreator)p.Value.Creator;
+                return (Creator)p.Value.Creator;
             }
 
             return null;
@@ -462,7 +457,7 @@ namespace Pioneer
                             writer.WriteUInt64(a.OwnerId);
                             writer.WriteByte((byte)a.Type);
                             writer.WriteByte((byte)a.Target);
-                            writer.WriteUInt64(a.EntityId);
+                            writer.WriteUInt64(a.ActorId);
                             writer.WriteString(a.ClsName ?? string.Empty);
                             writer.WriteString(a.SubTarget ?? string.Empty);
                             writer.WriteByte((byte)a.Payload.Length);
@@ -517,7 +512,7 @@ namespace Pioneer
                             OwnerId = ownerId,
                             Type = type,
                             Target = target,
-                            EntityId = entityId,
+                            ActorId = entityId,
                             ClsName = string.IsNullOrEmpty(clsName) ? null : clsName,
                             SubTarget = string.IsNullOrEmpty(subTarget) ? null : subTarget,
                             Payload = payload,

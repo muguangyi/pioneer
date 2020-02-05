@@ -12,23 +12,23 @@ using System.Collections.Generic;
 namespace Pioneer
 {
     /// <summary>
-    /// Entities filter interface.
+    /// Actors' filter interface.
     /// </summary>
-    public interface IEntitiesFilter
+    public interface IActorsFilter
     {
         /// <summary>
-        /// Gets a value to indicate the entity count.
+        /// Gets a value to indicate the actor count.
         /// </summary>
         int Count { get; }
 
         /// <summary>
-        /// Gets a value to indicate the entity collection.
+        /// Gets a value to indicate the actor collection.
         /// </summary>
-        IEnumerable<IEntity> Target { get; }
+        IEnumerable<IActor> Target { get; }
 
         /// <summary>
-        /// Gets a value to indicate the first entity.
+        /// Gets a value to indicate the first actor.
         /// </summary>
-        IEntity First { get; }
+        IActor First { get; }
     }
 }

@@ -18,22 +18,22 @@ using System.Linq;
 
 namespace Pioneer.Framework
 {
-    sealed class Entity : ReusableObject, IEntity, IBitCodeTrigger
+    sealed class Actor : ReusableObject, IActor, IBitCodeTrigger
     {
         private World world = null;
         private IBitCodeCenter center = null;
         private Trait[] traits = new Trait[BitCode.MAXSIZE];
         private Dictionary<uint, string> tags = new Dictionary<uint, string>();
-        private Filters<EntityFilter> filters = new Filters<EntityFilter>();
+        private Filters<ActorFilter> filters = new Filters<ActorFilter>();
         private List<Control> controls = new List<Control>();
 
-        public Entity(World world, IBitCodeCenter center)
+        public Actor(World world, IBitCodeCenter center)
         {
             this.world = world;
             this.center = center;
         }
 
-        public IEntityCreator Creator { get; private set; } = null;
+        public ICreator Creator { get; private set; } = null;
 
         public IWorld World { get => this.world; }
 
@@ -43,12 +43,12 @@ namespace Pioneer.Framework
 
         public override void Dispose()
         {
-            this.world.DestroyEntity(this);
+            this.world.DestroyActor(this);
 
             base.Dispose();
         }
 
-        public void Active(IEntityCreator owner, ulong id, string template = null)
+        public void Active(ICreator owner, ulong id, string template = null)
         {
             base.Active();
 
@@ -115,7 +115,7 @@ namespace Pioneer.Framework
             Trait trait = AddTraitInternal(traitType);
             if (this.Replicated && null != trait && WorldMode.Client != this.world.Mode)
             {
-                this.world.Do(((EntityCreator)this.Creator).Id, SyncType.Create, SyncTarget.Trait, this.Id, traitType.FullName);
+                this.world.Do(((Creator)this.Creator).Id, SyncType.Create, SyncTarget.Trait, this.Id, traitType.FullName);
             }
 
             return trait;
@@ -136,7 +136,7 @@ namespace Pioneer.Framework
         {
             if (RemoveTraitInternal(traitType) && this.Replicated && WorldMode.Client != this.world.Mode)
             {
-                this.world.Do(((EntityCreator)this.Creator).Id, SyncType.Destroy, SyncTarget.Trait, this.Id, traitType.FullName);
+                this.world.Do(((Creator)this.Creator).Id, SyncType.Destroy, SyncTarget.Trait, this.Id, traitType.FullName);
 
                 return true;
             }
@@ -229,7 +229,7 @@ namespace Pioneer.Framework
         {
             if (AddTagInternal(tag) && this.Replicated && WorldMode.Client != this.world.Mode)
             {
-                this.world.Do(((EntityCreator)this.Creator).Id, SyncType.Create, SyncTarget.Tag, this.Id, tag);
+                this.world.Do(((Creator)this.Creator).Id, SyncType.Create, SyncTarget.Tag, this.Id, tag);
 
                 return true;
             }
@@ -241,7 +241,7 @@ namespace Pioneer.Framework
         {
             if (RemoveTagInternal(tag) && this.Replicated && WorldMode.Client != this.world.Mode)
             {
-                this.world.Do(((EntityCreator)this.Creator).Id, SyncType.Destroy, SyncTarget.Tag, this.Id, tag);
+                this.world.Do(((Creator)this.Creator).Id, SyncType.Destroy, SyncTarget.Tag, this.Id, tag);
 
                 return true;
             }
@@ -282,18 +282,18 @@ namespace Pioneer.Framework
             return new Matcher(this.center);
         }
 
-        public IEntityFilter GetFilter(IControl control, TupleType tupleType, IMatcher matcher)
+        public IActorFilter GetFilter(IControl control, TupleType tupleType, IMatcher matcher)
         {
             var m = matcher as Matcher;
 
-            EntityFilter filter = this.filters.GetFilter(control, tupleType, m);
+            ActorFilter filter = this.filters.GetFilter(control, tupleType, m);
             if (null == filter)
             {
                 filter = this.filters.AddFilter
                 (
                     control,
                     tupleType,
-                    TupleType.Job == tupleType ? new JobEntityFilter(m) as EntityFilter : new ReactEntityFilter(m)
+                    TupleType.Job == tupleType ? new JobActorFilter(m) as ActorFilter : new ReactActorFilter(m)
                 );
                 filter.OnBitCodeTargetInit(this);
             }
@@ -301,22 +301,22 @@ namespace Pioneer.Framework
             return filter;
         }
 
-        public void OnBitCodeTargetInit(Entity target)
+        public void OnBitCodeTargetInit(Actor target)
         { }
 
-        public void OnBitCodeTargetAdded(Entity target, BitCode code)
+        public void OnBitCodeTargetAdded(Actor target, BitCode code)
         {
             this.filters.OnBitCodeTargetAdded(target, code);
             this.world.OnBitCodeTargetAdded(target, code);
         }
 
-        public void OnBitCodeTargetRemoved(Entity target, BitCode code)
+        public void OnBitCodeTargetRemoved(Actor target, BitCode code)
         {
             this.filters.OnBitCodeTargetRemoved(target, code);
             this.world.OnBitCodeTargetRemoved(target, code);
         }
 
-        public void OnBitCodeTargetChanged(Entity target, BitCode code)
+        public void OnBitCodeTargetChanged(Actor target, BitCode code)
         {
             this.filters.OnBitCodeTargetChanged(target, code);
             this.world.OnBitCodeTargetChanged(target, code);
@@ -337,7 +337,7 @@ namespace Pioneer.Framework
 
         internal void TakeSnapshot()
         {
-            var ownerId = ((EntityCreator)this.Creator).Id;
+            var ownerId = ((Creator)this.Creator).Id;
             for (var i = 0; i < this.traits.Length; ++i)
             {
                 var trait = this.traits[i];

@@ -12,14 +12,14 @@ using System;
 namespace Pioneer
 {
     /// <summary>
-    /// Entity interface.
+    /// Actor interface.
     /// </summary>
-    public interface IEntity : ITraitContainer, IControlContainer, IDisposable
+    public interface IActor : ITraitContainer, IControlContainer, IDisposable
     {
         /// <summary>
-        /// Gets a value to indicate the entity creator.
+        /// Gets a value to indicate the actor creator.
         /// </summary>
-        IEntityCreator Creator { get; }
+        ICreator Creator { get; }
 
         /// <summary>
         /// Gets a value to indicate the world instance.

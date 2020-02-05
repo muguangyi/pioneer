@@ -26,7 +26,7 @@ namespace Pioneer.Sync
     {
         World,
         Player,
-        Entity,
+        Actor,
         Trait,
         Tag,
     }
@@ -36,7 +36,7 @@ namespace Pioneer.Sync
         public ulong OwnerId;
         public SyncType Type;
         public SyncTarget Target;
-        public ulong EntityId;
+        public ulong ActorId;
         public string ClsName;
         public string SubTarget;
         public object[] Payload;

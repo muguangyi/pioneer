@@ -10,9 +10,9 @@
 namespace Pioneer
 {
     /// <summary>
-    /// Entities binder interface.
+    /// Actor binder interface.
     /// </summary>
-    public interface IEntitiesBinder
+    public interface IActorBinder
     {
         /// <summary>
         /// Create a new matcher.
@@ -21,12 +21,12 @@ namespace Pioneer
         IMatcher NewMatcher();
 
         /// <summary>
-        /// Get target filter instance.
+        /// Get the target filter.
         /// </summary>
-        /// <param name="system">System component.</param>
+        /// <param name="control">Control component.</param>
         /// <param name="tupleType">Tuple type.</param>
         /// <param name="matcher">Matcher instance.</param>
         /// <returns>Filter instance.</returns>
-        IEntitiesFilter GetFilter(ISystem system, TupleType tupleType, IMatcher matcher);
+        IActorFilter GetFilter(IControl control, TupleType tupleType, IMatcher matcher);
     }
 }

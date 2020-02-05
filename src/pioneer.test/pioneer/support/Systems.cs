@@ -18,12 +18,12 @@ namespace Pioneer.Test.Pioneer.Support
             --SystemCount;
         }
 
-        public override void OnInit(IEntityContainer container)
+        public override void OnInit(IActorContainer container)
         {
             ++SystemCount;
         }
 
-        public override void OnUpdate(IEntityContainer container, float deltaTime)
+        public override void OnUpdate(IActorContainer container, float deltaTime)
         {
         }
 
@@ -37,9 +37,9 @@ namespace Pioneer.Test.Pioneer.Support
     public class ABJobSystem : BaseSystem
     {
         public IMatcher Matcher = null;
-        public IEntitiesFilter Filter = null;
+        public IActorsFilter Filter = null;
 
-        public override void OnInit(IEntityContainer container)
+        public override void OnInit(IActorContainer container)
         {
             base.OnInit(container);
 
@@ -52,10 +52,10 @@ namespace Pioneer.Test.Pioneer.Support
     public class ABReactSystem : BaseSystem
     {
         public IMatcher Matcher = null;
-        public IEntitiesFilter Filter = null;
+        public IActorsFilter Filter = null;
         public int ReactCount = 0;
 
-        public override void OnInit(IEntityContainer container)
+        public override void OnInit(IActorContainer container)
         {
             base.OnInit(container);
 
@@ -64,7 +64,7 @@ namespace Pioneer.Test.Pioneer.Support
             this.Filter = container.GetFilter(this, TupleType.Reactive, this.Matcher);
         }
 
-        public override void OnUpdate(IEntityContainer container, float deltaTime)
+        public override void OnUpdate(IActorContainer container, float deltaTime)
         {
             this.ReactCount = this.Filter.Count;
         }
@@ -73,10 +73,10 @@ namespace Pioneer.Test.Pioneer.Support
     public class ABModifySystem : BaseSystem
     {
         public IMatcher Matcher = null;
-        public IEntitiesFilter Filter = null;
+        public IActorsFilter Filter = null;
         public int ModifyCount = 0;
 
-        public override void OnInit(IEntityContainer container)
+        public override void OnInit(IActorContainer container)
         {
             base.OnInit(container);
 
@@ -85,7 +85,7 @@ namespace Pioneer.Test.Pioneer.Support
             this.Filter = container.GetFilter(this, TupleType.Job, this.Matcher);
         }
 
-        public override void OnUpdate(IEntityContainer container, float deltaTime)
+        public override void OnUpdate(IActorContainer container, float deltaTime)
         {
             this.ModifyCount = 0;
             var rnd = new Random();
@@ -107,9 +107,9 @@ namespace Pioneer.Test.Pioneer.Support
     public class ABJobDeleteSystem : BaseSystem
     {
         public IMatcher Matcher = null;
-        public IEntitiesFilter Filter = null;
+        public IActorsFilter Filter = null;
 
-        public override void OnInit(IEntityContainer container)
+        public override void OnInit(IActorContainer container)
         {
             base.OnInit(container);
 
@@ -118,7 +118,7 @@ namespace Pioneer.Test.Pioneer.Support
             this.Filter = container.GetFilter(this, TupleType.Job, this.Matcher);
         }
 
-        public override void OnUpdate(IEntityContainer container, float deltaTime)
+        public override void OnUpdate(IActorContainer container, float deltaTime)
         {
             foreach (var e in this.Filter.Target)
             {
@@ -130,13 +130,13 @@ namespace Pioneer.Test.Pioneer.Support
 
     public class MatcherTestSystem : BaseSystem
     {
-        public IEntitiesFilter Filter = null;
+        public IActorsFilter Filter = null;
 
-        public override void OnInit(IEntityContainer container)
+        public override void OnInit(IActorContainer container)
         {
             base.OnInit(container);
 
-            var e = container.CreateEntity();
+            var e = container.CreateActor();
 
             var matcher = container.NewMatcher();
             matcher.HasTrait<ATrait>()
@@ -152,13 +152,13 @@ namespace Pioneer.Test.Pioneer.Support
 
     public class ModifyFilterSystem : BaseSystem
     {
-        public IEntitiesFilter Filter = null;
+        public IActorsFilter Filter = null;
 
-        public override void OnInit(IEntityContainer container)
+        public override void OnInit(IActorContainer container)
         {
             base.OnInit(container);
 
-            var e = container.CreateEntity();
+            var e = container.CreateActor();
 
             var matcher = container.NewMatcher();
             matcher.HasTrait<ATrait>().ExceptTrait<BTrait>();
@@ -166,7 +166,7 @@ namespace Pioneer.Test.Pioneer.Support
             this.Filter = container.GetFilter(this, TupleType.Job, matcher);
         }
 
-        public override void OnUpdate(IEntityContainer container, float deltaTime)
+        public override void OnUpdate(IActorContainer container, float deltaTime)
         {
             foreach (var e in this.Filter.Target)
             {
@@ -178,9 +178,9 @@ namespace Pioneer.Test.Pioneer.Support
     public class SameJobMatcherSystem1 : BaseSystem
     {
         public IMatcher Matcher = null;
-        public IEntitiesFilter Filter = null;
+        public IActorsFilter Filter = null;
 
-        public override void OnInit(IEntityContainer container)
+        public override void OnInit(IActorContainer container)
         {
             this.Matcher = container.NewMatcher();
             this.Matcher.HasTrait<ATrait>();
@@ -191,9 +191,9 @@ namespace Pioneer.Test.Pioneer.Support
     public class SameJobMatcherSystem2 : BaseSystem
     {
         public IMatcher Matcher = null;
-        public IEntitiesFilter Filter = null;
+        public IActorsFilter Filter = null;
 
-        public override void OnInit(IEntityContainer container)
+        public override void OnInit(IActorContainer container)
         {
             this.Matcher = container.NewMatcher();
             this.Matcher.HasTrait<ATrait>();
@@ -204,9 +204,9 @@ namespace Pioneer.Test.Pioneer.Support
     public class SameReactMatcherSystem1 : BaseSystem
     {
         public IMatcher Matcher = null;
-        public IEntitiesFilter Filter = null;
+        public IActorsFilter Filter = null;
 
-        public override void OnInit(IEntityContainer container)
+        public override void OnInit(IActorContainer container)
         {
             this.Matcher = container.NewMatcher();
             this.Matcher.HasTrait<ATrait>();
@@ -217,9 +217,9 @@ namespace Pioneer.Test.Pioneer.Support
     public class SameReactMatcherSystem2 : BaseSystem
     {
         public IMatcher Matcher = null;
-        public IEntitiesFilter Filter = null;
+        public IActorsFilter Filter = null;
 
-        public override void OnInit(IEntityContainer container)
+        public override void OnInit(IActorContainer container)
         {
             this.Matcher = container.NewMatcher();
             this.Matcher.HasTrait<ATrait>();

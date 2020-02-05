@@ -32,10 +32,10 @@ namespace Pioneer.Test.Pioneer
         public void TestVerifyJobEntityGroup()
         {
             var world = Env.GetWorld();
-            var a = world.CreateEntity();
+            var a = world.CreateActor();
             a.AddTrait<ATrait>();
             a.AddTrait<BTrait>();
-            var b = world.CreateEntity();
+            var b = world.CreateActor();
             b.AddTrait<ATrait>();
             b.AddTrait<BTrait>();
             var system = world.AddSystem<ABJobSystem>();
@@ -65,10 +65,10 @@ namespace Pioneer.Test.Pioneer
         public void TestVerifyReactiveEntityGroup()
         {
             var world = Env.GetWorld();
-            var a = world.CreateEntity();
+            var a = world.CreateActor();
             var aa = a.AddTrait<ATrait>();
             var ab = a.AddTrait<BTrait>();
-            var b = world.CreateEntity();
+            var b = world.CreateActor();
             var ba = b.AddTrait<ATrait>();
             var bb = b.AddTrait<BTrait>();
             var system = world.AddSystem<ABReactSystem>();
@@ -109,10 +109,10 @@ namespace Pioneer.Test.Pioneer
         public void TestVerifyDelayReactiveEntity()
         {
             var world = Env.GetWorld();
-            var a = world.CreateEntity();
+            var a = world.CreateActor();
             var aa = a.AddTrait<ATrait>();
             var ab = a.AddTrait<BTrait>();
-            var b = world.CreateEntity();
+            var b = world.CreateActor();
             var ba = b.AddTrait<ATrait>();
             var bb = b.AddTrait<BTrait>();
             var system = world.AddSystem<ABReactSystem>();
@@ -141,10 +141,10 @@ namespace Pioneer.Test.Pioneer
         public void TestDeleteEntity()
         {
             var world = Env.GetWorld();
-            var a = world.CreateEntity();
+            var a = world.CreateActor();
             var aa = a.AddTrait<ATrait>();
             var ab = a.AddTrait<BTrait>();
-            var b = world.CreateEntity();
+            var b = world.CreateActor();
             var ba = b.AddTrait<ATrait>();
             var bb = b.AddTrait<BTrait>();
             var system = world.AddSystem<ABJobDeleteSystem>();
@@ -165,7 +165,7 @@ namespace Pioneer.Test.Pioneer
         public void TestVerifyMatcherSystem()
         {
             var world = Env.GetWorld();
-            var e = world.CreateEntity();
+            var e = world.CreateActor();
             var l = world.AddSystem<MatcherTestSystem>();
 
             Assert.AreEqual(l.Filter.Target.Count(), 0);
@@ -196,10 +196,10 @@ namespace Pioneer.Test.Pioneer
         {
             var world = Env.GetWorld();
 
-            var e1 = world.CreateEntity();
+            var e1 = world.CreateActor();
             e1.AddTrait<ATrait>();
 
-            var e2 = world.CreateEntity();
+            var e2 = world.CreateActor();
             e2.AddTrait<BTrait>();
 
             var s = world.AddSystem<ModifyFilterSystem>();
@@ -209,7 +209,7 @@ namespace Pioneer.Test.Pioneer
             Env.UpdateWorld(1);
             Assert.AreEqual(s.Filter.Target.Count(), 0);
 
-            var e3 = world.CreateEntity();
+            var e3 = world.CreateActor();
             e3.AddTrait<ATrait>();
 
             Assert.AreEqual(s.Filter.Target.Count(), 1);

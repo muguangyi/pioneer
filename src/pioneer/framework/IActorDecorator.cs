@@ -10,15 +10,15 @@
 namespace Pioneer.Framework
 {
     /// <summary>
-    /// Entity decorator interface.
+    /// Actor decorator interface.
     /// </summary>
-    interface IEntityDecorator
+    interface IActorDecorator
     {
         /// <summary>
-        /// Apply template to target entity.
+        /// Apply template to target actor.
         /// </summary>
         /// <param name="template">Template name.</param>
-        /// <param name="entity">Target entity instance.</param>
-        void Apply(string template, IEntity entity);
+        /// <param name="actor">Target actor instance.</param>
+        void Apply(string template, IActor actor);
     }
 }
