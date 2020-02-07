@@ -51,7 +51,7 @@ namespace Pioneer
         /// Add actor template with an unique name.
         /// </summary>
         /// <param name="template">Template name.</param>
-        /// <param name="decorator">Decorator func for entity.</param>
+        /// <param name="decorator">Decorator func for actor.</param>
         /// <returns>Indicate if the operation is succeeded or not.</returns>
         bool TrySetActorTemplate(string template, Action<IActor> decorator);
 

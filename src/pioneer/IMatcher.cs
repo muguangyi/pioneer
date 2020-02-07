@@ -17,56 +17,56 @@ namespace Pioneer
     public interface IMatcher
     {
         /// <summary>
-        /// Ensure the entity contains the target trait.
+        /// Ensure the actor contains the target trait.
         /// </summary>
         /// <param name="traitType">Trait type.</param>
         /// <returns>Matcher instance.</returns>
         IMatcher HasTrait(Type traitType);
 
         /// <summary>
-        /// Ensure the entity contains the target trait.
+        /// Ensure the actor contains the target trait.
         /// </summary>
         /// <typeparam name="TTrait">Trait type.</typeparam>
         /// <returns>Matcher instance.</returns>
         IMatcher HasTrait<TTrait>() where TTrait : ITrait;
 
         /// <summary>
-        /// Ensure the entity contains the target trait.
+        /// Ensure the actor contains the target trait.
         /// </summary>
         /// <param name="traitName">Trait name.</param>
         /// <returns>Matcher instance.</returns>
         IMatcher HasTrait(string traitName);
 
         /// <summary>
-        /// Ensure the entity contains the target tag.
+        /// Ensure the actor contains the target tag.
         /// </summary>
         /// <param name="tag">Tag.</param>
         /// <returns>Matcher instance.</returns>
         IMatcher HasTag(string tag);
 
         /// <summary>
-        /// Ensure the entity doesn't include the target trait.
+        /// Ensure the actor doesn't include the target trait.
         /// </summary>
         /// <param name="traitType">Trait type.</param>
         /// <returns>Matcher instance.</returns>
         IMatcher ExceptTrait(Type traitType);
 
         /// <summary>
-        /// Ensure the entity doesn't include the target trait.
+        /// Ensure the actor doesn't include the target trait.
         /// </summary>
         /// <typeparam name="TTrait">Trait type.</typeparam>
         /// <returns>Matcher instance.</returns>
         IMatcher ExceptTrait<TTrait>() where TTrait : ITrait;
 
         /// <summary>
-        /// Ensure the entity doesn't include the target trait.
+        /// Ensure the actor doesn't include the target trait.
         /// </summary>
         /// <param name="traitName">Trait name.</param>
         /// <returns>Matcher instance.</returns>
         IMatcher ExceptTrait(string traitName);
 
         /// <summary>
-        /// Ensure the entity doesn't include the target tag.
+        /// Ensure the actor doesn't include the target tag.
         /// </summary>
         /// <param name="tag">Tag.</param>
         /// <returns>Matcher instance.</returns>

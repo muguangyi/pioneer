@@ -29,7 +29,7 @@ namespace Pioneer.Test.Pioneer
         }
 
         [TestMethod]
-        public void TestVerifyJobEntityGroup()
+        public void TestVerifyJobActorGroup()
         {
             var world = Env.GetWorld();
             var a = world.CreateActor();
@@ -62,7 +62,7 @@ namespace Pioneer.Test.Pioneer
         }
 
         [TestMethod]
-        public void TestVerifyReactiveEntityGroup()
+        public void TestVerifyReactiveActorGroup()
         {
             var world = Env.GetWorld();
             var a = world.CreateActor();
@@ -106,7 +106,7 @@ namespace Pioneer.Test.Pioneer
         }
 
         [TestMethod]
-        public void TestVerifyDelayReactiveEntity()
+        public void TestVerifyDelayReactiveActor()
         {
             var world = Env.GetWorld();
             var a = world.CreateActor();
@@ -138,7 +138,7 @@ namespace Pioneer.Test.Pioneer
         }
 
         [TestMethod]
-        public void TestDeleteEntity()
+        public void TestDeleteActor()
         {
             var world = Env.GetWorld();
             var a = world.CreateActor();

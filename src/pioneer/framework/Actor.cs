@@ -366,7 +366,7 @@ namespace Pioneer.Framework
             if (null == trait)
             {
                 trait = this.world.PickTrait(traitType);
-                trait.Entity = this;
+                trait.Actor = this;
                 trait.OnInit();
                 trait.OnChanged += OnTraitChanged;
 

@@ -19,27 +19,27 @@ namespace Pioneer.Bit
         /// <summary>
         /// When BitCode target initialize.
         /// </summary>
-        /// <param name="target">Entity instance.</param>
+        /// <param name="target">Actor instance.</param>
         void OnBitCodeTargetInit(Actor target);
 
         /// <summary>
         /// When BitCode target added a BitCode instance.
         /// </summary>
-        /// <param name="target">Entity instance.</param>
+        /// <param name="target">Actor instance.</param>
         /// <param name="code">BitCode instance.</param>
         void OnBitCodeTargetAdded(Actor target, BitCode code);
 
         /// <summary>
         /// When BitCode target removed a BitCode instance.
         /// </summary>
-        /// <param name="target">Entity instance.</param>
+        /// <param name="target">Actor instance.</param>
         /// <param name="code">BitCode instance.</param>
         void OnBitCodeTargetRemoved(Actor target, BitCode code);
 
         /// <summary>
         /// When BitCode target modified a BitCode instance.
         /// </summary>
-        /// <param name="target">Entity instance.</param>
+        /// <param name="target">Actor instance.</param>
         /// <param name="code">BitCode instance.</param>
         void OnBitCodeTargetChanged(Actor target, BitCode code);
     }

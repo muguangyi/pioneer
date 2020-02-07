@@ -30,9 +30,9 @@ namespace Pioneer.Filter
             base.Dispose();
         }
 
-        protected virtual void OnActorMatched(Actor entity)
+        protected virtual void OnActorMatched(Actor actor)
         {
-            this.actor = entity;
+            this.actor = actor;
         }
 
         protected virtual void OnActorUnmatched(Actor actor)

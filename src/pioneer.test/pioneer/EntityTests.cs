@@ -46,7 +46,7 @@ namespace Pioneer.Test.Pioneer
         }
 
         [TestMethod]
-        public void TestDestroyEntity()
+        public void TestDestroyActor()
         {
             var world = Env.GetWorld();
             var a = world.CreateActor();
@@ -251,7 +251,7 @@ namespace Pioneer.Test.Pioneer
             Env.UpdateWorld(1);
 
             var e2 = world.CreateActor();
-            Assert.AreEqual(e0, e2);    // reuse the same entity, but all content is clean
+            Assert.AreEqual(e0, e2);    // reuse the same actor, but all content is clean
             Assert.AreNotEqual(id0, e2.Id);
             Assert.AreNotEqual(e1.Id, e2.Id);
             Assert.IsNull(e2.GetTrait<ATrait>());

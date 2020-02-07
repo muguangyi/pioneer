@@ -36,25 +36,25 @@ namespace Pioneer.Test.Pioneer
         }
 
         [TestMethod]
-        public void TestCreateEntity()
+        public void TestCreateActor()
         {
             var world = Env.GetWorld();
-            var entity = world.CreateActor();
-            Assert.IsNotNull(entity);
+            var actor = world.CreateActor();
+            Assert.IsNotNull(actor);
         }
 
         [TestMethod]
-        public void TestDestroyEntity()
+        public void TestDestroyActor()
         {
             var world = Env.GetWorld();
-            var entity = world.CreateActor();
-            entity.Dispose();
+            var actor = world.CreateActor();
+            actor.Dispose();
             Env.UpdateWorld(1);
-            Assert.IsNull(world.GetActorById(entity.Id));
+            Assert.IsNull(world.GetActorById(actor.Id));
         }
 
         [TestMethod]
-        public void TestGetEntity()
+        public void TestGetActor()
         {
             var world = Env.GetWorld();
             var e1 = world.CreateActor();

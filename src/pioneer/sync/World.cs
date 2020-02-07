@@ -96,10 +96,10 @@ namespace Pioneer
                 break;
             case WorldMode.Client:
                 {
-                    var creator = GetFirstEntityCreator();
+                    var creator = GetFirstCreator();
                     if (null == creator)
                     {
-                        throw new NullReferenceException("Player entity creator CAN NOT be null!");
+                        throw new NullReferenceException("Player actor creator CAN NOT be null!");
                     }
 
                     Do(creator.Id, SyncType.Loaded, SyncTarget.Player, 0);
@@ -257,7 +257,7 @@ namespace Pioneer
                     case SyncTarget.Actor:
                         lock (this.syncObject)
                         {
-                            CreateActorInternal(GetEntityCreatorById(a.OwnerId), a.ActorId, true, a.SubTarget);
+                            CreateActorInternal(GetCreatorById(a.OwnerId), a.ActorId, true, a.SubTarget);
                         }
                         break;
                     case SyncTarget.Trait:
@@ -380,13 +380,13 @@ namespace Pioneer
             return null;
         }
 
-        private ICreator GetEntityCreatorById(ulong id)
+        private ICreator GetCreatorById(ulong id)
         {
             IActor p = null;
             return (this.players.TryGetValue(id, out p) ? p.Creator : this.defaultCreator);
         }
 
-        private Creator GetFirstEntityCreator()
+        private Creator GetFirstCreator()
         {
             foreach (var p in this.players)
             {
@@ -453,7 +453,7 @@ namespace Pioneer
                         {
                             var a = this.Actions.Dequeue();
 
-                            //Console.WriteLine("> " + a.OwnerId + ", " + a.Type + ", " + a.Target + ", " + a.EntityId + ", " + (a.ClsName ?? string.Empty) + ", " + (a.SubTarget ?? string.Empty));
+                            //Console.WriteLine("> " + a.OwnerId + ", " + a.Type + ", " + a.Target + ", " + a.ActorId + ", " + (a.ClsName ?? string.Empty) + ", " + (a.SubTarget ?? string.Empty));
                             writer.WriteUInt64(a.OwnerId);
                             writer.WriteByte((byte)a.Type);
                             writer.WriteByte((byte)a.Target);
@@ -490,7 +490,7 @@ namespace Pioneer
                     var ownerId = reader.ReadUInt64();
                     var type = (SyncType)reader.ReadByte();
                     var target = (SyncTarget)reader.ReadByte();
-                    var entityId = reader.ReadUInt64();
+                    var actorId = reader.ReadUInt64();
                     var clsName = reader.ReadString();
                     var subTarget = reader.ReadString();
                     object[] payload = null;
@@ -504,7 +504,7 @@ namespace Pioneer
                         }
                     }
 
-                    //Console.WriteLine("< " + ownerId + ", " + type + ", " + target + ", " + entityId + ", " + (clsName ?? string.Empty) + ", " + (subTarget ?? string.Empty));
+                    //Console.WriteLine("< " + ownerId + ", " + type + ", " + target + ", " + actorId + ", " + (clsName ?? string.Empty) + ", " + (subTarget ?? string.Empty));
                     lock (this.Actions)
                     {
                         this.Actions.Enqueue(new SyncAction
@@ -512,7 +512,7 @@ namespace Pioneer
                             OwnerId = ownerId,
                             Type = type,
                             Target = target,
-                            ActorId = entityId,
+                            ActorId = actorId,
                             ClsName = string.IsNullOrEmpty(clsName) ? null : clsName,
                             SubTarget = string.IsNullOrEmpty(subTarget) ? null : subTarget,
                             Payload = payload,

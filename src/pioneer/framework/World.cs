@@ -46,7 +46,7 @@ namespace Pioneer
             Reset();
 
             // NOTE: Dispose System first since system dispose logic may
-            // need Entity
+            // need Actor
             for (var i = 0; i < this.systems.Count; ++i)
             {
                 this.systems[i].Dispose();
@@ -172,10 +172,10 @@ namespace Pioneer
             return e;
         }
 
-        public IActor GetActorById(ulong entityId)
+        public IActor GetActorById(ulong actorId)
         {
             LinkedListNode<IActor> node = null;
-            if (this.actorMap.TryGetValue(entityId, out node))
+            if (this.actorMap.TryGetValue(actorId, out node))
             {
                 return node.Value;
             }

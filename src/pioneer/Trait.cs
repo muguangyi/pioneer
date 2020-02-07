@@ -60,7 +60,7 @@ namespace Pioneer
             }
         }
 
-        internal Actor Entity { private get; set; }
+        internal Actor Actor { private get; set; }
 
         /// <inheritdoc />
         public event Action<ITrait> OnChanged;
@@ -82,9 +82,9 @@ namespace Pioneer
 
         public void SetProp(string name, object value)
         {
-            if (((Creator)this.Entity.Creator).HasAuthority)
+            if (((Creator)this.Actor.Creator).HasAuthority)
             {
-                SetPropInternal(CallType.Local, ((Creator)this.Entity.Creator).Id, name, value);
+                SetPropInternal(CallType.Local, ((Creator)this.Actor.Creator).Id, name, value);
             }
         }
 
@@ -95,9 +95,9 @@ namespace Pioneer
         /// <param name="args"></param>
         public void CallFunc(string name, params object[] args)
         {
-            if (((Creator)this.Entity.Creator).HasAuthority)
+            if (((Creator)this.Actor.Creator).HasAuthority)
             {
-                CallFuncInternal(CallType.Local, ((Creator)this.Entity.Creator).Id, name, args);
+                CallFuncInternal(CallType.Local, ((Creator)this.Actor.Creator).Id, name, args);
             }
         }
 
@@ -135,17 +135,17 @@ namespace Pioneer
 
         internal void TakeSnapshot()
         {
-            var owner = (Creator)this.Entity.Creator;
+            var owner = (Creator)this.Actor.Creator;
             var world = owner.World;
             foreach (var i in this.props)
             {
-                world.Do(owner.Id, SyncType.SetProp, SyncTarget.Trait, this.Entity.Id, this.typeName, i.Key, i.Value.Get());
+                world.Do(owner.Id, SyncType.SetProp, SyncTarget.Trait, this.Actor.Id, this.typeName, i.Key, i.Value.Get());
             }
         }
 
         private void Invoke(AbstractMeta proxy, CallType callType, SyncType syncType, ulong authorityOwnerId, string subTarget, params object[] payload)
         {
-            var world = ((Creator)this.Entity.Creator).World;
+            var world = ((Creator)this.Actor.Creator).World;
             switch (world.Mode)
             {
                 case WorldMode.Standalone:
@@ -155,16 +155,16 @@ namespace Pioneer
                     switch (proxy.Domain)
                     {
                         case ApplyDomain.Client:
-                            world.Do(authorityOwnerId, syncType, SyncTarget.Trait, this.Entity.Id, this.typeName, subTarget, payload);
+                            world.Do(authorityOwnerId, syncType, SyncTarget.Trait, this.Actor.Id, this.typeName, subTarget, payload);
                             break;
                         case ApplyDomain.Server:
                             proxy.Call(payload);
                             break;
                         case ApplyDomain.NetMultiple:
                             proxy.Call(payload);
-                            if (this.Entity.Replicated)
+                            if (this.Actor.Replicated)
                             {
-                                world.Do(authorityOwnerId, syncType, SyncTarget.Trait, this.Entity.Id, this.typeName, subTarget, payload);
+                                world.Do(authorityOwnerId, syncType, SyncTarget.Trait, this.Actor.Id, this.typeName, subTarget, payload);
                             }
                             break;
                     }
@@ -179,15 +179,15 @@ namespace Pioneer
                             }
                             break;
                         case ApplyDomain.Server:
-                            world.Do(authorityOwnerId, syncType, SyncTarget.Trait, this.Entity.Id, this.typeName, subTarget, payload);
+                            world.Do(authorityOwnerId, syncType, SyncTarget.Trait, this.Actor.Id, this.typeName, subTarget, payload);
                             break;
                         case ApplyDomain.NetMultiple:
                             if (CallType.Local == callType)
                             {
                                 proxy.Call(payload);
-                                if (this.Entity.Replicated)
+                                if (this.Actor.Replicated)
                                 {
-                                    world.Do(authorityOwnerId, syncType, SyncTarget.Trait, this.Entity.Id, this.typeName, subTarget, payload);
+                                    world.Do(authorityOwnerId, syncType, SyncTarget.Trait, this.Actor.Id, this.typeName, subTarget, payload);
                                 }
                             }
                             else if (CanInvoke(authorityOwnerId, proxy.Condition))
@@ -203,8 +203,8 @@ namespace Pioneer
         private bool CanInvoke(ulong authorityOwnerId, ApplyCondition condition)
         {
             return ((ApplyCondition.All == condition) ||
-                    (ApplyCondition.OwnerOnly == condition && authorityOwnerId == ((Creator)this.Entity.Creator).Id) ||
-                    (ApplyCondition.SkipOwner == condition && authorityOwnerId != ((Creator)this.Entity.Creator).Id));
+                    (ApplyCondition.OwnerOnly == condition && authorityOwnerId == ((Creator)this.Actor.Creator).Id) ||
+                    (ApplyCondition.SkipOwner == condition && authorityOwnerId != ((Creator)this.Actor.Creator).Id));
         }
 
         private Type GetMethodType(Type methodProxy)
