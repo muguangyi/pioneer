@@ -19,11 +19,6 @@ namespace Pioneer
         /// <summary>
         /// Gets a value to indicate the actor collection.
         /// </summary>
-        IEnumerable<IActor> Target { get; }
-
-        /// <summary>
-        /// Gets a value to indicate the first actor.
-        /// </summary>
-        IActor First { get; }
+        IEnumerable<IActor> Actors { get; }
     }
 }

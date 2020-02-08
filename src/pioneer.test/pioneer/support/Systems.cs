@@ -54,7 +54,6 @@ namespace Pioneer.Test.Pioneer.Support
     {
         public IMatcher Matcher = null;
         public IGroupFilter Filter = null;
-        public int ReactCount = 0;
 
         public override void OnInit(IWorld world)
         {
@@ -63,11 +62,6 @@ namespace Pioneer.Test.Pioneer.Support
             this.Matcher = world.NewMatcher();
             this.Matcher.HasTrait<ATrait>().HasTrait<BTrait>();
             this.Filter = world.GetFilter(this, TupleType.Reactive, this.Matcher);
-        }
-
-        public override void OnUpdate(IWorld world, float deltaTime)
-        {
-            this.ReactCount = this.Filter.Target.Count();
         }
     }
 
@@ -91,7 +85,7 @@ namespace Pioneer.Test.Pioneer.Support
             this.ModifyCount = 0;
             var rnd = new Random();
 
-            foreach (var e in this.Filter.Target)
+            foreach (var e in this.Filter.Actors)
             {
                 var a = e.GetTrait<ATrait>();
                 a.ChangeValue();
@@ -121,7 +115,7 @@ namespace Pioneer.Test.Pioneer.Support
 
         public override void OnUpdate(IWorld world, float deltaTime)
         {
-            foreach (var e in this.Filter.Target)
+            foreach (var e in this.Filter.Actors)
             {
                 e.Dispose();
                 break;
@@ -169,7 +163,7 @@ namespace Pioneer.Test.Pioneer.Support
 
         public override void OnUpdate(IWorld world, float deltaTime)
         {
-            foreach (var e in this.Filter.Target)
+            foreach (var e in this.Filter.Actors)
             {
                 e.AddTrait<BTrait>();
             }

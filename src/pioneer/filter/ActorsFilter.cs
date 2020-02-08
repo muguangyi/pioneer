@@ -24,16 +24,7 @@ namespace Pioneer.Filter
 
         public bool Matched => this.actors.Count > 0;
 
-        public IEnumerable<IActor> Target => this.actors;
-
-        public IActor First
-        {
-            get
-            {
-                var first = this.actors.First;
-                return first?.Value;
-            }
-        }
+        public IEnumerable<IActor> Actors => this.actors;
 
         public override void Dispose()
         {

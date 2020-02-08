@@ -21,7 +21,7 @@ namespace Pioneer.Filter
             this.actor = null;
         }
 
-        public virtual bool Matched => this.actor != null;
+        public bool Matched => this.actor != null;
 
         public override void Dispose()
         {
