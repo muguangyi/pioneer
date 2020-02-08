@@ -42,23 +42,22 @@ namespace Pioneer.Test.Pioneer
 
             Env.UpdateWorld(1);
             Assert.IsNotNull(system.Filter);
-            Assert.AreEqual(system.Filter.Actors.Count(), 2);
+            Assert.AreEqual(2, system.Filter.Actors.Count());
 
             a.RemoveTrait<ATrait>();
             Env.UpdateWorld(1);
             Assert.IsNotNull(system.Filter);
-            Assert.AreEqual(system.Filter.Actors.Count(), 1);
+            Assert.AreEqual(1, system.Filter.Actors.Count());
 
             a.AddTrait<ATrait>();
             Env.UpdateWorld(1);
             Assert.IsNotNull(system.Filter);
-            Assert.AreEqual(system.Filter.Actors.Count(), 2);
+            Assert.AreEqual(2, system.Filter.Actors.Count());
 
             a.RemoveTrait<BTrait>();
             b.RemoveTrait<ATrait>();
             Env.UpdateWorld(1);
-            Assert.IsNotNull(system.Filter);
-            Assert.AreEqual(system.Filter.Actors.Count(), 0);
+            Assert.AreEqual(0, system.Filter.Actors.Count());
         }
 
         [TestMethod]
@@ -74,35 +73,35 @@ namespace Pioneer.Test.Pioneer
             var system = world.AddSystem<ABReactSystem>();
 
             Env.UpdateWorld(1);
-            Assert.AreEqual(system.Filter.Actors.Count(), 2);
+            Assert.AreEqual(2, system.ReactCount);
 
             Env.UpdateWorld(1);
-            Assert.AreEqual(system.Filter.Actors.Count(), 0);
+            Assert.AreEqual(0, system.ReactCount);
 
             aa.ChangeValue();
             Env.UpdateWorld(1);
-            Assert.AreEqual(system.Filter.Actors.Count(), 1);
+            Assert.AreEqual(1, system.ReactCount);
 
             aa.ChangeValue();
             ab.ChangeValue();
             Env.UpdateWorld(1);
-            Assert.AreEqual(system.Filter.Actors.Count(), 1);
+            Assert.AreEqual(1, system.ReactCount);
 
             aa.ChangeValue();
             bb.ChangeValue();
             Env.UpdateWorld(1);
-            Assert.AreEqual(system.Filter.Actors.Count(), 2);
+            Assert.AreEqual(2, system.ReactCount);
 
             Env.UpdateWorld(1);
-            Assert.AreEqual(system.Filter.Actors.Count(), 0);
+            Assert.AreEqual(0, system.ReactCount);
 
             Env.UpdateWorld(1);
             aa.ChangeValue();
-            Assert.AreEqual(system.Filter.Actors.Count(), 0);
+            Assert.AreEqual(0, system.ReactCount);
             Env.UpdateWorld(1);
-            Assert.AreEqual(system.Filter.Actors.Count(), 1);
+            Assert.AreEqual(1, system.ReactCount);
             Env.UpdateWorld(1);
-            Assert.AreEqual(system.Filter.Actors.Count(), 0);
+            Assert.AreEqual(0, system.ReactCount);
         }
 
         [TestMethod]
@@ -121,20 +120,20 @@ namespace Pioneer.Test.Pioneer
             int lastModifyCount = 0;
 
             Env.UpdateWorld(1);
-            Assert.AreEqual(system.Filter.Actors.Count(), 2);
+            Assert.AreEqual(2, system.ReactCount);
             lastModifyCount = system2.ModifyCount;
 
             Env.UpdateWorld(1);
-            Assert.AreEqual(system.Filter.Actors.Count(), lastModifyCount);
+            Assert.AreEqual(lastModifyCount, system.ReactCount);
             lastModifyCount = system2.ModifyCount;
 
             Env.UpdateWorld(1);
-            Assert.AreEqual(system.Filter.Actors.Count(), lastModifyCount);
+            Assert.AreEqual(lastModifyCount, system.ReactCount);
 
             a.RemoveTrait<ATrait>();
             b.RemoveTrait<ATrait>();
             Env.UpdateWorld(1);
-            Assert.AreEqual(system.Filter.Actors.Count(), 0);
+            Assert.AreEqual(0, system.ReactCount);
         }
 
         [TestMethod]
@@ -150,15 +149,15 @@ namespace Pioneer.Test.Pioneer
             var system = world.AddSystem<ABJobDeleteSystem>();
 
             Assert.IsNotNull(system.Filter);
-            Assert.AreEqual(system.Filter.Actors.Count(), 2);
+            Assert.AreEqual(2, system.Filter.Actors.Count());
 
             Env.UpdateWorld(1);
             Assert.IsNotNull(system.Filter);
-            Assert.AreEqual(system.Filter.Actors.Count(), 1);
+            Assert.AreEqual(1, system.Filter.Actors.Count());
 
             Env.UpdateWorld(1);
             Assert.IsNotNull(system.Filter);
-            Assert.AreEqual(system.Filter.Actors.Count(), 0);
+            Assert.AreEqual(0, system.Filter.Actors.Count());
         }
 
         [TestMethod]
@@ -168,7 +167,7 @@ namespace Pioneer.Test.Pioneer
             var e = world.CreateActor();
             var l = world.AddSystem<MatcherTestSystem>();
 
-            Assert.AreEqual(l.Filter.Actors.Count(), 0);
+            Assert.AreEqual(0, l.Filter.Actors.Count());
 
             e.AddTrait<ATrait>();
             e.AddTrait<BTrait>();
@@ -176,19 +175,19 @@ namespace Pioneer.Test.Pioneer
             e.AddTrait<DTrait>();
             e.AddTag("E");
             e.AddTag("F");
-            Assert.AreEqual(l.Filter.Actors.Count(), 0);
+            Assert.AreEqual(0, l.Filter.Actors.Count());
 
             e.RemoveTrait<BTrait>();
-            Assert.AreEqual(l.Filter.Actors.Count(), 0);
+            Assert.AreEqual(0, l.Filter.Actors.Count());
 
             e.RemoveTrait<DTrait>();
-            Assert.AreEqual(l.Filter.Actors.Count(), 0);
+            Assert.AreEqual(0, l.Filter.Actors.Count());
 
             e.RemoveTag("F");
-            Assert.AreEqual(l.Filter.Actors.Count(), 1);
+            Assert.AreEqual(1, l.Filter.Actors.Count());
 
             e.AddTag("F");
-            Assert.AreEqual(l.Filter.Actors.Count(), 0);
+            Assert.AreEqual(0, l.Filter.Actors.Count());
         }
 
         [TestMethod]
@@ -204,18 +203,18 @@ namespace Pioneer.Test.Pioneer
 
             var s = world.AddSystem<ModifyFilterSystem>();
 
-            Assert.AreEqual(s.Filter.Actors.Count(), 1);
+            Assert.AreEqual(1, s.Filter.Actors.Count());
 
             Env.UpdateWorld(1);
-            Assert.AreEqual(s.Filter.Actors.Count(), 0);
+            Assert.AreEqual(0, s.Filter.Actors.Count());
 
             var e3 = world.CreateActor();
             e3.AddTrait<ATrait>();
 
-            Assert.AreEqual(s.Filter.Actors.Count(), 1);
+            Assert.AreEqual(1, s.Filter.Actors.Count());
 
             Env.UpdateWorld(1);
-            Assert.AreEqual(s.Filter.Actors.Count(), 0);
+            Assert.AreEqual(0, s.Filter.Actors.Count());
         }
 
         [TestMethod]
@@ -230,11 +229,11 @@ namespace Pioneer.Test.Pioneer
             world.AddSystem<MatcherTestSystem>();
             world.AddSystem<ModifyFilterSystem>();
 
-            Assert.AreEqual(BaseSystem.SystemCount, 6);
+            Assert.AreEqual(6, BaseSystem.SystemCount);
 
             Env.Stop();
 
-            Assert.AreEqual(BaseSystem.SystemCount, 0);
+            Assert.AreEqual(0, BaseSystem.SystemCount);
         }
 
         [TestMethod]
