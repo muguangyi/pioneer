@@ -202,12 +202,12 @@ namespace Pioneer.Test.Pioneer
             e.AddTrait<CTrait>();
             e.AddTrait<DTrait>();
 
-            Assert.AreEqual(BaseTrait.TraitCount, 4);
+            Assert.AreEqual(4, BaseTrait.TraitCount);
 
             e.Dispose();
             Env.UpdateWorld(1);
 
-            Assert.AreEqual(BaseTrait.TraitCount, 0);
+            Assert.AreEqual(0, BaseTrait.TraitCount);
         }
 
         [TestMethod]
@@ -223,7 +223,7 @@ namespace Pioneer.Test.Pioneer
             e.AddControl<AWithoutBJobControl>();
             e.AddControl<ABReactControl>();
             e.AddControl<CTagJobControl>();
-            Assert.AreEqual(BaseControl.ControlCount, 4);
+            Assert.AreEqual(4, BaseControl.ControlCount);
         }
 
         [TestMethod]

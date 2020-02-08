@@ -74,7 +74,7 @@ namespace Pioneer.Test.Pioneer
             world.CreateActor();
 
             var entities = world.Actors;
-            Assert.AreEqual(entities.Count(), 3);
+            Assert.AreEqual(3, entities.Count());
         }
 
         [TestMethod]
