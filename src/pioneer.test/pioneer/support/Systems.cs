@@ -18,12 +18,12 @@ namespace Pioneer.Test.Pioneer.Support
             --SystemCount;
         }
 
-        public override void OnInit(IActorContainer container)
+        public override void OnInit(IWorld world)
         {
             ++SystemCount;
         }
 
-        public override void OnUpdate(IActorContainer container, float deltaTime)
+        public override void OnUpdate(IWorld world, float deltaTime)
         {
         }
 
@@ -39,13 +39,13 @@ namespace Pioneer.Test.Pioneer.Support
         public IMatcher Matcher = null;
         public IActorsFilter Filter = null;
 
-        public override void OnInit(IActorContainer container)
+        public override void OnInit(IWorld world)
         {
-            base.OnInit(container);
+            base.OnInit(world);
 
-            this.Matcher = container.NewMatcher();
+            this.Matcher = world.NewMatcher();
             this.Matcher.HasTrait<ATrait>().HasTrait<BTrait>();
-            this.Filter = container.GetFilter(this, TupleType.Job, this.Matcher);
+            this.Filter = world.GetFilter(this, TupleType.Job, this.Matcher);
         }
     }
 
@@ -55,16 +55,16 @@ namespace Pioneer.Test.Pioneer.Support
         public IActorsFilter Filter = null;
         public int ReactCount = 0;
 
-        public override void OnInit(IActorContainer container)
+        public override void OnInit(IWorld world)
         {
-            base.OnInit(container);
+            base.OnInit(world);
 
-            this.Matcher = container.NewMatcher();
+            this.Matcher = world.NewMatcher();
             this.Matcher.HasTrait<ATrait>().HasTrait<BTrait>();
-            this.Filter = container.GetFilter(this, TupleType.Reactive, this.Matcher);
+            this.Filter = world.GetFilter(this, TupleType.Reactive, this.Matcher);
         }
 
-        public override void OnUpdate(IActorContainer container, float deltaTime)
+        public override void OnUpdate(IWorld world, float deltaTime)
         {
             this.ReactCount = this.Filter.Count;
         }
@@ -76,16 +76,16 @@ namespace Pioneer.Test.Pioneer.Support
         public IActorsFilter Filter = null;
         public int ModifyCount = 0;
 
-        public override void OnInit(IActorContainer container)
+        public override void OnInit(IWorld world)
         {
-            base.OnInit(container);
+            base.OnInit(world);
 
-            this.Matcher = container.NewMatcher();
+            this.Matcher = world.NewMatcher();
             this.Matcher.HasTrait<ATrait>().HasTrait<BTrait>();
-            this.Filter = container.GetFilter(this, TupleType.Job, this.Matcher);
+            this.Filter = world.GetFilter(this, TupleType.Job, this.Matcher);
         }
 
-        public override void OnUpdate(IActorContainer container, float deltaTime)
+        public override void OnUpdate(IWorld world, float deltaTime)
         {
             this.ModifyCount = 0;
             var rnd = new Random();
@@ -109,16 +109,16 @@ namespace Pioneer.Test.Pioneer.Support
         public IMatcher Matcher = null;
         public IActorsFilter Filter = null;
 
-        public override void OnInit(IActorContainer container)
+        public override void OnInit(IWorld world)
         {
-            base.OnInit(container);
+            base.OnInit(world);
 
-            this.Matcher = container.NewMatcher();
+            this.Matcher = world.NewMatcher();
             this.Matcher.HasTrait<ATrait>().HasTrait<BTrait>();
-            this.Filter = container.GetFilter(this, TupleType.Job, this.Matcher);
+            this.Filter = world.GetFilter(this, TupleType.Job, this.Matcher);
         }
 
-        public override void OnUpdate(IActorContainer container, float deltaTime)
+        public override void OnUpdate(IWorld world, float deltaTime)
         {
             foreach (var e in this.Filter.Target)
             {
@@ -132,13 +132,13 @@ namespace Pioneer.Test.Pioneer.Support
     {
         public IActorsFilter Filter = null;
 
-        public override void OnInit(IActorContainer container)
+        public override void OnInit(IWorld world)
         {
-            base.OnInit(container);
+            base.OnInit(world);
 
-            var e = container.CreateActor();
+            var e = world.CreateActor();
 
-            var matcher = container.NewMatcher();
+            var matcher = world.NewMatcher();
             matcher.HasTrait<ATrait>()
                    .ExceptTrait<BTrait>()
                    .HasTrait<CTrait>()
@@ -146,7 +146,7 @@ namespace Pioneer.Test.Pioneer.Support
                    .HasTag("E")
                    .ExceptTag("F");
 
-            this.Filter = container.GetFilter(this, TupleType.Job, matcher);
+            this.Filter = world.GetFilter(this, TupleType.Job, matcher);
         }
     }
 
@@ -154,19 +154,19 @@ namespace Pioneer.Test.Pioneer.Support
     {
         public IActorsFilter Filter = null;
 
-        public override void OnInit(IActorContainer container)
+        public override void OnInit(IWorld world)
         {
-            base.OnInit(container);
+            base.OnInit(world);
 
-            var e = container.CreateActor();
+            var e = world.CreateActor();
 
-            var matcher = container.NewMatcher();
+            var matcher = world.NewMatcher();
             matcher.HasTrait<ATrait>().ExceptTrait<BTrait>();
 
-            this.Filter = container.GetFilter(this, TupleType.Job, matcher);
+            this.Filter = world.GetFilter(this, TupleType.Job, matcher);
         }
 
-        public override void OnUpdate(IActorContainer container, float deltaTime)
+        public override void OnUpdate(IWorld world, float deltaTime)
         {
             foreach (var e in this.Filter.Target)
             {
@@ -180,11 +180,11 @@ namespace Pioneer.Test.Pioneer.Support
         public IMatcher Matcher = null;
         public IActorsFilter Filter = null;
 
-        public override void OnInit(IActorContainer container)
+        public override void OnInit(IWorld world)
         {
-            this.Matcher = container.NewMatcher();
+            this.Matcher = world.NewMatcher();
             this.Matcher.HasTrait<ATrait>();
-            this.Filter = container.GetFilter(this, TupleType.Job, this.Matcher);
+            this.Filter = world.GetFilter(this, TupleType.Job, this.Matcher);
         }
     }
 
@@ -193,11 +193,11 @@ namespace Pioneer.Test.Pioneer.Support
         public IMatcher Matcher = null;
         public IActorsFilter Filter = null;
 
-        public override void OnInit(IActorContainer container)
+        public override void OnInit(IWorld world)
         {
-            this.Matcher = container.NewMatcher();
+            this.Matcher = world.NewMatcher();
             this.Matcher.HasTrait<ATrait>();
-            this.Filter = container.GetFilter(this, TupleType.Job, this.Matcher);
+            this.Filter = world.GetFilter(this, TupleType.Job, this.Matcher);
         }
     }
 
@@ -206,11 +206,11 @@ namespace Pioneer.Test.Pioneer.Support
         public IMatcher Matcher = null;
         public IActorsFilter Filter = null;
 
-        public override void OnInit(IActorContainer container)
+        public override void OnInit(IWorld world)
         {
-            this.Matcher = container.NewMatcher();
+            this.Matcher = world.NewMatcher();
             this.Matcher.HasTrait<ATrait>();
-            this.Filter = container.GetFilter(this, TupleType.Reactive, this.Matcher);
+            this.Filter = world.GetFilter(this, TupleType.Reactive, this.Matcher);
         }
     }
 
@@ -219,11 +219,11 @@ namespace Pioneer.Test.Pioneer.Support
         public IMatcher Matcher = null;
         public IActorsFilter Filter = null;
 
-        public override void OnInit(IActorContainer container)
+        public override void OnInit(IWorld world)
         {
-            this.Matcher = container.NewMatcher();
+            this.Matcher = world.NewMatcher();
             this.Matcher.HasTrait<ATrait>();
-            this.Filter = container.GetFilter(this, TupleType.Reactive, this.Matcher);
+            this.Filter = world.GetFilter(this, TupleType.Reactive, this.Matcher);
         }
     }
 }

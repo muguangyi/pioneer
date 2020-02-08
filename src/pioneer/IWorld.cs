@@ -8,13 +8,14 @@
  */
 
 using System;
+using System.Collections.Generic;
 
 namespace Pioneer
 {
     /// <summary>
     /// World interface.
     /// </summary>
-    public interface IWorld : IActorContainer, IDisposable
+    public interface IWorld : ICreator, IActorsBinder, IDisposable
     {
         /// <summary>
         /// Event when the world is loading.
@@ -25,6 +26,28 @@ namespace Pioneer
         /// Event when the world is closed.
         /// </summary>
         event Action<Exception> OnClosed;
+
+        /// <summary>
+        /// Event when a player actor enters the container.
+        /// </summary>
+        event Action<IActor> OnPlayerEntered;
+
+        /// <summary>
+        /// Event when a player actor exits the container.
+        /// </summary>
+        event Action<IActor> OnPlayerExited;
+
+        /// <summary>
+        /// Gets a value to indicate the actor collection in the container.
+        /// </summary>
+        IEnumerable<IActor> Actors { get; }
+
+        /// <summary>
+        /// Get actor by actor's ID.
+        /// </summary>
+        /// <param name="actorId">Actor ID.</param>
+        /// <returns>Actor instance if exists, otherwise return null.</returns>
+        IActor GetActorById(ulong actorId);
 
         /// <summary>
         /// Add a system.
