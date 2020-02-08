@@ -8,6 +8,7 @@
  */
 
 using System;
+using System.Linq;
 
 namespace Pioneer.Test.Pioneer.Support
 {
@@ -37,7 +38,7 @@ namespace Pioneer.Test.Pioneer.Support
     public class ABJobSystem : BaseSystem
     {
         public IMatcher Matcher = null;
-        public IActorsFilter Filter = null;
+        public IGroupFilter Filter = null;
 
         public override void OnInit(IWorld world)
         {
@@ -52,7 +53,7 @@ namespace Pioneer.Test.Pioneer.Support
     public class ABReactSystem : BaseSystem
     {
         public IMatcher Matcher = null;
-        public IActorsFilter Filter = null;
+        public IGroupFilter Filter = null;
         public int ReactCount = 0;
 
         public override void OnInit(IWorld world)
@@ -66,14 +67,14 @@ namespace Pioneer.Test.Pioneer.Support
 
         public override void OnUpdate(IWorld world, float deltaTime)
         {
-            this.ReactCount = this.Filter.Count;
+            this.ReactCount = this.Filter.Target.Count();
         }
     }
 
     public class ABModifySystem : BaseSystem
     {
         public IMatcher Matcher = null;
-        public IActorsFilter Filter = null;
+        public IGroupFilter Filter = null;
         public int ModifyCount = 0;
 
         public override void OnInit(IWorld world)
@@ -107,7 +108,7 @@ namespace Pioneer.Test.Pioneer.Support
     public class ABJobDeleteSystem : BaseSystem
     {
         public IMatcher Matcher = null;
-        public IActorsFilter Filter = null;
+        public IGroupFilter Filter = null;
 
         public override void OnInit(IWorld world)
         {
@@ -130,7 +131,7 @@ namespace Pioneer.Test.Pioneer.Support
 
     public class MatcherTestSystem : BaseSystem
     {
-        public IActorsFilter Filter = null;
+        public IGroupFilter Filter = null;
 
         public override void OnInit(IWorld world)
         {
@@ -152,7 +153,7 @@ namespace Pioneer.Test.Pioneer.Support
 
     public class ModifyFilterSystem : BaseSystem
     {
-        public IActorsFilter Filter = null;
+        public IGroupFilter Filter = null;
 
         public override void OnInit(IWorld world)
         {
@@ -178,7 +179,7 @@ namespace Pioneer.Test.Pioneer.Support
     public class SameJobMatcherSystem1 : BaseSystem
     {
         public IMatcher Matcher = null;
-        public IActorsFilter Filter = null;
+        public IGroupFilter Filter = null;
 
         public override void OnInit(IWorld world)
         {
@@ -191,7 +192,7 @@ namespace Pioneer.Test.Pioneer.Support
     public class SameJobMatcherSystem2 : BaseSystem
     {
         public IMatcher Matcher = null;
-        public IActorsFilter Filter = null;
+        public IGroupFilter Filter = null;
 
         public override void OnInit(IWorld world)
         {
@@ -204,7 +205,7 @@ namespace Pioneer.Test.Pioneer.Support
     public class SameReactMatcherSystem1 : BaseSystem
     {
         public IMatcher Matcher = null;
-        public IActorsFilter Filter = null;
+        public IGroupFilter Filter = null;
 
         public override void OnInit(IWorld world)
         {
@@ -217,7 +218,7 @@ namespace Pioneer.Test.Pioneer.Support
     public class SameReactMatcherSystem2 : BaseSystem
     {
         public IMatcher Matcher = null;
-        public IActorsFilter Filter = null;
+        public IGroupFilter Filter = null;
 
         public override void OnInit(IWorld world)
         {

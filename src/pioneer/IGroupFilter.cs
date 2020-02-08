@@ -7,16 +7,23 @@
  * file that was distributed with this source code.
  */
 
+using System.Collections.Generic;
+
 namespace Pioneer
 {
     /// <summary>
-    /// Actor filter interface.
+    /// Group filter interface.
     /// </summary>
-    public interface IActorFilter
+    public interface IGroupFilter : IFilter
     {
         /// <summary>
-        /// Gets a value to indicate the owner actor.
+        /// Gets a value to indicate the actor collection.
         /// </summary>
-        IActor Target { get; }
+        IEnumerable<IActor> Target { get; }
+
+        /// <summary>
+        /// Gets a value to indicate the first actor.
+        /// </summary>
+        IActor First { get; }
     }
 }

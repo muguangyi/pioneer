@@ -13,7 +13,7 @@ using System.Collections.Generic;
 
 namespace Pioneer.Filter
 {
-    abstract class ActorsFilter : Filter, IActorsFilter
+    abstract class ActorsFilter : Filter, IGroupFilter
     {
         protected LinkedList<IActor> actors = new LinkedList<IActor>();
         protected Dictionary<ulong, LinkedListNode<IActor>> queryTable = new Dictionary<ulong, LinkedListNode<IActor>>();
@@ -22,7 +22,7 @@ namespace Pioneer.Filter
         public ActorsFilter(Matcher matcher) : base(matcher)
         { }
 
-        public int Count => this.actors.Count;
+        public bool Matched => this.actors.Count > 0;
 
         public IEnumerable<IActor> Target => this.actors;
 

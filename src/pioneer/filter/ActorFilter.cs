@@ -12,7 +12,7 @@ using Pioneer.Framework;
 
 namespace Pioneer.Filter
 {
-    abstract class ActorFilter : Filter, IActorFilter
+    abstract class ActorFilter : Filter, IFilter
     {
         protected Actor actor = null;
 
@@ -21,7 +21,7 @@ namespace Pioneer.Filter
             this.actor = null;
         }
 
-        public virtual IActor Target => this.actor;
+        public virtual bool Matched => this.actor != null;
 
         public override void Dispose()
         {
@@ -106,8 +106,6 @@ namespace Pioneer.Filter
     {
         public ReactActorFilter(Matcher matcher) : base(matcher)
         { }
-
-        public override IActor Target => this.actor;
 
         protected override void OnActorChanged(Actor actor)
         {

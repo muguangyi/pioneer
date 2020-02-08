@@ -31,7 +31,7 @@ namespace Pioneer.Test.Pioneer.Support
     public class ABJobControl : BaseControl
     {
         public IMatcher Coder = null;
-        public IActorFilter Filter = null;
+        public IFilter Filter = null;
 
         public override void OnInit(IActor actor)
         {
@@ -46,7 +46,7 @@ namespace Pioneer.Test.Pioneer.Support
     public class AWithoutBJobControl : BaseControl
     {
         public IMatcher Coder = null;
-        public IActorFilter Filter = null;
+        public IFilter Filter = null;
 
         public override void OnInit(IActor actor)
         {
@@ -61,7 +61,7 @@ namespace Pioneer.Test.Pioneer.Support
     public class ABReactControl : BaseControl
     {
         public IMatcher Coder = null;
-        public IActorFilter Filter = null;
+        public IFilter Filter = null;
 
         public override void OnInit(IActor actor)
         {
@@ -75,7 +75,7 @@ namespace Pioneer.Test.Pioneer.Support
 
     public class CTagJobControl : BaseControl
     {
-        public IActorFilter Filter = null;
+        public IFilter Filter = null;
 
         public override void OnInit(IActor actor)
         {

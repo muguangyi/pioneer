@@ -282,7 +282,7 @@ namespace Pioneer.Framework
             return new Matcher(this.center);
         }
 
-        public IActorFilter GetFilter(IControl control, TupleType tupleType, IMatcher matcher)
+        public IFilter GetFilter(IControl control, TupleType tupleType, IMatcher matcher)
         {
             var m = matcher as Matcher;
 

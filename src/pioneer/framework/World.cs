@@ -117,7 +117,7 @@ namespace Pioneer
             return new Matcher(this.center);
         }
 
-        public IActorsFilter GetFilter(ISystem system, TupleType tupleType, IMatcher matcher)
+        public IGroupFilter GetFilter(ISystem system, TupleType tupleType, IMatcher matcher)
         {
             var m = matcher as Matcher;
 

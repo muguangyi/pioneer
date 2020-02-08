@@ -27,6 +27,6 @@ namespace Pioneer
         /// <param name="tupleType">Tuple type.</param>
         /// <param name="matcher">Matcher instance.</param>
         /// <returns>Filter instance.</returns>
-        IActorsFilter GetFilter(ISystem system, TupleType tupleType, IMatcher matcher);
+        IGroupFilter GetFilter(ISystem system, TupleType tupleType, IMatcher matcher);
     }
 }

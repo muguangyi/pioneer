@@ -125,13 +125,11 @@ namespace Pioneer.Test.Pioneer
             var logic = e.AddControl<ABJobControl>();
 
             Env.UpdateWorld(1);
-            Assert.IsNotNull(logic.Filter.Target);
-            Assert.IsNotNull(logic.Filter.Target.GetTrait<ATrait>());
-            Assert.IsNotNull(logic.Filter.Target.GetTrait(typeof(BTrait)));
+            Assert.IsTrue(logic.Filter.Matched);
 
             e.RemoveTrait<BTrait>();
             Env.UpdateWorld(1);
-            Assert.IsNull(logic.Filter.Target);
+            Assert.IsFalse(logic.Filter.Matched);
         }
 
         [TestMethod]
@@ -143,23 +141,23 @@ namespace Pioneer.Test.Pioneer
             var b = e.AddTrait<BTrait>();
             var logic = e.AddControl<ABReactControl>();
 
-            Assert.IsNotNull(logic.Filter.Target);
+            Assert.IsTrue(logic.Filter.Matched);
             Env.UpdateWorld(1);
-            Assert.IsNull(logic.Filter.Target);
+            Assert.IsFalse(logic.Filter.Matched);
 
             a.ChangeValue();
-            Assert.IsNotNull(logic.Filter.Target);
+            Assert.IsTrue(logic.Filter.Matched);
             Env.UpdateWorld(1);
 
             b.ChangeValue();
-            Assert.IsNotNull(logic.Filter.Target);
+            Assert.IsTrue(logic.Filter.Matched);
             Env.UpdateWorld(1);
 
             a.ChangeValue();
             b.ChangeValue();
-            Assert.IsNotNull(logic.Filter.Target);
+            Assert.IsTrue(logic.Filter.Matched);
             Env.UpdateWorld(1);
-            Assert.IsNull(logic.Filter.Target);
+            Assert.IsFalse(logic.Filter.Matched);
         }
 
         [TestMethod]
@@ -174,28 +172,24 @@ namespace Pioneer.Test.Pioneer
             var l2 = e.AddControl<AWithoutBJobControl>();
             var l3 = e.AddControl<CTagJobControl>();
 
-            Assert.IsNotNull(l1.Filter.Target);
-            Assert.AreEqual(l1.Filter.Target, e);
-            Assert.IsNull(l2.Filter.Target);
-            Assert.IsNull(l3.Filter.Target);
+            Assert.IsTrue(l1.Filter.Matched);
+            Assert.IsFalse(l2.Filter.Matched);
+            Assert.IsFalse(l3.Filter.Matched);
 
             e.RemoveTrait<BTrait>();
-            Assert.IsNull(l1.Filter.Target);
-            Assert.IsNotNull(l2.Filter.Target);
-            Assert.AreEqual(l2.Filter.Target, e);
-            Assert.IsNull(l3.Filter.Target);
+            Assert.IsFalse(l1.Filter.Matched);
+            Assert.IsTrue(l2.Filter.Matched);
+            Assert.IsFalse(l3.Filter.Matched);
 
             e.AddTag("C");
-            Assert.IsNull(l1.Filter.Target);
-            Assert.IsNotNull(l2.Filter.Target);
-            Assert.AreEqual(l2.Filter.Target, e);
-            Assert.IsNotNull(l3.Filter.Target);
+            Assert.IsFalse(l1.Filter.Matched);
+            Assert.IsTrue(l2.Filter.Matched);
+            Assert.IsTrue(l3.Filter.Matched);
 
             e.RemoveTag("C");
-            Assert.IsNull(l1.Filter.Target);
-            Assert.IsNotNull(l2.Filter.Target);
-            Assert.AreEqual(l2.Filter.Target, e);
-            Assert.IsNull(l3.Filter.Target);
+            Assert.IsFalse(l1.Filter.Matched);
+            Assert.IsTrue(l2.Filter.Matched);
+            Assert.IsFalse(l3.Filter.Matched);
         }
 
         [TestMethod]
