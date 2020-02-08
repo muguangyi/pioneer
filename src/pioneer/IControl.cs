@@ -19,14 +19,14 @@ namespace Pioneer
         /// <summary>
         /// Initialize entrance for the control component.
         /// </summary>
-        /// <param name="container">The owner trait container.</param>
-        void OnInit(ITraitContainer container);
+        /// <param name="actor">The owner trait container.</param>
+        void OnInit(IActor actor);
 
         /// <summary>
         /// Delta update entrance for the control component.
         /// </summary>
-        /// <param name="container">The owner trait container.</param>
+        /// <param name="actor">The owner trait container.</param>
         /// <param name="deltaTime">Delta time from the last frame.</param>
-        void OnUpdate(ITraitContainer container, float deltaTime);
+        void OnUpdate(IActor actor, float deltaTime);
     }
 }

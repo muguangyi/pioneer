@@ -15,8 +15,8 @@ namespace Pioneer
     public interface IActorFilter
     {
         /// <summary>
-        /// Gets a value to indicate the owner container.
+        /// Gets a value to indicate the owner actor.
         /// </summary>
-        ITraitContainer Target { get; }
+        IActor Target { get; }
     }
 }

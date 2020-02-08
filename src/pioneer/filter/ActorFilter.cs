@@ -21,7 +21,7 @@ namespace Pioneer.Filter
             this.actor = null;
         }
 
-        public virtual ITraitContainer Target => this.actor;
+        public virtual IActor Target => this.actor;
 
         public override void Dispose()
         {
@@ -107,7 +107,7 @@ namespace Pioneer.Filter
         public ReactActorFilter(Matcher matcher) : base(matcher)
         { }
 
-        public override ITraitContainer Target => this.actor;
+        public override IActor Target => this.actor;
 
         protected override void OnActorChanged(Actor actor)
         {

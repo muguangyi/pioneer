@@ -19,11 +19,11 @@ namespace Pioneer
         { }
 
         /// <inheritdoc/>
-        public virtual void OnInit(ITraitContainer container)
+        public virtual void OnInit(IActor actor)
         { }
 
         /// <inheritdoc/>
-        public virtual void OnUpdate(ITraitContainer container, float deltaTime)
+        public virtual void OnUpdate(IActor actor, float deltaTime)
         { }
     }
 }

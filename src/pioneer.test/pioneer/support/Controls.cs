@@ -16,12 +16,12 @@ namespace Pioneer.Test.Pioneer.Support
             --ControlCount;
         }
 
-        public override void OnInit(ITraitContainer container)
+        public override void OnInit(IActor actor)
         {
             ++ControlCount;
         }
 
-        public override void OnUpdate(ITraitContainer container, float deltaTime)
+        public override void OnUpdate(IActor actor, float deltaTime)
         {
         }
 
@@ -33,13 +33,13 @@ namespace Pioneer.Test.Pioneer.Support
         public IMatcher Coder = null;
         public IActorFilter Filter = null;
 
-        public override void OnInit(ITraitContainer container)
+        public override void OnInit(IActor actor)
         {
-            base.OnInit(container);
+            base.OnInit(actor);
 
-            this.Coder = container.NewMatcher();
+            this.Coder = actor.NewMatcher();
             this.Coder.HasTrait<ATrait>().HasTrait<BTrait>();
-            this.Filter = container.GetFilter(this, TupleType.Job, this.Coder);
+            this.Filter = actor.GetFilter(this, TupleType.Job, this.Coder);
         }
     }
 
@@ -48,13 +48,13 @@ namespace Pioneer.Test.Pioneer.Support
         public IMatcher Coder = null;
         public IActorFilter Filter = null;
 
-        public override void OnInit(ITraitContainer container)
+        public override void OnInit(IActor actor)
         {
-            base.OnInit(container);
+            base.OnInit(actor);
 
-            this.Coder = container.NewMatcher();
+            this.Coder = actor.NewMatcher();
             this.Coder.HasTrait<ATrait>().ExceptTrait<BTrait>();
-            this.Filter = container.GetFilter(this, TupleType.Job, this.Coder);
+            this.Filter = actor.GetFilter(this, TupleType.Job, this.Coder);
         }
     }
 
@@ -63,13 +63,13 @@ namespace Pioneer.Test.Pioneer.Support
         public IMatcher Coder = null;
         public IActorFilter Filter = null;
 
-        public override void OnInit(ITraitContainer container)
+        public override void OnInit(IActor actor)
         {
-            base.OnInit(container);
+            base.OnInit(actor);
 
-            this.Coder = container.NewMatcher();
+            this.Coder = actor.NewMatcher();
             this.Coder.HasTrait<ATrait>().HasTrait<BTrait>();
-            this.Filter = container.GetFilter(this, TupleType.Reactive, this.Coder);
+            this.Filter = actor.GetFilter(this, TupleType.Reactive, this.Coder);
         }
     }
 
@@ -77,13 +77,13 @@ namespace Pioneer.Test.Pioneer.Support
     {
         public IActorFilter Filter = null;
 
-        public override void OnInit(ITraitContainer container)
+        public override void OnInit(IActor actor)
         {
-            base.OnInit(container);
+            base.OnInit(actor);
 
-            var matcher = container.NewMatcher();
+            var matcher = actor.NewMatcher();
             matcher.HasTag("C");
-            this.Filter = container.GetFilter(this, TupleType.Job, matcher);
+            this.Filter = actor.GetFilter(this, TupleType.Job, matcher);
         }
     }
 }
