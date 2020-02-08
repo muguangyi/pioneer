@@ -28,17 +28,17 @@ namespace Pioneer
         event Action<Exception> OnClosed;
 
         /// <summary>
-        /// Event when a player actor enters the container.
+        /// Event when a player actor enters the world.
         /// </summary>
         event Action<IActor> OnPlayerEntered;
 
         /// <summary>
-        /// Event when a player actor exits the container.
+        /// Event when a player actor exits the world.
         /// </summary>
         event Action<IActor> OnPlayerExited;
 
         /// <summary>
-        /// Gets a value to indicate the actor collection in the container.
+        /// Gets a value to indicate the actor collection in the world.
         /// </summary>
         IEnumerable<IActor> Actors { get; }
 
