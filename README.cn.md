@@ -31,3 +31,62 @@ ATCS (`Actor` + `Trait` + `Control` + `System`)可以组合出不同的开发方
 `网络同步框架`基于一套代码到处运行的思想，隐藏底层网络传输，在应用层进行跨网络的数据同步定义。
 
 > 可参考**UE4**的游戏开发框架。
+
+## 快速开始
+
+一个简单的例子展示如何实现`ECS`模式。
+
+### 创建 IWorld
+
+```csharp
+IWorld world = Pioneer.Pioneer.New()
+...
+// 更新 world。
+world.Update(deltaTime);
+...
+// 销毁 world。
+world.Dispose();
+```
+
+### 创建 IActor
+
+```csharp
+IActor actor = world.CreateActor();
+```
+
+### 添加 Trait
+
+```csharp
+public class MyTrait : Pioneer.Trait
+{
+    public string Name;
+}
+
+actor.AddTrait<MyTrait>().Name = "User";
+```
+
+### 添加 System
+
+```csharp
+pubic class MySystem : Pioneer.System
+{
+    private IGroupFilter filter = null;
+
+    public override void OnInit(IWorld world)
+    {
+        // 设定过滤条件
+        IMatcher matcher = world.NewMatcher().HasTrait<MyTrait>();
+        this.filter = world.GetFilter(this, TupleType.Job, matcher);
+    }
+
+    public override void OnUpdate(IWorld world, float deltaTime)
+    {
+        foreach (var a in this.filter.Actors)
+        {
+            // 处理满足条件的Actor。
+        }
+    }
+}
+
+world.AddSystem<MySystem>();
+```
