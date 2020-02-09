@@ -39,7 +39,7 @@ namespace Pioneer.Test.Pioneer.Support
 
             this.Coder = actor.NewMatcher();
             this.Coder.HasTrait<ATrait>().HasTrait<BTrait>();
-            this.Filter = actor.GetFilter(this, TupleType.Job, this.Coder);
+            this.Filter = actor.GetFilter(this, this.Coder);
         }
     }
 
@@ -54,7 +54,7 @@ namespace Pioneer.Test.Pioneer.Support
 
             this.Coder = actor.NewMatcher();
             this.Coder.HasTrait<ATrait>().ExceptTrait<BTrait>();
-            this.Filter = actor.GetFilter(this, TupleType.Job, this.Coder);
+            this.Filter = actor.GetFilter(this, this.Coder);
         }
     }
 
@@ -69,7 +69,7 @@ namespace Pioneer.Test.Pioneer.Support
 
             this.Coder = actor.NewMatcher();
             this.Coder.HasTrait<ATrait>().HasTrait<BTrait>();
-            this.Filter = actor.GetFilter(this, TupleType.Reactive, this.Coder);
+            this.Filter = actor.GetFilter(this, this.Coder, TupleType.Reactive);
         }
     }
 
@@ -83,7 +83,7 @@ namespace Pioneer.Test.Pioneer.Support
 
             var matcher = actor.NewMatcher();
             matcher.HasTag("C");
-            this.Filter = actor.GetFilter(this, TupleType.Job, matcher);
+            this.Filter = actor.GetFilter(this, matcher);
         }
     }
 }

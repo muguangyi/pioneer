@@ -24,9 +24,9 @@ namespace Pioneer
         /// Get the target filter.
         /// </summary>
         /// <param name="control">Control component.</param>
-        /// <param name="tupleType">Tuple type.</param>
         /// <param name="matcher">Matcher instance.</param>
+        /// <param name="tupleType">Tuple type. Default is Job type.</param>
         /// <returns>Filter instance.</returns>
-        IFilter GetFilter(IControl control, TupleType tupleType, IMatcher matcher);
+        IFilter GetFilter(IControl control, IMatcher matcher, TupleType tupleType = TupleType.Job);
     }
 }

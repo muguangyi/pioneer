@@ -46,7 +46,7 @@ namespace Pioneer.Test.Pioneer.Support
 
             this.Matcher = world.NewMatcher();
             this.Matcher.HasTrait<ATrait>().HasTrait<BTrait>();
-            this.Filter = world.GetFilter(this, TupleType.Job, this.Matcher);
+            this.Filter = world.GetFilter(this, this.Matcher);
         }
     }
 
@@ -62,7 +62,7 @@ namespace Pioneer.Test.Pioneer.Support
 
             this.Matcher = world.NewMatcher();
             this.Matcher.HasTrait<ATrait>().HasTrait<BTrait>();
-            this.Filter = world.GetFilter(this, TupleType.Reactive, this.Matcher);
+            this.Filter = world.GetFilter(this, this.Matcher, TupleType.Reactive);
         }
 
         public override void OnUpdate(IWorld world, float deltaTime)
@@ -83,7 +83,7 @@ namespace Pioneer.Test.Pioneer.Support
 
             this.Matcher = world.NewMatcher();
             this.Matcher.HasTrait<ATrait>().HasTrait<BTrait>();
-            this.Filter = world.GetFilter(this, TupleType.Job, this.Matcher);
+            this.Filter = world.GetFilter(this, this.Matcher);
         }
 
         public override void OnUpdate(IWorld world, float deltaTime)
@@ -116,7 +116,7 @@ namespace Pioneer.Test.Pioneer.Support
 
             this.Matcher = world.NewMatcher();
             this.Matcher.HasTrait<ATrait>().HasTrait<BTrait>();
-            this.Filter = world.GetFilter(this, TupleType.Job, this.Matcher);
+            this.Filter = world.GetFilter(this, this.Matcher);
         }
 
         public override void OnUpdate(IWorld world, float deltaTime)
@@ -147,7 +147,7 @@ namespace Pioneer.Test.Pioneer.Support
                    .HasTag("E")
                    .ExceptTag("F");
 
-            this.Filter = world.GetFilter(this, TupleType.Job, matcher);
+            this.Filter = world.GetFilter(this, matcher);
         }
     }
 
@@ -164,7 +164,7 @@ namespace Pioneer.Test.Pioneer.Support
             var matcher = world.NewMatcher();
             matcher.HasTrait<ATrait>().ExceptTrait<BTrait>();
 
-            this.Filter = world.GetFilter(this, TupleType.Job, matcher);
+            this.Filter = world.GetFilter(this, matcher);
         }
 
         public override void OnUpdate(IWorld world, float deltaTime)
@@ -185,7 +185,7 @@ namespace Pioneer.Test.Pioneer.Support
         {
             this.Matcher = world.NewMatcher();
             this.Matcher.HasTrait<ATrait>();
-            this.Filter = world.GetFilter(this, TupleType.Job, this.Matcher);
+            this.Filter = world.GetFilter(this, this.Matcher);
         }
     }
 
@@ -198,7 +198,7 @@ namespace Pioneer.Test.Pioneer.Support
         {
             this.Matcher = world.NewMatcher();
             this.Matcher.HasTrait<ATrait>();
-            this.Filter = world.GetFilter(this, TupleType.Job, this.Matcher);
+            this.Filter = world.GetFilter(this, this.Matcher);
         }
     }
 
@@ -211,7 +211,7 @@ namespace Pioneer.Test.Pioneer.Support
         {
             this.Matcher = world.NewMatcher();
             this.Matcher.HasTrait<ATrait>();
-            this.Filter = world.GetFilter(this, TupleType.Reactive, this.Matcher);
+            this.Filter = world.GetFilter(this, this.Matcher, TupleType.Reactive);
         }
     }
 
@@ -224,7 +224,7 @@ namespace Pioneer.Test.Pioneer.Support
         {
             this.Matcher = world.NewMatcher();
             this.Matcher.HasTrait<ATrait>();
-            this.Filter = world.GetFilter(this, TupleType.Reactive, this.Matcher);
+            this.Filter = world.GetFilter(this, this.Matcher, TupleType.Reactive);
         }
     }
 }

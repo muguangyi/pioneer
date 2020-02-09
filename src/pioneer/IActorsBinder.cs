@@ -24,9 +24,9 @@ namespace Pioneer
         /// Get target filter instance.
         /// </summary>
         /// <param name="system">System component.</param>
-        /// <param name="tupleType">Tuple type.</param>
         /// <param name="matcher">Matcher instance.</param>
+        /// <param name="tupleType">Tuple type. Default is Job type.</param>
         /// <returns>Filter instance.</returns>
-        IGroupFilter GetFilter(ISystem system, TupleType tupleType, IMatcher matcher);
+        IGroupFilter GetFilter(ISystem system, IMatcher matcher, TupleType tupleType = TupleType.Job);
     }
 }

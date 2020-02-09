@@ -117,7 +117,7 @@ namespace Pioneer
             return new Matcher(this.center);
         }
 
-        public IGroupFilter GetFilter(ISystem system, TupleType tupleType, IMatcher matcher)
+        public IGroupFilter GetFilter(ISystem system, IMatcher matcher, TupleType tupleType = TupleType.Job)
         {
             var m = matcher as Matcher;
 
