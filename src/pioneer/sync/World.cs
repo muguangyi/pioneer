@@ -382,8 +382,7 @@ namespace Pioneer
 
         private ICreator GetCreatorById(ulong id)
         {
-            IActor p = null;
-            return (this.players.TryGetValue(id, out p) ? p.Creator : this.defaultCreator);
+            return this.players.TryGetValue(id, out IActor p) ? p.Creator : this.defaultCreator;
         }
 
         private Creator GetFirstCreator()
@@ -682,8 +681,6 @@ namespace Pioneer
                 throw new TypeUnloadedException("DO NOT know the value type!");
             }
         }
-
-        private const int BufferSize = 1024 * 256;
 
         private const byte FALSE = 0xc2;
         private const byte TRUE = 0xc3;
