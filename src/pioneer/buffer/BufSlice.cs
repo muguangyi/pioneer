@@ -56,13 +56,7 @@ namespace Pioneer.Buffer
 
         public int RefCount { get; private set; } = 0;
 
-        public byte[] Buffer
-        {
-            get
-            {
-                return this.block.Buffer;
-            }
-        }
+        public byte[] Buffer => this.block.Buffer;
 
         public int Total { get; private set; } = 0;
 
@@ -144,11 +138,11 @@ namespace Pioneer.Buffer
             return (0 != value);
         }
 
-        public UInt16 ReadUInt16()
+        public ushort ReadUInt16()
         {
             VertifyInRange(2);
 
-            UInt16 value = 0;
+            ushort value = 0;
             if (BigEndian)
             {
                 for (var i = 0; i < 2; i++)
@@ -170,11 +164,11 @@ namespace Pioneer.Buffer
             return value;
         }
 
-        public UInt32 ReadUInt32()
+        public uint ReadUInt32()
         {
             VertifyInRange(4);
 
-            UInt32 value = 0;
+            uint value = 0;
             if (BigEndian)
             {
                 for (var i = 0; i < 4; i++)
@@ -196,7 +190,7 @@ namespace Pioneer.Buffer
             return value;
         }
 
-        public UInt64 ReadUInt64()
+        public ulong ReadUInt64()
         {
             VertifyInRange(8);
 
@@ -222,17 +216,17 @@ namespace Pioneer.Buffer
             return value;
         }
 
-        public Int16 ReadInt16()
+        public short ReadInt16()
         {
             VertifyInRange(2);
 
-            Int16 value = 0;
+            short value = 0;
             if (BigEndian)
             {
                 for (var i = 0; i < 2; i++)
                 {
                     value = (short)(value << 8);
-                    value |= (short)this.block.Buffer[this.Offset + this.Position + i];
+                    value |= this.block.Buffer[this.Offset + this.Position + i];
                 }
             }
             else
@@ -240,7 +234,7 @@ namespace Pioneer.Buffer
                 for (var i = 1; i >= 0; i--)
                 {
                     value = (short)(value << 8);
-                    value |= (short)this.block.Buffer[this.Offset + this.Position + i];
+                    value |= this.block.Buffer[this.Offset + this.Position + i];
                 }
             }
             this.Position += 2;
@@ -248,11 +242,11 @@ namespace Pioneer.Buffer
             return value;
         }
 
-        public Int32 ReadInt32()
+        public int ReadInt32()
         {
             VertifyInRange(4);
 
-            Int32 value = 0;
+            int value = 0;
             if (BigEndian)
             {
                 for (var i = 0; i < 4; i++)
@@ -274,11 +268,11 @@ namespace Pioneer.Buffer
             return value;
         }
 
-        public Int64 ReadInt64()
+        public long ReadInt64()
         {
             VertifyInRange(8);
 
-            Int64 value = 0;
+            long value = 0;
             if (BigEndian)
             {
                 for (var i = 0; i < 8; i++)
@@ -410,7 +404,7 @@ namespace Pioneer.Buffer
             WriteByte(data ? (byte)1 : (byte)0);
         }
 
-        public void WriteUInt16(UInt16 data)
+        public void WriteUInt16(ushort data)
         {
             if (this.readOnly)
             {
@@ -435,7 +429,7 @@ namespace Pioneer.Buffer
             UpdateSize(this.Position);
         }
 
-        public void WriteUInt32(UInt32 data)
+        public void WriteUInt32(uint data)
         {
             if (this.readOnly)
             {
@@ -464,7 +458,7 @@ namespace Pioneer.Buffer
             UpdateSize(this.Position);
         }
 
-        public void WriteUInt64(UInt64 data)
+        public void WriteUInt64(ulong data)
         {
             if (this.readOnly)
             {
@@ -500,7 +494,7 @@ namespace Pioneer.Buffer
             UpdateSize(this.Position);
         }
 
-        public void WriteInt16(Int16 data)
+        public void WriteInt16(short data)
         {
             if (this.readOnly)
             {
@@ -524,7 +518,7 @@ namespace Pioneer.Buffer
             UpdateSize(this.Position);
         }
 
-        public void WriteInt32(Int32 data)
+        public void WriteInt32(int data)
         {
             if (this.readOnly)
             {
@@ -552,7 +546,7 @@ namespace Pioneer.Buffer
             UpdateSize(this.Position);
         }
 
-        public void WriteInt64(Int64 data)
+        public void WriteInt64(long data)
         {
             if (this.readOnly)
             {
@@ -676,7 +670,7 @@ namespace Pioneer.Buffer
             byte[] bytes = Encoding.UTF8.GetBytes(data);
             VerifyCapacity(bytes.Length + 2);
 
-            WriteUInt16((UInt16)bytes.Length);
+            WriteUInt16((ushort)bytes.Length);
             for (int i = 0; i < bytes.Length; ++i)
             {
                 this.block.Buffer[this.Offset + this.Position + i] = bytes[i];

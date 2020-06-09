@@ -17,17 +17,17 @@ namespace Pioneer.Buffer
 
         bool ReadBool();
 
-        UInt16 ReadUInt16();
+        ushort ReadUInt16();
 
-        UInt32 ReadUInt32();
+        uint ReadUInt32();
 
-        UInt64 ReadUInt64();
+        ulong ReadUInt64();
 
-        Int16 ReadInt16();
+        short ReadInt16();
 
-        Int32 ReadInt32();
+        int ReadInt32();
 
-        Int64 ReadInt64();
+        long ReadInt64();
 
         int ReadInt();
 

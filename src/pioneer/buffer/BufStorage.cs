@@ -50,10 +50,9 @@ namespace Pioneer.Buffer
 
         public IBufSlice Alloc(int size)
         {
-            BufSlice bytes = null;
             for (int i = 0; i < this.blocks.Count; ++i)
             {
-                bytes = this.blocks[i].Capture(size);
+                BufSlice bytes = this.blocks[i].Capture(size);
                 if (bytes != null)
                 {
                     return bytes;
