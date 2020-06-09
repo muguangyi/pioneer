@@ -30,13 +30,7 @@ namespace Pioneer.Framework
 
         public BitCode.CompositeCode ExceptCode { get; }
 
-        public IEnumerable<uint> Indices
-        {
-            get
-            {
-                return this.indices;
-            }
-        }
+        public IEnumerable<uint> Indices => this.indices;
 
         public static bool operator ==(Matcher m0, Matcher m1)
         {

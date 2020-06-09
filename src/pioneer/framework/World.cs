@@ -31,15 +31,15 @@ namespace Pioneer
         private ActorDecorator decorator = new ActorDecorator();
         private Dictionary<uint, Queue<Trait>> traitPool = new Dictionary<uint, Queue<Trait>>();
 
-        public event Action<IActor> OnPlayerEntered;
-        public event Action<IActor> OnPlayerExited;
-
         public World(WorldMode mode = WorldMode.Standalone)
         {
             this.Mode = mode;
             this.filters.Active();
             this.defaultCreator = new Creator(AllocUniqueId(), this);
         }
+
+        public event Action<IActor> OnPlayerEntered;
+        public event Action<IActor> OnPlayerExited;
 
         public override void Dispose()
         {
@@ -174,8 +174,7 @@ namespace Pioneer
 
         public IActor GetActorById(ulong actorId)
         {
-            LinkedListNode<IActor> node = null;
-            if (this.actorMap.TryGetValue(actorId, out node))
+            if (this.actorMap.TryGetValue(actorId, out LinkedListNode<IActor> node))
             {
                 return node.Value;
             }
@@ -191,7 +190,7 @@ namespace Pioneer
         public TSystem AddSystem<TSystem>() where TSystem : System
         {
             var system = AddSystem(typeof(TSystem));
-            return (null != system ? (TSystem)system : default(TSystem));
+            return (null != system ? (TSystem)system : default);
         }
 
         public System AddSystem(string systemName)
@@ -206,16 +205,14 @@ namespace Pioneer
 
         public override void EndFrame(float deltaTime)
         {
-            Actor e = null;
             for (var i = 0; i < this.cycleActors.Count; ++i)
             {
-                e = this.cycleActors[i] as Actor;
+                var e = this.cycleActors[i] as Actor;
                 e.Deactive();
 
                 lock (this.syncObject)
                 {
-                    LinkedListNode<IActor> node = null;
-                    if (this.actorMap.TryGetValue(e.Id, out node))
+                    if (this.actorMap.TryGetValue(e.Id, out LinkedListNode<IActor> node))
                     {
                         this.actorMap.Remove(e.Id);
                         this.actors.Remove(node);
@@ -259,7 +256,7 @@ namespace Pioneer
 
         internal Actor CreateActorInternal(ICreator owner, ulong id, bool replicated, string template)
         {
-            Actor a = null;
+            Actor a;
             if (this.actorPool.Count > 0)
             {
                 a = this.actorPool.Pop() as Actor;
@@ -313,7 +310,7 @@ namespace Pioneer
         internal TSystem AddSystemInternal<TSystem>() where TSystem : System
         {
             var system = AddSystemInternal(typeof(TSystem));
-            return (null != system ? (TSystem)system : default(TSystem));
+            return (null != system ? (TSystem)system : default);
         }
 
         internal System AddSystemInternal(string systemName)
@@ -321,19 +318,18 @@ namespace Pioneer
             return AddSystemInternal(TypeUtility.GetType(systemName));
         }
 
-        internal Trait PickTrait(Type componentType)
+        internal Trait PickTrait(Type traitType)
         {
-            var code = this.center.GetBitCodeByType(componentType);
-            Queue<Trait> list = null;
-            if (!this.traitPool.TryGetValue(code.Index, out list))
+            var code = this.center.GetBitCodeByType(traitType);
+            if (!this.traitPool.TryGetValue(code.Index, out Queue<Trait> list))
             {
                 this.traitPool.Add(code.Index, list = new Queue<Trait>());
             }
 
-            Trait instance = null;
+            Trait instance;
             if (0 == list.Count)
             {
-                instance = Activator.CreateInstance(componentType) as Trait;
+                instance = Activator.CreateInstance(traitType) as Trait;
             }
             else
             {
@@ -348,8 +344,7 @@ namespace Pioneer
             instance.Dispose();
 
             var code = this.center.GetBitCodeByType(instance.GetType());
-            Queue<Trait> list = null;
-            if (!this.traitPool.TryGetValue(code.Index, out list))
+            if (!this.traitPool.TryGetValue(code.Index, out Queue<Trait> list))
             {
                 this.traitPool.Add(code.Index, list = new Queue<Trait>());
             }
@@ -359,7 +354,7 @@ namespace Pioneer
 
         private ulong AllocUniqueId()
         {
-            ulong flag = (WorldMode.Client == this.Mode ? (ulong)0 : (uint)1 << 63);
+            ulong flag = (WorldMode.Client == this.Mode ? 0 : (uint)1 << 63);
             return flag + (++this.instanceIndex);
         }
 

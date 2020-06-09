@@ -98,10 +98,9 @@ namespace Pioneer.Framework
 
         public void OnUpdate(float deltaTime)
         {
-            IControl control = null;
             for (var i = 0; i < this.controls.Count; ++i)
             {
-                control = this.controls[i];
+                IControl control = this.controls[i];
                 this.filters.OnPreHandling(control);
                 {
                     control.OnUpdate(this, deltaTime);
@@ -124,7 +123,7 @@ namespace Pioneer.Framework
         public TTrait AddTrait<TTrait>() where TTrait : Trait
         {
             var trait = AddTrait(typeof(TTrait));
-            return (null != trait ? (TTrait)trait : default(TTrait));
+            return null != trait ? (TTrait)trait : default;
         }
 
         public Trait AddTrait(string traitName)
@@ -157,7 +156,7 @@ namespace Pioneer.Framework
         public bool ReplaceTrait(Type srcType, Type destType)
         {
             RemoveTrait(srcType);
-            return (null != AddTrait(destType));
+            return null != AddTrait(destType);
         }
 
         public bool ReplaceTrait<TSrcTrait, TDestTrait>() where TSrcTrait : Trait where TDestTrait : Trait
@@ -184,7 +183,7 @@ namespace Pioneer.Framework
         public TTrait GetTrait<TTrait>() where TTrait : Trait
         {
             var trait = GetTrait(typeof(TTrait));
-            return (null != trait ? (TTrait)trait : default(TTrait));
+            return null != trait ? (TTrait)trait : default;
         }
 
         public Trait GetTrait(string traitName)
@@ -269,7 +268,7 @@ namespace Pioneer.Framework
         public TControl AddControl<TControl>() where TControl : Control
         {
             var control = AddControl(typeof(TControl));
-            return (null != control ? (TControl)control : default(TControl));
+            return null != control ? (TControl)control : default;
         }
 
         public Control AddControl(string controlName)
@@ -382,7 +381,7 @@ namespace Pioneer.Framework
         internal TTrait AddTraitInternal<TTrait>() where TTrait : Trait
         {
             var trait = AddTraitInternal(typeof(TTrait));
-            return (null != trait ? (TTrait)trait : default(TTrait));
+            return (null != trait ? (TTrait)trait : default);
         }
 
         internal Trait AddTraitInternal(string traitName)
@@ -470,7 +469,7 @@ namespace Pioneer.Framework
         internal TControl AddControlInternal<TControl>() where TControl : Control
         {
             var control = AddControlInternal(typeof(TControl));
-            return (null != control ? (TControl)control : default(TControl));
+            return (null != control ? (TControl)control : default);
         }
 
         internal Control AddControlInternal(string controlName)
@@ -515,11 +514,6 @@ namespace Pioneer.Framework
         {
             control.OnInit(this);
             this.controls.Add(control);
-        }
-
-        private void RemoveControl(Control control)
-        {
-            this.controls.Remove(control);
         }
     }
 }

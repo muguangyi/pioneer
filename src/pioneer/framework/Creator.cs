@@ -34,7 +34,6 @@ namespace Pioneer.Framework
             }
         }
 
-
         public override void Dispose()
         {
             while (this.entities.Count > 0)
